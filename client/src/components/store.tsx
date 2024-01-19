@@ -1,0 +1,138 @@
+import {configureStore, createSlice} from '@reduxjs/toolkit'
+
+let IsLogined = createSlice ({
+    name : 'IsLogined',
+    initialState : 
+            {
+                isLogined: false,
+                name : ''
+
+            },
+
+    reducers : {
+        changeIsLogined(state,action) {
+            state.isLogined = true;
+            state.name =  action.payload.name;
+        }
+    }
+})
+
+let j_list = createSlice ({
+    name : 'j_list',
+
+    initialState : 
+        [
+            { 
+                title:'',
+                category:'',
+                link:'',
+                writer:'',
+                date:0,
+                content:null,
+                file:'',
+                fileName:''
+            },
+
+        ],
+
+    reducers : {
+        setList(state,action) {
+            return action.payload
+        },
+        resetList(state) {
+            state.splice(0,state.length)
+        },
+
+        removeList(state,action) {
+            state.splice(action.payload,1)
+        },
+
+    }
+})
+
+let p_list = createSlice ({
+    name: 'p_list',
+    
+    initialState: [
+        {
+            title: '',
+            category: '',
+            writer: '',
+            date: 0,
+
+            content: {
+                image: null,
+                video: null,
+                text: '',
+            },
+
+            recruit: [
+                {
+                    field: '',
+                    apply_cnt: 0,
+                }
+            ],
+            file: '',
+            deadline: 0,
+            is_done: false,
+
+            apply: [
+                {
+                    date: 0,
+                    name: '',
+                    field: '',
+                    memo: '',
+                }
+            ]
+        },
+    ],
+    reducers: {
+        p_addList(state,action) {
+            state.push(action.payload)
+        },
+        p_resetList(state) {
+            state.splice(0,state.length)
+        },
+        p_removeList(state,action) {
+            state.splice(action.payload,1)
+        },
+        p_addcontent(state,action) {
+            state[0].content.text = action.payload;
+        },
+        p_addtitle(state,action) {
+            state[0].title = action.payload;
+        },
+        p_addrecruit(state) {
+            state[0].recruit.push({
+                field: '',
+                apply_cnt: 0,
+            })
+        },
+        p_removerecruit(state,action) {
+            state[0].recruit.splice(action.payload,1);
+        },
+        p_addimage(state,action) {
+            state[0].content.image = action.payload;
+        }
+    }
+})
+
+
+export const { setList, removeList,resetList } = j_list.actions;
+export const { changeIsLogined } = IsLogined.actions;
+export const { p_addList, p_removeList, p_resetList,p_addrecruit, p_addcontent, p_removerecruit, p_addtitle,p_addimage} = p_list.actions;
+
+// 스토어 설정
+const store = configureStore({
+  reducer: {
+    j_list: j_list.reducer,
+    IsLogined:IsLogined.reducer,
+    p_list:p_list.reducer,
+
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+});
+
+// RootState 타입 정의
+export type RootState = ReturnType<typeof store.getState>;
+export default store;
