@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, Ref, useMemo } from 'react';
 import '../styles/App.css';
-import '../styles/J_List.module.css';
-import '../styles/JB_detail.module.css';
-import '../styles/P_List_add.module.css'
+import J_List_styles from '../styles/J_List.module.css';
+import JB_styles from '../styles/JB_detail.module.css';
+import P_add_styles from '../styles/P_List_add.module.css'
 import Mynavbar from '../components/navbar';
 
 import { useState } from 'react';
@@ -27,8 +27,8 @@ export default function Mojib(props:any) {
     };
 
     return (
-        <div className='mojib_container'>
-            <input className='mojib_categori'
+        <div className={P_add_styles.mojib_container}>
+            <input className={P_add_styles.mojib_container}
             
             />
             <div style={{
@@ -37,12 +37,12 @@ export default function Mojib(props:any) {
                 fontWeight: 400,
                 marginTop:23
                 }}> 인원 수 </div>
-            <input className='mojib_pop'/>
+            <input className={P_add_styles.mojib_container}/>
             <MdCancel onClick={() => {
                 if(props.num>0) {
                     dispatch(p_removerecruit(props.num))
                 }
-            }} className='cancel_icon'/>
+            }} className={P_add_styles.mojib_container}/>
         </div>
 
     )
