@@ -14,9 +14,15 @@ import { useDispatch, useSelector } from "react-redux";
 
 import '../styles/Paging.css';
 import Pagination from "react-js-pagination";
+import { useNavigate } from 'react-router-dom';
 
 
 function J_List(props:any) {
+  const navigate = useNavigate();
+  const handleNavigate = (key: string, page: number) => {
+    navigate(`/scholarship?key=${key}&page=${page}`);
+  };
+  
   const IsLogined = useSelector((state: RootState) => state.IsLogined);
   let dispatch = useDispatch();
 
@@ -99,13 +105,7 @@ function J_List(props:any) {
                   </div>
                   <div className={J_List_styles.j_list_title}> 
                     <span onClick={() => {
-                        axios.get(`/scholarship/detail/${(page-1)*10+i}`)
-                      .then(response => {
-                        document.getElementById('root')!.innerHTML = response.data;
-                      })
-                      .catch(error => {
-                        console.error(error);
-                      });
+                        handleNavigate('all', i)
                     }}>{a.title}</span>
                   </div>
                   <div className={J_List_styles.j_list_date}> 

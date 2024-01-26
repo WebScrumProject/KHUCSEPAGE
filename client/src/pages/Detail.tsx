@@ -12,8 +12,10 @@ import { useDispatch, useSelector } from "react-redux";
 import J_List from './J_List';
 import axios from 'axios';
 
-export default function Detail(props:any) {
+import { useParams } from 'react-router';
 
+export default function Detail(props:any) {
+    const { key, page } = useParams<{ key: string; page: string }>();
     
     let content:string = props.j_list[1].content;
     content = content.substring(1, content.length - 1);
