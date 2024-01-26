@@ -1,0 +1,92 @@
+.mypage_container {
+    display: flex;
+    flex-direction: column;
+    float: left;
+  }
+  .mypage_profile {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    background-color: white;
+  
+    margin: 120px 0 0 50px;
+    padding-top: 20px;
+    width: 548px;
+    height: 500px;
+  
+    border: 1px grey solid;
+    /* box-shadow: 0px 4px 3px 0px rgba(0, 0, 0, 0.25); */
+    z-index: 700;
+  }
+  .mypage_picture {
+    margin-bottom: 10px;
+    background-color: pink;
+    border-radius: 100%;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mypage_button {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    width: 100px;
+    height: 40px;
+  }
+  .mypage_portfolio {
+    display: flex;
+  
+    position: relative;
+    background-color: white;
+    float: right;
+  
+    margin: 120px 50px 20px 0;
+    width: 657px;
+    height: 872px;
+    border: 1px grey solid;
+    /* width: 50px;
+    height: 50px; */
+    /* box-shadow: 0px 4px 3px 0px rgba(0, 0, 0, 0.25); */
+    z-index: 700;
+  }
+  
+  .mypage_content {
+    /* background-color: white; */
+  
+    margin: 20px 0 20px 50px;
+    /* padding: 20px; */
+    width: 548px;
+    height: 312px;
+   
+    /* box-shadow: 0px 4px 3px 0px rgba(0, 0, 0, 0.25); */
+    z-index: 700;
+  }
+  
+  .buttton_container {
+    width: 548px;
+    /* height: 100px; */
+  }
+  .content_button {
+    margin: 0 5px;
+    width : 170px;
+    height: 43px;
+    background-color: white;
+    border-width: 2px 2px 0 2px;
+    border-color: rgb(180, 180, 180);
+    border-radius : 4px 4px 0 0;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    color: rgb(80, 80, 80);
+  }
+  .content {
+    display: flex;
+    width: 548px;
+    height: 290px;
+    border: 1px grey solid;
+    /* background-color: pink; */
+    overflow: auto;
+  }
