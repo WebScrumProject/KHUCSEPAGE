@@ -1,0 +1,99 @@
+.add_professor_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 650px;
+  }
+  
+  .add_professor_profile {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    background-color: white;
+  
+    margin: 150px 10px 53px 67px;
+    width: 600px;
+    height: 500px;
+  
+    border: 1px grey solid;
+    box-shadow: 0px 4px 3px 0px rgba(0, 0, 0, 0.25);
+  }
+  
+  .add_professor_history {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 150px 67px 53px 10px;
+    width: 800px;
+    height: 500px;
+    background-color: pink;
+    box-shadow: 0px 4px 3px 0px rgba(0, 0, 0, 0.25);
+  }
+
+  .history_input {
+    margin: 20px;
+    width: 650px;
+    height: 30px;
+    border: none;
+    border-bottom: 1px black solid;
+    background-color: transparent;
+  }
+  
+  .add_professor_project {
+    display: flex;
+    /* justify-content: space-between; */
+  
+    align-items: start;
+    margin: 10px 67px 53px 67px;
+    
+    border: 1px grey solid;
+    height: 200px;
+    box-shadow: 0px 4px 3px 0px rgba(0, 0, 0, 0.25);
+  
+  }
+  .add_professor_profile_top {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: 190px;
+    padding: 10px 0;
+    background-color: skyblue;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .image_input {
+    display: none;
+    height: 30px;
+  }
+
+  .image_preview {
+    width : 150px;
+    height : 150px;
+  }
+
+  .add_professor_picture {
+    background-color: black;
+    margin-bottom: 10px;
+    border-radius: 100%;
+    width: 150px;
+    height: 150px; 
+  }
+  
+  .add_professor_profile_bottom {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+  
+    width: 200px;
+    height: 200px;
+  }
+  
+  .add_professor_input {
+    margin-bottom: 5px;
+    height: 30px;
+    border: none;
+    border-bottom: 1px black solid;
+  }
