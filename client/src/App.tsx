@@ -1,8 +1,7 @@
-import React from 'react';
-import logo from './logo.svg';
-import './styles/App.css'
-import Routing from './routes/Routes';
-import Mynavbar from './components/navbar';
+import React from "react";
+import "./styles/App.css";
+import Routing from "./routes/Routes";
+import Mynavbar from "./components/navbar";
 
 function App() {
   return (
