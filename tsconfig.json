@@ -4,6 +4,7 @@
     "target": "ESNext",
     "jsx": "react-jsx",
     "module": "commonjs",
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
