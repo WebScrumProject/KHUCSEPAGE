@@ -2,6 +2,7 @@ interface ProfCardDTO {
   profName: string;
   profMajor: string;
   profEmail: string;
+  recNumber: string;
   recDate: string;
 }
 
