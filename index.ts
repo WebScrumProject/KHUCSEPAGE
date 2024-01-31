@@ -3,12 +3,20 @@ import session from "express-session";
 import passport from "passport";
 import path from "path";
 import dotenv from "dotenv";
+import cors from "cors";
 
 import { connectToRedis, connectToDatabase } from "./libs/database";
+import profRoutes from "./routes/prof";
 
 const app = express();
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cors());
+
 app.use(express.static(path.join(__dirname, "../client/build")));
+
+app.use("/undergraduate_student", profRoutes);
 
 dotenv.config();
 connectToDatabase();

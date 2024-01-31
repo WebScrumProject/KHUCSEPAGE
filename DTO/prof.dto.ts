@@ -2,7 +2,7 @@ interface ProfCardDTO {
   profName: string;
   profMajor: string;
   profEmail: string;
-  profPhone: string;
+  recDate: string;
 }
 
 export default ProfCardDTO;

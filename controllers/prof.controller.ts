@@ -52,12 +52,11 @@ export async function postImage(req: Request, res: Response) {
 export async function getProfCard(req: Request, res: Response) {
   try {
     const allData: DBProf[] = await Prof.find({});
-
     const cardData: ProfCardDTO[] = allData.map((data) => ({
       profName: data.profName,
       profMajor: data.profMajor,
       profEmail: data.profEmail,
-      profPhone: data.profPhone,
+      recDate: data.recDate,
     }));
     res.send(cardData);
   } catch (err) {
@@ -116,7 +115,8 @@ export async function deleteProf(req: Request, res: Response) {
   const profId: string = req.params.id;
   const objectId = new mongoose.Types.ObjectId(profId);
   try {
-    const result = await Prof.findByIdAndDelete(objectId);
+    await Prof.findByIdAndDelete(objectId);
+    await File.deleteMany({ fileUser: profId });
     res.send(`${objectId} deleted successfully`);
   } catch (err) {
     res.status(500).send("Error deleting Prof");
