@@ -10,73 +10,121 @@ interface ProfRequest extends Request {
   };
 }
 
-module.exports = {
-  getImage: async (req: ProfRequest, res: Response) => {
-    const imageId: string = req.params.id;
-    //이거 id->profId?
-    const objectId = new mongoose.Types.ObjectId(imageId);
+export async function getImage(req: ProfRequest, res: Response) {
+  const imageId: string = req.params.id;
+  //이거 id->profId?
+  const objectId = new mongoose.Types.ObjectId(imageId);
 
-    try {
-      const foundImage = await File.findById(objectId);
-      res.send(foundImage?.fileUrl);
-    } catch (err) {
-      res.status(500).send("Error getting Image Url");
-    }
-  },
-  postImage: async (req: Request, res: Response) => {
-    try {
-      const imageUser = req.body.profId;
-      const multerFile = req.file as Express.MulterS3.File;
-      //as: 변수의 타입을 명시적으로 변환하는 문법
-      const imageUrl = multerFile.location;
-      const imageName = multerFile.key;
-      const newFile: DBFile = new File({
-        fileUser: imageUser,
-        fileUrl: imageUrl,
-        fileName: imageName,
-      });
-      await newFile.save();
-      res.status(200).send({
-        success: true,
-        imageUser: imageUser,
-        imageName: imageName,
-        imageUrl: imageUrl,
-      });
-    } catch (err) {
-      res.status(400).json({
-        success: false,
-      });
-    }
-  },
-  getProfCard: async (req: Request, res: Response) => {
-    try {
-      const allData: DBProf[] = await Prof.find({});
+  try {
+    const foundImage = await File.findOne({ fileUser: objectId });
+    res.send(foundImage?.fileUrl);
+  } catch (err) {
+    res.status(500).send("Error getting Image Url");
+  }
+}
 
-      const cardData: ProfCardDTO[] = allData.map((data) => ({
-        profName: data.profName,
-        profMajor: data.profMajor,
-        profEmail: data.profEmail,
-        profPhone: data.profPhone,
-      }));
-      res.send(cardData);
-    } catch (err) {
-      console.error("Error getting carddata: ", err);
-      res.status(500).send("Server Error getting prof card data");
-    }
-  },
-  getProfDetail: async (req: ProfRequest, res: Response) => {
-    const profId: string = req.params.id;
-    const objectId = new mongoose.Types.ObjectId(profId);
-    try {
-      const foundProf = await Prof.findById(objectId);
-      res.send(foundProf);
-    } catch (err) {
-      res.status(500).send("Error getting Prof Detail");
-    }
-  },
-  putProfDetail: async (req: ProfRequest, res: Response) => {
-    const profId: string = req.params.id;
-    const objectId = new mongoose.Types.ObjectId(profId);
+export async function postImage(req: Request, res: Response) {
+  try {
+    const imageUser = req.body.profId;
+    const multerFile = req.file as Express.MulterS3.File;
+    //as: 변수의 타입을 명시적으로 변환하는 문법
+    const imageUrl = multerFile.location;
+    const imageName = multerFile.key;
+    const newFile: DBFile = new File({
+      fileUser: imageUser,
+      fileUrl: imageUrl,
+      fileName: imageName,
+    });
+    await newFile.save();
+    res.status(200).send({
+      success: true,
+      imageUser: imageUser,
+      imageName: imageName,
+      imageUrl: imageUrl,
+    });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+    });
+  }
+}
+
+export async function getProfCard(req: Request, res: Response) {
+  try {
+    const allData: DBProf[] = await Prof.find({});
+
+    const cardData: ProfCardDTO[] = allData.map((data) => ({
+      profName: data.profName,
+      profMajor: data.profMajor,
+      profEmail: data.profEmail,
+      profPhone: data.profPhone,
+    }));
+    res.send(cardData);
+  } catch (err) {
+    console.error("Error getting carddata: ", err);
+    res.status(500).send("Server Error getting prof card data");
+  }
+}
+
+export async function getProfDetail(req: ProfRequest, res: Response) {
+  const profId: string = req.params.id;
+  const objectId = new mongoose.Types.ObjectId(profId);
+  try {
+    const foundProf = await Prof.findById(objectId);
+    res.send(foundProf);
+  } catch (err) {
+    res.status(500).send("Error getting Prof Detail");
+  }
+}
+
+export async function putProfDetail(req: ProfRequest, res: Response) {
+  const profId: string = req.params.id;
+  const objectId = new mongoose.Types.ObjectId(profId);
+  const {
+    profName,
+    profMajor,
+    profPhone,
+    profEmail,
+    profLab,
+    profLink,
+    recNumber,
+    recDate,
+    profHistory,
+    labHistory,
+  } = req.body;
+  try {
+    const existingProf = await Prof.findById(objectId);
+    existingProf.profName = profName || existingProf.profName;
+    existingProf.profMajor = profMajor || existingProf.profMajor;
+    existingProf.profPhone = profPhone || existingProf.profPhone;
+    existingProf.profEmail = profEmail || existingProf.profEmail;
+    existingProf.profLab = profLab || existingProf.profLab;
+    existingProf.profLink = profLink || existingProf.profLink;
+    existingProf.recNumber = recNumber || existingProf.recNumber;
+    existingProf.recDate = recDate || existingProf.recDate;
+    existingProf.profHistory = profHistory || existingProf.profHistory;
+    existingProf.labHistory = labHistory || existingProf.labHistory;
+
+    const updatedProf = await existingProf.save();
+    res.status(200).json(updatedProf);
+  } catch (err) {
+    res.status(500).send("Error updating Prof");
+  }
+}
+
+export async function deleteProf(req: Request, res: Response) {
+  const profId: string = req.params.id;
+  const objectId = new mongoose.Types.ObjectId(profId);
+  try {
+    const result = await Prof.findByIdAndDelete(objectId);
+    res.send(`${objectId} deleted successfully`);
+  } catch (err) {
+    res.status(500).send("Error deleting Prof");
+  }
+}
+
+export async function postProf(req: Request, res: Response) {
+  try {
     const {
       profName,
       profMajor,
@@ -89,65 +137,21 @@ module.exports = {
       profHistory,
       labHistory,
     } = req.body;
-    try {
-      const existingProf = await Prof.findById(objectId);
-      existingProf.profName = profName || existingProf.profName;
-      existingProf.profMajor = profMajor || existingProf.profMajor;
-      existingProf.profPhone = profPhone || existingProf.profPhone;
-      existingProf.profEmail = profEmail || existingProf.profEmail;
-      existingProf.profLab = profLab || existingProf.profLab;
-      existingProf.profLink = profLink || existingProf.profLink;
-      existingProf.recNumber = recNumber || existingProf.recNumber;
-      existingProf.recDate = recDate || existingProf.recDate;
-      existingProf.profHistory = profHistory || existingProf.profHistory;
-      existingProf.labHistory = labHistory || existingProf.labHistory;
-
-      const updatedProf = await existingProf.save();
-      res.status(200).json(updatedProf);
-    } catch (err) {
-      res.status(500).send("Error updating Prof");
-    }
-  },
-  deleteProf: async (req: Request, res: Response) => {
-    const profId: string = req.params.id;
-    const objectId = new mongoose.Types.ObjectId(profId);
-    try {
-      const result = await Prof.findByIdAndDelete(objectId);
-      res.send(`${objectId} deleted successfully`);
-    } catch (err) {
-      res.status(500).send("Error deleting Prof");
-    }
-  },
-  postProf: async (req: Request, res: Response) => {
-    try {
-      const {
-        profName,
-        profMajor,
-        profPhone,
-        profEmail,
-        profLab,
-        profLink,
-        recNumber,
-        recDate,
-        profHistory,
-        labHistory,
-      } = req.body;
-      const newProf: DBProf = new Prof({
-        profName,
-        profMajor,
-        profPhone,
-        profEmail,
-        profLab,
-        profLink,
-        recNumber,
-        recDate,
-        profHistory,
-        labHistory,
-      });
-      const savedProf = await newProf.save();
-      res.status(200).json({ ObjectId: savedProf._id });
-    } catch (err) {
-      res.status(500).send("Error posting Prof");
-    }
-  },
-};
+    const newProf: DBProf = new Prof({
+      profName,
+      profMajor,
+      profPhone,
+      profEmail,
+      profLab,
+      profLink,
+      recNumber,
+      recDate,
+      profHistory,
+      labHistory,
+    });
+    const savedProf = await newProf.save();
+    res.status(200).json({ ObjectId: savedProf._id });
+  } catch (err) {
+    res.status(500).send("Error posting Prof");
+  }
+}
