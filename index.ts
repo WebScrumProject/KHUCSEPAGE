@@ -1,6 +1,7 @@
 require('dotenv').config()
 import express from 'express';
 import path from 'path'
+import scholarshipRoutes from './controllers/scholarshipController'
 const app = express()
 const connectMongoDB = require('./models/connectMongoDB')
 const connectRedis = require('./models/connectRedis')
@@ -18,6 +19,8 @@ app.listen(process.env.MAIN_PORT, function(){
     connectMongoDB
     console.log('listening on 8080')
 })
+
+app.use('/scholarship', scholarshipRoutes)
 
 app.get('*', (req, res)=>{
   res.sendFile(path.join(__dirname, '/client/build/index.html'));
