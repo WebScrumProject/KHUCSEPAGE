@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, Ref, useMemo } from 'react';
-import '../css/App.css';
+import '../styles/App.css';
 import J_List_styles from '../styles/J_List.module.css';
 import JB_styles from '../styles/JB_detail.module.css';
 import P_add_styles from '../styles/P_List_add.module.css'
@@ -102,6 +102,8 @@ export default function P_List_add_design() {
                         />
                 </div>
 
+                <button onClick={()=>{console.log(p_list)}}>콘솔</button>
+
                 <div className={J_List_styles.janghak_thin_line}></div>
 
                 <div className={P_add_styles.P_List_title2}>
@@ -197,7 +199,7 @@ export default function P_List_add_design() {
                 <button className='navbar_button' onClick={() => {
                    
                     console.log(p_list[0])
-                    useEffect(()=>{
+                    /* useEffect(()=>{
                         axios.post('project/write',p_list[0])
                         .then((response) => {
                             console.log('succes');
@@ -205,11 +207,11 @@ export default function P_List_add_design() {
                           .catch((error) => {
                             console.error(error);
                           });
-                    },[])
+                    },[]) */
                 }}>글쓰기</button> 
             </div>
             
-
+            <button onClick={()=>{console.log(p_list)}}>zhsth</button>
             
 
 

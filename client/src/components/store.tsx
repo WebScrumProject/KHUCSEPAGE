@@ -113,14 +113,45 @@ let p_list = createSlice ({
         },
         p_addimage(state,action) {
             state[0].content.image = action.payload;
+        },
+        p_addfield(state,action){
+            if(state[0].recruit.length!=action.payload.num) {
+                console.log(123)
+                /* while(state[0].recruit.length!=action.payload.num) {
+                    state[0].recruit.push(
+                        {
+                            field: '',
+                            apply_cnt: 0,
+                        }
+                    )
+                } */
+            }
+            console.log(456)
+            state[0].recruit[action.payload.num].field =action.payload.field;
+        },
+        p_addapply_cnt(state,action){
+            if(state[0].recruit.length!=action.payload.num) {
+                /* while(state[0].recruit.length!=action.payload.num) {
+                    state[0].recruit.push(
+                        {
+                            field: '',
+                            apply_cnt: 0,
+                        }
+                    )
+                } */
+            }
+            state[0].recruit[action.payload.num].apply_cnt=action.payload.apply_cnt;
         }
+
     }
 })
 
 
 export const { setList, removeList,resetList } = j_list.actions;
 export const { changeIsLogined } = IsLogined.actions;
-export const { p_addList, p_removeList, p_resetList,p_addrecruit, p_addcontent, p_removerecruit, p_addtitle,p_addimage} = p_list.actions;
+export const { p_addList, p_removeList, p_resetList,
+                p_addrecruit, p_addcontent, p_removerecruit, 
+                p_addtitle,p_addimage, p_addfield, p_addapply_cnt} = p_list.actions;
 
 // 스토어 설정
 const store = configureStore({

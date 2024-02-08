@@ -7,7 +7,7 @@ import Mynavbar from '../components/navbar';
 
 import { useState } from 'react';
 
-import { RootState, p_addcontent, p_removerecruit } from "../components/store";
+import { RootState, p_addcontent, p_addfield, p_addapply_cnt, p_removerecruit } from "../components/store";
 import { useDispatch, useSelector } from "react-redux";
 
 import { FaRegCalendarAlt } from "react-icons/fa";
@@ -21,14 +21,32 @@ export default function Mojib(props:any) {
     let p_list = useSelector((state: RootState) => state.p_list);
     let dispatch = useDispatch();
 
-    const handleChange = (e:any) => {
-        dispatch(p_addcontent(e.target.value));
-        console.log(p_list[0].content.text);
+    const handleChangeField = (e:any) => {
+        dispatch(p_addfield(
+            {
+                field : e.target.value,
+                num : props.num
+            }
+        ));
+        
+    };
+
+    const handleChangeApply_cnt = (e:any) => {
+        dispatch(p_addapply_cnt({
+            apply_cnt : e.target.value,
+            num : props.num
+        }));
+        
     };
 
     return (
         <div className={P_add_styles.mojib_container}>
-            <input className={P_add_styles.mojib_container}
+            
+            <input className=
+            {P_add_styles.mojib_container}
+            name="field" 
+            /* value={p_list[0].apply[props.num].field}  */
+            onChange={handleChangeField}
             
             />
             <div style={{
@@ -37,7 +55,13 @@ export default function Mojib(props:any) {
                 fontWeight: 400,
                 marginTop:23
                 }}> 인원 수 </div>
-            <input className={P_add_styles.mojib_container}/>
+
+            <input className={P_add_styles.mojib_container}
+            name="apply_cnt" 
+            /* value={p_list[0].recruit[props.num].apply_cnt}  */
+            onChange={handleChangeApply_cnt}
+            />
+
             <MdCancel onClick={() => {
                 if(props.num>0) {
                     dispatch(p_removerecruit(props.num))

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import '../css/App.css';
+
 import J_List_styles from '../styles/J_List.module.css';
 import JB_styles from '../styles/JB_detail.module.css';
 import P_add_styles from '../styles/P_List_add.module.css'
