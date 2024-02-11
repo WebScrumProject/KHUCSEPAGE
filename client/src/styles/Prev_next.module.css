@@ -1,0 +1,22 @@
+.prev_container{
+    width: 1318px;
+    height: 73px;
+
+    margin-left:61px;
+
+
+}
+
+.prev_text{
+    margin-left: 39px;
+    margin-top:24px;
+
+    color: #000;
+
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+
+}

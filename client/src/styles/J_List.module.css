@@ -1,0 +1,166 @@
+.janghak_text {
+    color: #000;
+    font-family: Inter;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  
+    display:inline-block;
+    margin-top: 14%; 
+    margin-left:4%;
+  }
+  
+  .janghak_container {
+    width : 1318px;
+    height: 60px; /* 보류 */
+    /* background-color:rgb(88, 210, 210); */
+    
+    display:flex;
+    margin-top: 2.5%;
+    margin-left:61px;
+    justify-content: space-between;
+  
+  }
+  
+  .janghak_categori {
+    background-color: #EEE;
+    width: 136px; /*136px */
+  
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  
+    color: #000;
+  
+  text-align: center;
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+    
+  }
+  
+  .janghak_search {
+    background-color: aliceblue;
+    width: 1090px; /*1090px*/ 
+  
+  }
+  
+  .janghak_icon {
+    width : 60px; /*60*/
+    height: 60px;
+    background-color: #EEE;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    border-radius: 5px;
+  }
+  
+  .janghak_list {
+    height:548px;
+    width:1318px;
+    margin-top:26px;
+    margin-left:61px;
+  }
+  
+  .janghak_thick_line {
+    width: 1318.001px;
+    height: 5px;
+    background-color: #000;
+  
+    
+  }
+  .janghak_thin_line{
+    width: 1318.001px;
+    height: 1.5px;
+    background-color: #BABABA;
+  }
+  
+  .janghak_title {
+    width: 1318px;
+    height: 68px;
+    flex-shrink: 0;
+    background-color: #F3F3F3;
+  
+    display:flex;
+    justify-content: space-between;
+  
+  
+  }
+  
+  .janghak_text1{
+    color: #000;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  
+    margin-left: 31px;
+    margin-right: 37px;
+    margin-top :20px;
+  }
+  
+  .j_list_container {
+   /*  background-color: aqua; */
+    height: 61px;
+    width:1318px;
+  
+    color: #000000;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+  
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  
+  }
+  
+  .j_list_categori {
+    width: 136px;
+    display:flex;
+    justify-content: center;
+  }
+  .j_list_categori_rec {
+    width: 70px;
+    height: 41px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background-color: #F87F7F;
+  
+    color: #FFF;
+    text-align: center;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    
+    display:flex;
+    justify-content: center;
+  }
+  
+  .j_list_categori_text {
+    margin-top: 11px;
+  }
+  .j_list_title {
+    width: 1053px;
+    display:flex;
+    justify-content: center;
+  }
+  .j_list_date {
+    width: 127px;
+    display:flex;
+    justify-content: center;
+  }
+  
+  .search_icon {
+    width: 40px;
+    height: 40px;
+  }
