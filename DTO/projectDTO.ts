@@ -1,0 +1,46 @@
+import { StringArray } from 'aws-sdk/clients/rdsdataservice';
+const projectModel = require('../models/projectSchema');
+
+interface np {
+  title: String,
+  category: String,
+  writer: String,
+  id : String,
+  date: String,
+  content: {
+    image: StringArray,
+    video: StringArray,
+    text : String,
+    file : StringArray
+  },
+  recruit: Array<object>,
+  deadline : String,
+  is_done: boolean,
+  apply : Array<object>
+}
+
+export async function writeProject(newProject:np, images:StringArray, videos:StringArray, files: StringArray){
+    try{
+        const project = await projectModel.create({
+          title: newProject.title,
+          category: newProject.category,
+          writer: newProject.writer,
+          writer_id : newProject.id,
+          date: newProject.date,
+          content: {
+            image: images,
+            video: videos,
+            text : newProject.content.text,
+            file : files
+          },
+          recruit: [],
+          deadline : newProject.deadline,
+          is_done: false,
+          apply : []
+        })
+        
+      }
+      catch(err){
+        console.log(err)
+      }
+}

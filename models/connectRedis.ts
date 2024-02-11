@@ -7,8 +7,10 @@ const client = redis.createClient({
 
 client.on('connect', () => {
     console.info('Redis connected');
-  });
-  client.on('error', (err: any) => {
-    console.error('Redis Client Error', err);
-  });
-  client.connect().then();
+});
+client.on('error', (err: any) => {
+  console.error('Redis Client Error', err);
+});
+client.connect().then();
+
+module.exports = client
