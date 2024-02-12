@@ -1,7 +1,6 @@
 import {configureStore, createSlice} from '@reduxjs/toolkit'
 
 interface ProfessorHistory {
-    _id: string;
     date: string;
     content: string;
 }
@@ -9,7 +8,6 @@ export let profHistory:any = createSlice ({
     name : 'profHistory',
     initialState : [
         {
-        _id : '',
         date : '2000-00-00',
         content : ''
         }
@@ -18,11 +16,11 @@ export let profHistory:any = createSlice ({
         addProfHistory(state, action) {
             state.push(action.payload)
         },
-        deleteProfHistory(state, action) {
-            const idToDelete = action.payload;
-            const indexToDelete = state.findIndex(item => item._id == idToDelete);
-            state.splice(indexToDelete, 1)
-        }
+        // deleteProfHistory(state, action) {
+        //     const idToDelete = action.payload;
+        //     const indexToDelete = state.findIndex(item => item._id == idToDelete);
+        //     state.splice(indexToDelete, 1)
+        // }
     }
 })
 

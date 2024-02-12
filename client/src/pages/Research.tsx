@@ -77,45 +77,45 @@ function Research() {
       };
     return (
         <div>
-            <button className={styles.add_professor} onClick={() => {navigate('/addProfessor')}}> 페이지 추가 </button>
-            <div className={styles.research_container}>
-                {
-                    professor.map((a:any, i:any) => {
-                        return(
-                            <div className={styles.research_box}>
-                                <div className={styles.research_profile}>
-                                    <div className={styles.research_picture} />
-                                    <p>{a.profName} 교수님</p>
-                                    <p>{a.profPhone}</p>
-                                </div>
-                                <div className={styles.research_content}>
-                                    <p>모집 인원 : {a.recNumber}명</p>
-                                    <p>기간 : {a.recDate}</p>
-                                    <p>연구 분야 : {a.profMajor}</p>
-                                </div>
-                                <div className={styles.button_container}>
-                                    <button type='submit' 
-                                    className={styles.delete_button}
-                                    onClick={() => {
-                                        var id = a._id
-                                        deleteUndergraduate(i)}}> - </button>
-                                    <button type='submit' 
-                                        className={styles.detail_button} 
-                                        onClick={() => {
-                                            var id = a._id
-                                            navigate(`/detail/${id}`)}}> + </button>
-                                </div>
-                            </div>
-                        )
-                    })
-                }
-            </div>
-            <div className={styles.pagination}>
-                <button className={styles.prev_btn} onClick={prevPage}
-                    style={{ opacity: page !== 1 ? 1 : 0, pointerEvents: page !== 1 ? 'auto' : 'none' }}>이전</button>
-                    <p className={styles.page_num}>{page}페이지</p>
-                <button className={styles.next_btn} onClick={nextPage}>다음</button>      
-            </div>
+          <button className={styles.add_professor} onClick={() => {navigate('/addProfessor')}}> 페이지 추가 </button>
+          <div className={styles.research_container}>
+              {
+                professor.map((a:any, i:any) => {
+                  return(
+                    <div className={styles.research_box}>
+                      <div className={styles.research_profile}>
+                        <div className={styles.research_picture} />
+                        <p>{a.profName} 교수님</p>
+                        <p>{a.profEmail}</p>
+                      </div>
+                      <div className={styles.research_content}>
+                        <p>모집 인원 : {a.recNumber}명</p>
+                        <p>기간 : {a.recDate}</p>
+                        <p>연구 분야 : {a.profMajor}</p>
+                      </div>
+                      <div className={styles.button_container}>
+                        <button type='submit' 
+                        className={styles.delete_button}
+                        onClick={() => {
+                          var id = a._id
+                          deleteUndergraduate(i)}}> - </button>
+                        <button type='submit' 
+                          className={styles.detail_button} 
+                          onClick={() => {
+                            var id = a._id
+                            navigate(`/detail/${id}`)}}> + </button>
+                      </div>
+                    </div>
+                  )
+                })
+              }
+          </div>
+          <div className={styles.pagination}>
+            <button className={styles.prev_btn} onClick={prevPage}
+              style={{ opacity: page !== 1 ? 1 : 0, pointerEvents: page !== 1 ? 'auto' : 'none' }}>이전</button>
+              <p className={styles.page_num}>{page}페이지</p>
+            <button className={styles.next_btn} onClick={nextPage}>다음</button>      
+          </div>
         </div>
     )
 }
