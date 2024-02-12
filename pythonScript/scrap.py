@@ -6,8 +6,8 @@ client = MongoClient('mongodb+srv://chaen328:scrumproject1@cluster0.coq8qi7.mong
 db = client.test
 
 base_url = "https://www.khu.ac.kr/kor/notice/list.do"
-start_page = 5
-end_page = 1
+start_page = 20
+end_page = 11
 for page in range(start_page, end_page-1, -1):
     url = f"{base_url}?page={page}&category=SCHOLARSHIP"
     html = requests.get(url).text

@@ -1,5 +1,5 @@
 import { StringArray } from 'aws-sdk/clients/rdsdataservice';
-const projectModel = require('../models/projectSchema');
+const projectModel = require('../models/projectSchema.tsx');
 
 interface np {
   title: String,
