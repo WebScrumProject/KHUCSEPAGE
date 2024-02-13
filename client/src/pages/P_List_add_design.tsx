@@ -4,6 +4,7 @@ import J_List_styles from '../styles/J_List.module.css';
 import JB_styles from '../styles/JB_detail.module.css';
 import P_add_styles from '../styles/P_List_add.module.css'
 import P_List_styles from '../styles/P_List.module.css'
+import P_Calendar from '../components/calendar';
 
 import Mynavbar from '../components/navbar';
 import Mojib from '../components/mojib'
@@ -26,6 +27,7 @@ export default function P_List_add_design() {
     let p_list = useSelector((state: RootState) => state.p_list);
     let dispatch = useDispatch();
     
+    const [value, onChange] = useState(new Date());
 
     const handleChangeContent = (e:any) => {
         dispatch(p_addcontent(e.target.value));
@@ -122,10 +124,14 @@ export default function P_List_add_design() {
 
                     <div className={P_add_styles.P_List_date}></div>
                     
-                    <FaRegCalendarAlt className={P_add_styles.calendar_icon} onClick={() => {
-
-                    }} />
+                    <FaRegCalendarAlt className={P_add_styles.calendar_icon}>
+                        
+                    </FaRegCalendarAlt>
                     
+                    <P_Calendar onChange={onChange} value={value}></P_Calendar>
+                    
+                    
+                    <button onClick={()=>{console.log(value)}}>날짜콘솔</button>
              
                 </div>
 
@@ -144,7 +150,7 @@ export default function P_List_add_design() {
 
                 <button onClick={() =>{
                     console.log(imageList)
-                    console.log(showImages)
+                    /* console.log(showImages) */
                 }}>콘솔</button>
                 
             </div>
@@ -198,16 +204,16 @@ export default function P_List_add_design() {
                 <button className='navbar_button'>목록</button>
                 <button className='navbar_button' onClick={() => {
                    
-                    console.log(p_list[0])
-                    /* useEffect(()=>{
-                        axios.post('project/write',p_list[0])
+                    /* console.log(p_list[0]) */
+                    
+                        axios.post('project/write',imageList)
                         .then((response) => {
                             console.log('succes');
                           })
                           .catch((error) => {
                             console.error(error);
                           });
-                    },[]) */
+                    
                 }}>글쓰기</button> 
             </div>
             
