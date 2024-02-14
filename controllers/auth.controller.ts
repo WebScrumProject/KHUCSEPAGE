@@ -39,9 +39,8 @@ export async function googleOauthHandler(req: Request, res: Response) {
       hd: userDetails.hd,
     });
 
-    console.log(data);
-
     //upsertUser하고 반환되는 값을 통해서 email name을 할당하려고 했지만 잘 안돼서 임시로..
+
     const email = userDetails.email;
     const name = userDetails.name;
 

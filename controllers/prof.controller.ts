@@ -23,29 +23,19 @@ export async function getImage(req: ProfRequest, res: Response) {
   }
 }
 
-export async function postImage(req: Request, res: Response) {
+async function postImage(req: Request, res: Response) {
   try {
-    const imageUser = req.body.profId;
     const multerFile = req.file as Express.MulterS3.File;
-    //as: 변수의 타입을 명시적으로 변환하는 문법
     const imageUrl = multerFile.location;
-    const imageName = multerFile.key;
-    const newFile: DBFile = new File({
-      fileUser: imageUser,
-      fileUrl: imageUrl,
-      fileName: imageName,
-    });
-    await newFile.save();
-    res.status(200).send({
-      success: true,
-      imageUser: imageUser,
-      imageName: imageName,
-      imageUrl: imageUrl,
-    });
+    // const imageName = multerFile.key;
+    // const newFile: DBFile = new File({
+    //   fileUrl: imageUrl,
+    //   fileName: imageName,
+    // });
+    // await newFile.save();
+    return imageUrl;
   } catch (err) {
-    res.status(400).json({
-      success: false,
-    });
+    throw new Error(err.message);
   }
 }
 
@@ -138,6 +128,7 @@ export async function postProf(req: Request, res: Response) {
       profHistory,
       labHistory,
     } = req.body;
+
     const newProf: DBProf = new Prof({
       profName,
       profMajor,
