@@ -1,16 +1,21 @@
 import express from "express";
-import session from "express-session";
+import expressSession from "express-session";
 import passport from "passport";
 import path from "path";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectRedis from "connect-redis";
 
-import { connectToRedis, connectToDatabase } from "./libs/database";
+import {
+  // connectToRedis,
+  connectToDatabase,
+  redisClient,
+} from "./libs/database";
+import authRoutes from "./routes/login";
 import profRoutes from "./routes/prof";
 
+const RedisStore = require("connect-redis").default;
 const app = express();
-const RedisStore = connectRedis(session);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -18,14 +23,16 @@ app.use(cors());
 
 app.use(express.static(path.join(__dirname, "../client/build")));
 
+app.use(authRoutes);
 app.use("/undergraduate_student", profRoutes);
 
 dotenv.config();
 connectToDatabase();
-connectToRedis();
+// connectToRedis();
 
 app.use(
-  session({
+  expressSession({
+    store: new RedisStore({ client: redisClient }),
     secret: process.env.SESSION_KEY,
     resave: false,
     saveUninitialized: false,
