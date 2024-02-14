@@ -4,7 +4,7 @@ import {
   getAccessTokenFromGoogle,
   getGoogleAuthURL,
 } from "../libs/googleoauth";
-import getUserDetails, { upsertUser } from "../libs/userdetail";
+import { getUserDetails, upsertUser } from "../libs/userdetail";
 import {
   appendRefreshToken,
   emptyRefreshTokens,
@@ -12,13 +12,14 @@ import {
   generateRefreshJWT,
 } from "../libs/jwt";
 
-async function googleLogin(req: Request, res: Response) {
+export async function googleLogin(req: Request, res: Response) {
   const url = getGoogleAuthURL();
   return res.status(200).json({
     url,
   });
 }
-async function googleOauthHandler(req: Request, res: Response) {
+
+export async function googleOauthHandler(req: Request, res: Response) {
   const code = req.query.code;
   try {
     const access_token = await getAccessTokenFromGoogle(code);
@@ -58,7 +59,7 @@ async function googleOauthHandler(req: Request, res: Response) {
   }
 }
 
-async function getTokenWithRefreshToken(req, res) {
+export async function getTokenWithRefreshToken(req, res) {
   const { name, email } = req.user;
   const token = generateJWT({ email, name });
   return res.status(200).json({
@@ -66,7 +67,7 @@ async function getTokenWithRefreshToken(req, res) {
   });
 }
 
-async function logout(req, res) {
+export async function logout(req, res) {
   const { name } = req.user;
   try {
     await emptyRefreshTokens(name);
@@ -79,10 +80,3 @@ async function logout(req, res) {
     });
   }
 }
-
-module.exports = {
-  googleLogin,
-  googleOauthHandler,
-  getTokenWithRefreshToken,
-  logout,
-};

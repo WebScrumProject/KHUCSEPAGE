@@ -1,17 +1,21 @@
 import express from "express";
-
-import { redisClient } from "../libs/database";
+import * as authController from "../controllers/auth.controller";
+import verifyRefreshToken from "../middlewares/refresh";
 
 //url앞에 login있음
 
 const router = express.Router();
 
-router.get("/login/google");
+router.get("/login/google", authController.googleLogin);
 
-router.get("/oauth2/redirect/google");
+router.get("/oauth2/redirect/google", authController.googleOauthHandler);
 
-router.post("/token", [verifyRefreshToken]);
+router.post(
+  "/token",
+  [verifyRefreshToken],
+  authController.getTokenWithRefreshToken
+);
 
-router.post("/logout", [verifyRefreshToken]);
+router.post("/logout", [verifyRefreshToken], authController.logout);
 
 module.exports = router;

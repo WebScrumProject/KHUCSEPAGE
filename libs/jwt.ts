@@ -44,9 +44,22 @@ async function emptyRefreshTokens(user) {
   }
 }
 
+async function refreshTokenExists(user, refreshToken) {
+  try {
+    const refreshTokenExistence = await redisClient.sIsMember(
+      user,
+      refreshToken
+    );
+    return refreshTokenExistence;
+  } catch (err) {
+    throw new Error(`Redis client error: ${err.message}`);
+  }
+}
+
 export {
   generateJWT,
   generateRefreshJWT,
   appendRefreshToken,
   emptyRefreshTokens,
+  refreshTokenExists,
 };
