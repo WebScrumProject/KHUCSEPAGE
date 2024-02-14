@@ -4,11 +4,13 @@ import passport from "passport";
 import path from "path";
 import dotenv from "dotenv";
 import cors from "cors";
+import connectRedis from "connect-redis";
 
 import { connectToRedis, connectToDatabase } from "./libs/database";
 import profRoutes from "./routes/prof";
 
 const app = express();
+const RedisStore = connectRedis(session);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -20,12 +22,14 @@ app.use("/undergraduate_student", profRoutes);
 
 dotenv.config();
 connectToDatabase();
+connectToRedis();
 
 app.use(
   session({
     secret: process.env.SESSION_KEY,
     resave: false,
     saveUninitialized: false,
+    cookie: { secure: false },
   })
 );
 
