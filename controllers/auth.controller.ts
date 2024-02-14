@@ -7,6 +7,7 @@ import {
 import getUserDetails, { upsertUser } from "../libs/userdetail";
 import {
   appendRefreshToken,
+  emptyRefreshTokens,
   generateJWT,
   generateRefreshJWT,
 } from "../libs/jwt";
@@ -32,9 +33,13 @@ async function googleOauthHandler(req: Request, res: Response) {
     const data = await upsertUser({
       userDetails,
     });
+    console.log(data);
 
+    //upsertUser하고 반환되는 값을 통해서 email name을 할당하려고 했지만 잘 안돼서 임시로..
+    const email = userDetails.email;
+    const name = userDetails.name;
 
-    const token = generateJWT({ data.useremail, name });
+    const token = generateJWT({ email, name });
 
     const refreshToken = generateRefreshJWT({ email, name });
 
@@ -52,3 +57,32 @@ async function googleOauthHandler(req: Request, res: Response) {
     });
   }
 }
+
+async function getTokenWithRefreshToken(req, res) {
+  const { name, email } = req.user;
+  const token = generateJWT({ email, name });
+  return res.status(200).json({
+    token,
+  });
+}
+
+async function logout(req, res) {
+  const { name } = req.user;
+  try {
+    await emptyRefreshTokens(name);
+    return res.status(200).json({
+      message: "Logout succesful",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      err: err.message,
+    });
+  }
+}
+
+module.exports = {
+  googleLogin,
+  googleOauthHandler,
+  getTokenWithRefreshToken,
+  logout,
+};

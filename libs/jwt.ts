@@ -35,4 +35,18 @@ async function appendRefreshToken(user, refreshToken) {
   }
 }
 
-export { generateJWT, generateRefreshJWT, appendRefreshToken };
+async function emptyRefreshTokens(user) {
+  try {
+    await redisClient.del(user);
+    return;
+  } catch (err) {
+    throw new Error(`Redis client error: ${err.message}`);
+  }
+}
+
+export {
+  generateJWT,
+  generateRefreshJWT,
+  appendRefreshToken,
+  emptyRefreshTokens,
+};
