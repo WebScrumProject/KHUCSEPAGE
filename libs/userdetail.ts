@@ -17,70 +17,80 @@ async function getUserDetails(access_token) {
   return userInfo;
 }
 
-function InsertUser(userDetails) {
-  let info: string = userDetails.displayName;
-  let name: string = "",
+function InsertUser({ id, email, name, picture, hd }) {
+  let username: string = "",
     college: string = "",
     major: string,
     add: boolean = false;
   let index: number = 0;
-  for (let i = 0; i < info.length; i++) {
-    if (info[i] != "[") name += info[i];
+  for (let i = 0; i < name.length; i++) {
+    if (name[i] != "[") username += name[i];
     else {
       index = i;
       break;
     }
   }
-  for (let i = index + 1; i < info.length; i++) {
-    if (add == true) college += info[i];
-    if (info[i] == "(") {
+  for (let i = index + 1; i < name.length; i++) {
+    if (add == true) college += name[i];
+    if (name[i] == "(") {
       add = true;
-    } else if (info[i] == " ") {
+    } else if (name[i] == " ") {
       index = i;
       add = false;
       break;
     }
   }
-  major = info.substring(index + 1, info.length - 1);
-  redisClient.hSet(userDetails.id, "username", name);
-  redisClient.hSet(userDetails.id, "usercollege", college);
-  redisClient.hSet(userDetails.id, "usermajor", major);
-  redisClient.hSet(userDetails.id, "useremail", userDetails.emails[0].value);
-  redisClient.hSet(userDetails.id, "userphone", "");
-  redisClient.hSet(userDetails.id, "usertype", "newuser");
-  redisClient.hSet(userDetails.id, "applyproj", JSON.stringify([]));
-  redisClient.hSet(userDetails.id, "portfolio", JSON.stringify([]));
-  redisClient.hSet(userDetails.id, "profileImage", userDetails._json.picture);
+  major = name.substring(index + 1, name.length - 1);
+
+  const user = {
+    username: name,
+    usercollege: college,
+    usermajor: major,
+    useremail: email,
+    userphone: "",
+    usertype: "newuser",
+  };
+
+  redisClient.hmset(id, user, (err, reply) => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log(reply);
+    }
+  });
+
+  // redisClient.hset(id, "username", name);
+  // redisClient.hset(userDetails.id, "usercollege", college);
+  // redisClient.hset(userDetails.id, "usermajor", major);
+  // redisClient.hset(userDetails.id, "useremail", userDetails.emails[0].value);
+  // redisClient.hset(userDetails.id, "userphone", "");
+  // redisClient.hset(userDetails.id, "usertype", "newuser");
+  // redisClient.hset(userDetails.id, "applyproj", JSON.stringify([]));
+  // redisClient.hset(userDetails.id, "portfolio", JSON.stringify([]));
+  // redisClient.hset(userDetails.id, "profileImage", userDetails._json.picture);
 }
 
-async function upsertUser(userDetails) {
+async function upsertUser({ id, email, name, picture, hd }) {
   try {
-    const reply = await redisClient.exists(userDetails.id);
+    const reply = await redisClient.exists(id);
 
     if (reply === 1) {
-      console.log(`User already exists in Redis: ${userDetails}`);
+      console.log(`User already exists in Redis: ${id}`);
+    } else if (hd === "khu.ac.kr") {
+      InsertUser({ id, email, name, picture, hd });
+      console.log(`Succesfully insert in Redis: ${id}`);
     } else {
-      if (userDetails._json.hd === "khu.ac.kr") {
-        InsertUser(userDetails);
-        console.log(`Succesfully insert in Redis: ${userDetails}`);
-
-        const data = await redisClient.hmGet(
-          userDetails.id,
-          "useremail",
-          "username"
-        );
-
-        const result = data.reduce((acc, value, index) => {
-          const field = index === 0 ? "useremail" : "username";
-          acc[field] = value;
-          return acc;
-        }, {});
-
-        return result;
-      } else {
-        console.log("Try again with khu mail");
-      }
+      console.log("Try again with khu mail");
     }
+    const data = await redisClient.hmget(id, "useremail", "username");
+
+    const result = data.reduce((acc, value, index) => {
+      const field = index === 0 ? "useremail" : "username";
+      acc[field] = value;
+      return acc;
+    }, {});
+
+    return result;
   } catch (err) {
     throw new Error(err.message);
   }

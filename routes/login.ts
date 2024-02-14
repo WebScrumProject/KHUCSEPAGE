@@ -8,7 +8,9 @@ const router = express.Router();
 
 router.get("/login/google", authController.googleLogin);
 
-router.get("/oauth2/redirect/google", authController.googleOauthHandler);
+// router.get("/oauth2/redirect/google", authController.googleOauthHandler);
+
+router.get("/login/redirect", authController.googleOauthHandler);
 
 router.post(
   "/token",
@@ -18,4 +20,4 @@ router.post(
 
 router.post("/logout", [verifyRefreshToken], authController.logout);
 
-module.exports = router;
+export default router;

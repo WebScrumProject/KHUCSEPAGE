@@ -28,7 +28,7 @@ function generateRefreshJWT({ email, name }) {
 
 async function appendRefreshToken(user, refreshToken) {
   try {
-    await redisClient.sAdd(user, refreshToken);
+    await redisClient.sadd(user, refreshToken);
     return;
   } catch (err) {
     throw new Error(`Redis client error refreshingtoken: ${err.message}`);
@@ -46,7 +46,7 @@ async function emptyRefreshTokens(user) {
 
 async function refreshTokenExists(user, refreshToken) {
   try {
-    const refreshTokenExistence = await redisClient.sIsMember(
+    const refreshTokenExistence = await redisClient.sismember(
       user,
       refreshToken
     );
