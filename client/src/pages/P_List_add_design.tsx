@@ -124,18 +124,26 @@ export default function P_List_add_design() {
 
                     <div className={P_add_styles.P_List_date}></div>
                     
-                    <FaRegCalendarAlt className={P_add_styles.calendar_icon}>
+                    {/* <FaRegCalendarAlt className={P_add_styles.calendar_icon}>
                         
-                    </FaRegCalendarAlt>
+                    </FaRegCalendarAlt> */}
                     
                     <P_Calendar onChange={onChange} value={value}></P_Calendar>
                     
                     
-                    <button onClick={()=>{console.log(value)}}>날짜콘솔</button>
+                    {/* <button onClick={()=>{console.log(value)}}>날짜콘솔</button> */}
              
                 </div>
 
             <div className={J_List_styles.janghak_thin_line}></div>
+
+            
+            
+            <textarea className={P_add_styles.content_box}
+                    name="content_text" 
+                    value={p_list[0].content.text} 
+                    onChange={handleChangeContent}
+                    placeholder="여기에 당신의 프로젝트를 소개해보세요"/>
 
             <div className={P_add_styles.func_container}>
                 <BsPaperclip className={P_add_styles.func_icon}/>
@@ -152,14 +160,14 @@ export default function P_List_add_design() {
                     console.log(imageList)
                     /* console.log(showImages) */
                 }}>콘솔</button>
+
+                {showImages.map((image, id) => (
+                        <div key={id}>
+                        <img src={image} alt={`${image}-${id}`} width="60" height="60" />
+                        </div>
+                    ))}
                 
             </div>
-            
-            <textarea className={P_add_styles.content_box}
-                    name="content_text" 
-                    value={p_list[0].content.text} 
-                    onChange={handleChangeContent}
-                    placeholder="여기에 당신의 프로젝트를 소개해보세요"/>
 
             <div style={{marginTop:48}} className={J_List_styles.janghak_thin_line}></div>
 

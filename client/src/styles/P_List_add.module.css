@@ -102,7 +102,7 @@
     width: auto;
     height: 85px;
     display: flex;
-    flex-direction: row-reverse;
+    /* flex-direction: row-reverse; */
 }
 
 .func_icon{
