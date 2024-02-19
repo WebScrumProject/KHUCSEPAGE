@@ -12,7 +12,7 @@ import Mojib from '../components/mojib'
 import { useState } from 'react';
 import axios from 'axios';
 
-import { RootState, p_addcontent ,p_addrecruit,p_addtitle,p_addimage } from "../components/store";
+import { RootState, p_addcontent ,p_addrecruit,p_addtitle,p_addimage, p_cate_change } from "../components/store";
 import { useDispatch, useSelector } from "react-redux";
 
 import { FaRegCalendarAlt } from "react-icons/fa";
@@ -28,6 +28,7 @@ export default function P_List_add_design() {
     let dispatch = useDispatch();
     
     const [value, onChange] = useState(new Date());
+    let [cate_val, cate_change] = useState("")
 
     const handleChangeContent = (e:any) => {
         dispatch(p_addcontent(e.target.value));
@@ -112,13 +113,16 @@ export default function P_List_add_design() {
 
                     <div className={P_add_styles.P_List_text1}> 카테고리 :  </div>
 
-                    <select className={P_add_styles.P_List_categori}> 
-                        <option selected value="전체"> 전체 </option>
+                    <select className={P_add_styles.P_List_categori} value={cate_val} onChange={(e) => {
+                        cate_change(e.target.value)
+                        dispatch(p_cate_change(e.target.value))}}>
+                        <option value="전체"> 전체 </option>
                         <option value="공통"> 공통 </option>
                         <option value="서울">서울 </option>
                         <option value="국제">국제 </option>
                         <option value="기타">기타 </option>
                     </select>
+
 
                     <div className={P_add_styles.P_List_text2}>마감 기한 : </div>
 
@@ -156,14 +160,14 @@ export default function P_List_add_design() {
                     <LuImagePlus className={P_add_styles.func_icon}/>
                 </label>
 
-                <button onClick={() =>{
+                {/* <button onClick={() =>{
                     console.log(imageList)
-                    /* console.log(showImages) */
-                }}>콘솔</button>
+                    console.log(showImages)
+                }}>콘솔</button> */}
 
                 {showImages.map((image, id) => (
                         <div key={id}>
-                        <img src={image} alt={`${image}-${id}`} width="60" height="60" />
+                        <img style={{marginLeft:10}} src={image} alt={`${image}-${id}`} width="80" height="80" />
                         </div>
                     ))}
                 
