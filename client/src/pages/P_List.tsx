@@ -61,7 +61,7 @@ function P_List() {
 
 
     <button onClick={() => {
-      axios.get(`/scholarship?key=all&page=${page}`)
+      axios.get(`/project?key=all&page=${page}`)
       .then(response => {
         console.log(response.data);
         response.data.map((a:any,i:any) => {
@@ -147,7 +147,7 @@ function P_List() {
               </div>
 
               <div className={J_List_styles.j_list_title}> 
-                <a href={`/scholarship/${i}`}>{a.title}</a> 
+                <a href={`/project/${i}`}>{a.title}</a> 
               </div>
 
               <div className={J_List_styles.j_list_date}> 

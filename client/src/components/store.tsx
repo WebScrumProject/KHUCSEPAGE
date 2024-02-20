@@ -141,6 +141,9 @@ let p_list = createSlice ({
                 } */
             }
             state[0].recruit[action.payload.num].apply_cnt=action.payload.apply_cnt;
+        },
+        p_cate_change(state,action){
+            state[0].category = action.payload;
         }
 
     }
@@ -151,7 +154,7 @@ export const { setList, removeList,resetList } = j_list.actions;
 export const { changeIsLogined } = IsLogined.actions;
 export const { p_addList, p_removeList, p_resetList,
                 p_addrecruit, p_addcontent, p_removerecruit, 
-                p_addtitle,p_addimage, p_addfield, p_addapply_cnt} = p_list.actions;
+                p_addtitle,p_addimage, p_addfield, p_addapply_cnt, p_cate_change} = p_list.actions;
 
 // 스토어 설정
 const store = configureStore({

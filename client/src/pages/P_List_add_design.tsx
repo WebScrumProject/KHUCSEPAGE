@@ -4,6 +4,7 @@ import J_List_styles from '../styles/J_List.module.css';
 import JB_styles from '../styles/JB_detail.module.css';
 import P_add_styles from '../styles/P_List_add.module.css'
 import P_List_styles from '../styles/P_List.module.css'
+import P_Calendar from '../components/calendar';
 
 import Mynavbar from '../components/navbar';
 import Mojib from '../components/mojib'
@@ -11,7 +12,7 @@ import Mojib from '../components/mojib'
 import { useState } from 'react';
 import axios from 'axios';
 
-import { RootState, p_addcontent ,p_addrecruit,p_addtitle,p_addimage } from "../components/store";
+import { RootState, p_addcontent ,p_addrecruit,p_addtitle,p_addimage, p_cate_change } from "../components/store";
 import { useDispatch, useSelector } from "react-redux";
 
 import { FaRegCalendarAlt } from "react-icons/fa";
@@ -26,6 +27,8 @@ export default function P_List_add_design() {
     let p_list = useSelector((state: RootState) => state.p_list);
     let dispatch = useDispatch();
     
+    const [value, onChange] = useState(new Date());
+    let [cate_val, cate_change] = useState("")
 
     const handleChangeContent = (e:any) => {
         dispatch(p_addcontent(e.target.value));
@@ -110,26 +113,41 @@ export default function P_List_add_design() {
 
                     <div className={P_add_styles.P_List_text1}> 카테고리 :  </div>
 
-                    <select className={P_add_styles.P_List_categori}> 
-                        <option selected value="전체"> 전체 </option>
+                    <select className={P_add_styles.P_List_categori} value={cate_val} onChange={(e) => {
+                        cate_change(e.target.value)
+                        dispatch(p_cate_change(e.target.value))}}>
+                        <option value="전체"> 전체 </option>
                         <option value="공통"> 공통 </option>
                         <option value="서울">서울 </option>
                         <option value="국제">국제 </option>
                         <option value="기타">기타 </option>
                     </select>
 
+
                     <div className={P_add_styles.P_List_text2}>마감 기한 : </div>
 
                     <div className={P_add_styles.P_List_date}></div>
                     
-                    <FaRegCalendarAlt className={P_add_styles.calendar_icon} onClick={() => {
-
-                    }} />
+                    {/* <FaRegCalendarAlt className={P_add_styles.calendar_icon}>
+                        
+                    </FaRegCalendarAlt> */}
                     
+                    <P_Calendar onChange={onChange} value={value}></P_Calendar>
+                    
+                    
+                    {/* <button onClick={()=>{console.log(value)}}>날짜콘솔</button> */}
              
                 </div>
 
             <div className={J_List_styles.janghak_thin_line}></div>
+
+            
+            
+            <textarea className={P_add_styles.content_box}
+                    name="content_text" 
+                    value={p_list[0].content.text} 
+                    onChange={handleChangeContent}
+                    placeholder="여기에 당신의 프로젝트를 소개해보세요"/>
 
             <div className={P_add_styles.func_container}>
                 <BsPaperclip className={P_add_styles.func_icon}/>
@@ -142,18 +160,18 @@ export default function P_List_add_design() {
                     <LuImagePlus className={P_add_styles.func_icon}/>
                 </label>
 
-                <button onClick={() =>{
+                {/* <button onClick={() =>{
                     console.log(imageList)
                     console.log(showImages)
-                }}>콘솔</button>
+                }}>콘솔</button> */}
+
+                {showImages.map((image, id) => (
+                        <div key={id}>
+                        <img style={{marginLeft:10}} src={image} alt={`${image}-${id}`} width="80" height="80" />
+                        </div>
+                    ))}
                 
             </div>
-            
-            <textarea className={P_add_styles.content_box}
-                    name="content_text" 
-                    value={p_list[0].content.text} 
-                    onChange={handleChangeContent}
-                    placeholder="여기에 당신의 프로젝트를 소개해보세요"/>
 
             <div style={{marginTop:48}} className={J_List_styles.janghak_thin_line}></div>
 
@@ -198,16 +216,16 @@ export default function P_List_add_design() {
                 <button className='navbar_button'>목록</button>
                 <button className='navbar_button' onClick={() => {
                    
-                    console.log(p_list[0])
-                    /* useEffect(()=>{
-                        axios.post('project/write',p_list[0])
+                    /* console.log(p_list[0]) */
+                    
+                        axios.post('project/write',imageList)
                         .then((response) => {
                             console.log('succes');
                           })
                           .catch((error) => {
                             console.error(error);
                           });
-                    },[]) */
+                    
                 }}>글쓰기</button> 
             </div>
             
