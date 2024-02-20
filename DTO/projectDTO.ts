@@ -7,19 +7,19 @@ interface np {
   writer: String,
   id : String,
   date: String,
-  content: {
-    image: StringArray,
+  content:{
+    image:StringArray,
     video: StringArray,
-    text : String,
-    file : StringArray
-  },
+    text: String,
+    file: StringArray
+  }
   recruit: Array<object>,
   deadline : String,
   is_done: boolean,
   apply : Array<object>
 }
 
-export async function writeProject(newProject:np, images:StringArray, videos:StringArray, files: StringArray){
+export async function writeProject(newProject:np){
     try{
         const project = await projectModel.create({
           title: newProject.title,
@@ -28,10 +28,10 @@ export async function writeProject(newProject:np, images:StringArray, videos:Str
           writer_id : newProject.id,
           date: newProject.date,
           content: {
-            image: images,
-            video: videos,
+            image: [],
+            video: [],
             text : newProject.content.text,
-            file : files
+            file : []
           },
           recruit: [],
           deadline : newProject.deadline,

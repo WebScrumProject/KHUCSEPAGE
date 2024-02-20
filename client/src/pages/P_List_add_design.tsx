@@ -75,7 +75,15 @@ export default function P_List_add_design() {
         for (let i = 0; i < imageList.length; i++) {
         formData.append("image", imageList[i]);
         }
-        axios.post("/project/write", formData)
+        try {
+            const imageRes = axios.post('/project/write/images', formData)
+            .then(response => {
+                console.log(response.data)
+            })
+          } catch (error) {
+            console.log(error);
+            alert('server error');
+          }
     }
 
     //image
@@ -217,14 +225,14 @@ export default function P_List_add_design() {
                 <button className='navbar_button' onClick={() => {
                    
                     /* console.log(p_list[0]) */
-                    
-                        axios.post('project/write',imageList)
-                        .then((response) => {
-                            console.log('succes');
-                          })
-                          .catch((error) => {
-                            console.error(error);
-                          });
+                    handletoServer()
+                        // axios.post('/project/write',imageList)
+                        // .then((response) => {
+                        //     console.log('succes');
+                        //   })
+                        //   .catch((error) => {
+                        //     console.error(error);
+                        //   });
                     
                 }}>글쓰기</button> 
             </div>
