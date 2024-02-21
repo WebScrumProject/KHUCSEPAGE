@@ -70,6 +70,7 @@ let p_list = createSlice ({
                 {
                     field: '',
                     apply_cnt: 0,
+                    cate_field:''
                 }
             ],
             file: '',
@@ -106,6 +107,7 @@ let p_list = createSlice ({
             state[0].recruit.push({
                 field: '',
                 apply_cnt: 0,
+                cate_field:''
             })
         },
         p_removerecruit(state,action) {
@@ -116,7 +118,7 @@ let p_list = createSlice ({
         },
         p_addfield(state,action){
             if(state[0].recruit.length!=action.payload.num) {
-                console.log(123)
+                
                 /* while(state[0].recruit.length!=action.payload.num) {
                     state[0].recruit.push(
                         {
@@ -126,8 +128,9 @@ let p_list = createSlice ({
                     )
                 } */
             }
-            console.log(456)
+            
             state[0].recruit[action.payload.num].field =action.payload.field;
+            state[0].recruit[action.payload.num].cate_field =action.payload.cate_field;
         },
         p_addapply_cnt(state,action){
             if(state[0].recruit.length!=action.payload.num) {

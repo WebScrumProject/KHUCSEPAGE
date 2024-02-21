@@ -20,12 +20,15 @@ export default function Mojib(props:any) {
 
     let p_list = useSelector((state: RootState) => state.p_list);
     let dispatch = useDispatch();
+    let [mojib_cate_val, mojib_cate_change ] = useState("")
+   
 
     const handleChangeField = (e:any) => {
         dispatch(p_addfield(
             {
                 field : e.target.value,
-                num : props.num
+                num : props.num,
+                cate_field : mojib_cate_val
             }
         ));
         
@@ -42,23 +45,51 @@ export default function Mojib(props:any) {
     return (
         <div className={P_add_styles.mojib_container}>
             
-            <input className=
-            {P_add_styles.mojib_container}
-            name="field" 
-            /* value={p_list[0].apply[props.num].field}  */
-            onChange={handleChangeField}
+            <select className={P_add_styles.P_List_categori} value={mojib_cate_val} onChange={(e) => {
+                        
+                        mojib_cate_change(e.target.value)
+
+                    }}>
+                        <option hidden disabled value=""> 선택 </option>
+                        <option value="프론트"> 프론트 </option>
+                        <option value="백"> 백 </option>
+                        <option value="게임"> 게임 </option>
+                        <option value="AI"> AI </option>
+                        <option value="PM"> PM </option>
+                        <option value="디자이너 "> 디자이너 </option>
+                        <option value="안드로이드 "> 안드로이드 </option>
+                        <option value="IOS"> IOS </option>
+                        <option value="기타">기타 </option>
+            </select>
+
+            {/* <button onClick={()=>console.log(mojib_cate_val)}>ㅋㅋ</button> */}
+
+            {
+                mojib_cate_val=="" ? null : 
+
+                <input className=
+                {P_add_styles.mojib_container}
+                name="field" 
+                style={{marginLeft:20}}
+                /* value={p_list[0].apply[props.num].field}  */
+                onChange={handleChangeField}
+                placeholder='자세한 분야를 적어주세요'
+                />
+            }
+
             
-            />
+
             <div style={{
                 marginLeft:41,
                 fontSize: 20,
                 fontWeight: 400,
-                marginTop:23
+                marginTop:20
                 }}> 인원 수 </div>
 
             <input className={P_add_styles.mojib_container}
             name="apply_cnt" 
             /* value={p_list[0].recruit[props.num].apply_cnt}  */
+            style={{marginLeft:20}}
             onChange={handleChangeApply_cnt}
             />
 
