@@ -35,7 +35,7 @@ function J_List(props:any) {
   };
 
   useEffect(()=>{
-    axios.get(`/scholarship/getList?key=all&page=${page}`)
+    axios.get(`/scholarship/?key=all&page=${page}`)
       .then(response => {
         
         setList(response.data)
