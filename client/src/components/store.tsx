@@ -116,6 +116,12 @@ let p_list = createSlice ({
         p_addimage(state,action) {
             state[0].content.image = action.payload;
         },
+        p_addvideo(state,action) {
+            state[0].content.video = action.payload;
+        },
+        p_addfile(state,action) {
+            state[0].file = action.payload;
+        },
         p_addfield(state,action){
             if(state[0].recruit.length!=action.payload.num) {
                 
@@ -157,7 +163,7 @@ export const { setList, removeList,resetList } = j_list.actions;
 export const { changeIsLogined } = IsLogined.actions;
 export const { p_addList, p_removeList, p_resetList,
                 p_addrecruit, p_addcontent, p_removerecruit, 
-                p_addtitle,p_addimage, p_addfield, p_addapply_cnt, p_cate_change} = p_list.actions;
+                p_addtitle,p_addimage, p_addfield, p_addapply_cnt, p_cate_change, p_addfile, p_addvideo} = p_list.actions;
 
 // 스토어 설정
 const store = configureStore({

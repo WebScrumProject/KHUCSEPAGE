@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, Ref, useMemo } from 'react';
+import React, { useEffect, useRef, Ref, useMemo, ChangeEvent} from 'react';
 import '../styles/App.css';
 import J_List_styles from '../styles/J_List.module.css';
 import JB_styles from '../styles/JB_detail.module.css';
@@ -12,7 +12,7 @@ import Mojib from '../components/mojib'
 import { useState } from 'react';
 import axios from 'axios';
 
-import { RootState, p_addcontent ,p_addrecruit,p_addtitle,p_addimage, p_cate_change } from "../components/store";
+import { RootState, p_addcontent ,p_addrecruit,p_addtitle,p_addimage, p_cate_change,p_addfile, p_addvideo } from "../components/store";
 import { useDispatch, useSelector } from "react-redux";
 
 import { FaRegCalendarAlt } from "react-icons/fa";
@@ -43,34 +43,96 @@ export default function P_List_add_design() {
     const [showImages, setShowImages] = useState<string[]>([]);
     const [imageList, setImageList]  = useState<File[]>([]);
 
- 
+    const [showVideos, setShowVideos] = useState<string[]>([]);
+    const [videoList, setVideoList] = useState<File[]>([]);
+
+    const [showFiles, setShowFiles] = useState<string[]>([]);
+    const [fileList, setFileList] = useState<File[]>([]);
+
     const handleAddImages = (event: { target: { files: any; }; } | any ) => {
         const imageLists = event.target.files;
         let imageUrlLists = [...showImages];
         let newImageList = [...imageList];
-
+    
         for (let i = 0; i < imageLists.length; i++) {
-            const currentImageUrl = URL.createObjectURL(imageLists[i]);
+            const file = imageLists[i];
+      
+            if (!file.type.startsWith('image/')) {
+             
+                alert('이미지 파일만 업로드 가능합니다.');
+                continue; 
+            }
+            
+            const currentImageUrl = URL.createObjectURL(file);
             imageUrlLists.push(currentImageUrl);
-            newImageList.push(imageLists[i]);
+            newImageList.push(file);
         }
-
+    
         if (imageUrlLists.length > 30) {
             imageUrlLists = imageUrlLists.slice(0, 30);
             newImageList = newImageList.slice(0, 30);
         }
-
+    
         setShowImages(imageUrlLists);
         setImageList(newImageList);
-        
     };
+
+    const handleAddVideos = (event: { target: { files: any; }; } | any) => {
+        const videoFiles = event.target.files;
+        let videoUrlList = [...showVideos];
+        let newVideoList = [...videoList];
+
+        for (let i = 0; i < videoFiles.length; i++) {
+            const file = videoFiles[i];
+           
+            if (!file.type.startsWith('video/')) {
+                
+                alert('동영상 파일만 업로드 가능합니다.');
+                continue; 
+            }
+
+            const currentVideoUrl = URL.createObjectURL(file);
+            videoUrlList.push(currentVideoUrl);
+            newVideoList.push(file);
+        }
+
+        if (videoUrlList.length > 30) {
+            videoUrlList = videoUrlList.slice(0, 30);
+            newVideoList = newVideoList.slice(0, 30);
+        }
+
+        setShowVideos(videoUrlList);
+        setVideoList(newVideoList);
+    };
+
+    const handleAddFiles = (event: { target: { files: any; }; } | any) => {
+        const files = event.target.files;
+        let fileUrlList = [...showFiles];
+        let newFileList = [...fileList];
+    
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const currentFileUrl = URL.createObjectURL(file);
+            fileUrlList.push(currentFileUrl);
+            newFileList.push(file);
+        }
+    
+        if (fileUrlList.length > 30) {
+            fileUrlList = fileUrlList.slice(0, 30);
+            newFileList = newFileList.slice(0, 30);
+        }
+    
+        setShowFiles(fileUrlList);
+        setFileList(newFileList);
+    };
+    
 
   
     const handleDeleteImage = (id: number) => {
         setShowImages(showImages.filter((_, index) => index !== id));
     };
 
-    const handletoServer = () => {
+    const handleImageUpload = () => {
         const formData = new FormData();
         for (let i = 0; i < imageList.length; i++) {
         formData.append("image", imageList[i]);
@@ -79,6 +141,7 @@ export default function P_List_add_design() {
             const imageRes = axios.post('/project/write/images', formData)
             .then(response => {
                 console.log(response.data)
+                dispatch(p_addimage(response.data))
             })
           } catch (error) {
             console.log(error);
@@ -86,11 +149,71 @@ export default function P_List_add_design() {
           }
     }
 
-    //image
+    const handleVideoUpload = () => {
+        const formData = new FormData();
+        for (let i = 0; i < videoList.length; i++) {
+            formData.append("video", videoList[i]);
+        }
+        try {
+            const imageRes = axios.post('/project/write/videos', formData)
+            .then(response => {
+                console.log(response.data)
+                dispatch(p_addvideo(response.data))
+            })
+          } catch (error) {
+            console.log(error);
+            alert('server error');
+          }
+    };
+    
+    // 파일 업로드
+    const handleFileUpload = () => {
+        const formData = new FormData();
+        for (let i = 0; i < fileList.length; i++) {
+            formData.append("file", fileList[i]);
+        }
+        try {
+            const imageRes = axios.post('/project/write/files', formData)
+            .then(response => {
+                console.log(response.data)
+                dispatch(p_addfile(response.data))
+            })
+          } catch (error) {
+            console.log(error);
+            alert('server error');
+          }
+    };
+    
+    // 모든 업로드가 완료되면 실행할 함수
+    const handleAllUploadsComplete = async () => {
+        try {
+          
+            await Promise.all([
+                handleImageUpload(),
+                handleVideoUpload(),
+                handleFileUpload()
+            ]);
+
+            const response = await axios.post('/project/write', { p_list: p_list });
+            console.log("Response from sending p_list:", response.data);
+        } catch (error) {
+            console.error("Error during uploads:", error);
+        }
+    };
+
+    
 
     useEffect(()=>{
         dispatch(p_addimage(showImages))
     },[showImages])
+
+    useEffect(()=>{
+        dispatch(p_addvideo(showVideos))
+    },[showVideos])
+
+    useEffect(()=>{
+        dispatch(p_addfile(showFiles))
+    },[showFiles])
     
 
    
@@ -158,15 +281,23 @@ export default function P_List_add_design() {
                     placeholder="여기에 당신의 프로젝트를 소개해보세요"/>
 
             <div className={P_add_styles.func_container}>
-                <BsPaperclip className={P_add_styles.func_icon}/>
-
-                <RiVideoAddFill className={P_add_styles.func_icon} />
-
                 
-                <label htmlFor="input-file"  onChange={handleAddImages}>
-                    <input type="file" id="input-file" multiple style={{ display: 'none' }} />
-                    <LuImagePlus className={P_add_styles.func_icon}/>
-                </label>
+                
+            <input type="file" id="image-file" multiple style={{ display: 'none' }} onChange={handleAddImages} />
+            <input type="file" id="video-file" multiple style={{ display: 'none' }} onChange={handleAddVideos} />
+            <input type="file" id="file-file" multiple style={{ display: 'none' }} onChange={handleAddFiles} />
+
+            <label htmlFor="image-file">
+                <LuImagePlus className={P_add_styles.func_icon}/>
+            </label>
+
+            <label htmlFor="video-file">
+                <RiVideoAddFill className={P_add_styles.func_icon} />
+            </label>
+
+            <label htmlFor="file-file">
+                <BsPaperclip className={P_add_styles.func_icon}/>
+            </label>
 
                 {/* <button onClick={() =>{
                     console.log(imageList)
@@ -224,15 +355,8 @@ export default function P_List_add_design() {
                 <button className='navbar_button'>목록</button>
                 <button className='navbar_button' onClick={() => {
                    
-                    /* console.log(p_list[0]) */
-                    handletoServer()
-                        // axios.post('/project/write',imageList)
-                        // .then((response) => {
-                        //     console.log('succes');
-                        //   })
-                        //   .catch((error) => {
-                        //     console.error(error);
-                        //   });
+                    handleAllUploadsComplete()
+                       
                     
                 }}>글쓰기</button> 
             </div>
