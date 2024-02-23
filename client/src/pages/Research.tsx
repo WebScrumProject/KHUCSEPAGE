@@ -6,7 +6,7 @@ import styles from '../styles/Research.module.css'
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import '../styles/Paging.css';
-// import Pagination from "react-js-pagination"
+import Pagination from 'react-js-pagination'
 // import { ObjectId } from 'mongodb';
 
 
@@ -19,8 +19,10 @@ function Research() {
     let [page, setPage] = useState(1) // 현재 페이지
     let [count, setCount] = useState(0) // 카드의 개수
 
-    const prevPage=(() => {setPage(page-1)})
-    const nextPage=(() => {setPage(page+1)})
+    const handlePageChange = (page: number) => {
+      setPage(page);
+    };
+
     // const fetchUndergraduatePage = async () => {
     //     try {
     //       const res = await axios.get(`/undergraduate_student?page=${page}`);
@@ -60,9 +62,7 @@ function Research() {
             })
         }
     }
-    // const handlePageChange = (page: number) => {
-    //     setPage(page)
-    // }
+
     // useEffect(() => {
     //     // fetchUndergraduatePage()
     //     fetchUndergraduateInfo()
@@ -111,10 +111,19 @@ function Research() {
               }
           </div>
           <div className={styles.pagination}>
-            <button className={styles.prev_btn} onClick={prevPage}
+            <Pagination 
+              activePage={page}
+              itemsCountPerPage={12}
+              totalItemsCount={60}
+              pageRangeDisplayed={5}
+              prevPageText={"<"}
+              nextPageText={">"}
+              onChange={handlePageChange} // onPageChange 대신 onChange 사용
+            />
+            {/* <button className={styles.prev_btn} onClick={prevPage}
               style={{ opacity: page !== 1 ? 1 : 0, pointerEvents: page !== 1 ? 'auto' : 'none' }}>이전</button>
               <p className={styles.page_num}>{page}페이지</p>
-            <button className={styles.next_btn} onClick={nextPage}>다음</button>      
+            <button className={styles.next_btn} onClick={nextPage}>다음</button>       */}
           </div>
         </div>
     )

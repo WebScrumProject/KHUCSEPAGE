@@ -95,7 +95,7 @@ function AddProfessor() {
           const decodedImage = await decodeImage(image);
           const imageExtension = imageName ? imageName.split('.').pop() : 'defaultExtension';
           const blobImage = new Blob([decodedImage], { type: `image/${imageExtension}` });
-          formData.append("roomImg", blobImage, imageName || 'defaultName');
+          formData.append("imageUrl", blobImage, imageName || 'defaultName');
 
           const res = await axios.post('/undergraduate_student/image', formData, {
             headers: {

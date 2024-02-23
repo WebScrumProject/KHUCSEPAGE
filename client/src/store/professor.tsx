@@ -32,7 +32,7 @@ export let professor = createSlice ({
         },
         deleteProfessor(state, action) {
             const idToDelete = action.payload;
-            const indexToDelete = state.findIndex(item => item._id == idToDelete);
+            const indexToDelete = state.findIndex(item => item._id === idToDelete);
             state.splice(indexToDelete, 1)
         }
     }

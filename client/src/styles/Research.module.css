@@ -97,14 +97,14 @@
 .pagination_container {
 display: block;
 }
-
+/* 
 .pagination {
 display: flex;
 align-items: center;
 justify-content: space-around;
 margin-top: 150px;
 width: 100vw;
-}
+} */
 .prev_btn {
 width: 100px;
 height: 50px;
@@ -140,4 +140,46 @@ justify-content: center;
 font-size: 20px;
 
 margin: 0 auto;
+}
+
+/* Research.module.css */
+
+.pagenationBox {
+  margin-top: 10px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 150px;
+  width: 100vw;
+}
+
+.pagination li:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+.pagination li:last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+.pagination li a {
+  text-decoration: none;
+  color: black;
+  font-size: 1rem;
+}
+
+.pagination li.active a {
+  color: lightgray;
+}
+
+.pagination li a:hover {
+  color: lightgray;
+}
+
+.page-selection {
+  width: 48px;
+  height: 30px;
+  color: #2f2f2f;
 }
