@@ -113,7 +113,7 @@ function AddProfessor() {
 
     const decodeImage = async (base64Image: any) => {
       const blobImage = await fetch(base64Image).then((res) => res.blob());
-      return blobImage;
+      return blobImage; 
     };
 
   

@@ -13,7 +13,7 @@ interface ProfessorState {
 }
 export let professor = createSlice ({
     name : 'professor',
-    initialState: [
+    initialState: [ 
         {
         _id: '',
         profName: '홍길동', 

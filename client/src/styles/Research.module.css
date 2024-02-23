@@ -154,7 +154,7 @@ margin: 0 auto;
   justify-content: space-around;
   margin-top: 150px;
   width: 100vw;
-}
+} 
  
 .pagination li:first-child {
   border-radius: 5px 0 0 5px;

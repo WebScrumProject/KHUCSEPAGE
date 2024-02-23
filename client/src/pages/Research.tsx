@@ -63,7 +63,7 @@ function Research() {
         }
     }
 
-    // useEffect(() => {
+    // useEffect(() => { 
     //     // fetchUndergraduat ePage()
     //     fetchUndergraduateInfo()
     // }, [page])
