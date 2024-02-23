@@ -120,7 +120,7 @@ function AddProfessor() {
     // axios 코드 (나중에 axios 파일 만들어서 옮길 예정)
     const sendProfessorData = (professorData: any) => {
       const serverURL = 'http://localhost:8080/undergraduate_student/write';
-      handleImageUpload();
+      handleImageUpload(); 
       axios.post(serverURL, professorData)
         .then((res) => {
           console.log(res.data);

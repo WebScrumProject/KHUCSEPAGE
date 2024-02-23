@@ -64,7 +64,7 @@ function Research() {
     }
 
     // useEffect(() => {
-    //     // fetchUndergraduatePage()
+    //     // fetchUndergraduat ePage()
     //     fetchUndergraduateInfo()
     // }, [page])
     // 그 카드의 상세페이지로 이동할 때 axios.get

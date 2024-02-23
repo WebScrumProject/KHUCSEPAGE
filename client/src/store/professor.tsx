@@ -16,7 +16,7 @@ export let professor = createSlice ({
     initialState: [
         {
         _id: '',
-        profName: '홍길동',
+        profName: '홍길동', 
         profMajor: 'none',
         profPhone: '010-1234-5678',
         profEmail: 'none',
