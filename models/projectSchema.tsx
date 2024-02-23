@@ -15,9 +15,8 @@ const applySchema = new Schema({
 
 const projectSchema = new Schema({
     title: {type:String, required:true},
-    category: {type : String, required: true},
-    writer: {type : String, required: true},
-    id: {type : String, required: true},
+    writer: {type : String},
+    id: {type : String},
     date: {type : String, required: true},
     content: {
         image: {type : Array},

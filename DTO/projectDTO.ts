@@ -3,7 +3,6 @@ const projectModel = require('../models/projectSchema.tsx');
 
 interface np {
   title: String,
-  category: String,
   writer: String,
   id : String,
   date: String,
@@ -23,7 +22,6 @@ export async function writeProject(newProject:np){
     try{
         const project = await projectModel.create({
           title: newProject.title,
-          category: newProject.category,
           writer: newProject.writer,
           writer_id : newProject.id,
           date: newProject.date,
