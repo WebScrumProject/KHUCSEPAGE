@@ -17,15 +17,15 @@ function AddProfessor() {
   let dispatch = useDispatch();
 
   interface ProfessorData {
-    _id: String;
-    profName: String;
-    profMajor: String;
-    profPhone: String;
-    profEmail: String;
-    profLab: String;
-    profLink: String;
-    recNumber: String;
-    recDate: String;
+    _id: string;
+    profName: string;
+    profMajor: string;
+    profPhone: string;
+    profEmail: string;
+    profLab: string;
+    profLink: string;
+    recNumber: number;
+    recDate: string;
   }
   const [professorData, setProfessorData] = useState<ProfessorData>({
     _id: "",
@@ -35,7 +35,7 @@ function AddProfessor() {
     profEmail: "",
     profLab: "",
     profLink: "",
-    recNumber: "",
+    recNumber: 0,
     recDate: "",
   });
 
@@ -108,9 +108,6 @@ function AddProfessor() {
       } else {
         console.error('이미지 파일을 선택해주세요.');
       }
-    } else {
-      console.error("이미지 파일을 선택해주세요.");
-    }
   };
 
     const decodeImage = async (base64Image: string) => {
@@ -121,14 +118,12 @@ function AddProfessor() {
   
     // axios 코드 (나중에 axios 파일 만들어서 옮길 예정)
     const sendProfessorData = (professorData: any) => {
-      handleImageUpload()
       const serverURL = 'http://localhost:8080/undergraduate_student/write';
-      handleImageUpload(); 
       axios.post(serverURL, professorData)
         .then((res) => {
           console.log(res.data);
           dispatch(addProfessor({
-            _id : res.data,
+            profId : res.data,
             profName : professorData.profName,
             profMajor: professorData.profMajor,
             profPhone: professorData.profPhone,
@@ -159,22 +154,6 @@ function AddProfessor() {
           console.log(err);
         });
     };
-      
-    // const fetchId = async () => {
-    //   try {
-    //       const res = await axios.get(`/undergraduate_student?page=${1}/info`);
-    //       const lastProfessor = res.data[res.data.length - 1];
-    //       // const lastId = lastProfessor.id;
-    //       // setNextId(lastId)
-    //       console.log(res.data)
-    //   } catch (error) {
-    //       console.error(error);
-    //     }
-    // }
-
-    // useEffect(() => {
-    //   fetchId()
-    // 2}, )
 
     return (
     <div style={{display:'flex', flexDirection:'column', width:'100%'}}>
@@ -193,6 +172,7 @@ function AddProfessor() {
               )}
               <input type='file' id='inputTag' className={styles.image_input} onChange={handleImageChange}/>  
             </div>
+            <button onClick={handleImageUpload}>이미지 등록하기</button>
           </div>
 
           <div className={styles.add_professor_profile_bottom}>
@@ -210,7 +190,7 @@ function AddProfessor() {
               <button onClick={(e) => {
               //임시로 넣은 dispatch, 성공 시 뺄 예정
                 dispatch(addProfessor({
-                  _id : '',
+                  profId : '',
                   profName : professorData.profName,
                   profMajor: professorData.profMajor,
                   profPhone: professorData.profPhone,
