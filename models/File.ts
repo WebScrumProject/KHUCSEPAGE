@@ -3,7 +3,6 @@ import * as mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 interface DBFile extends mongoose.Document {
-  fileUser: String;
   fileUrl: String;
   fileName: String;
 }
@@ -11,10 +10,6 @@ interface DBFile extends mongoose.Document {
 type DBFileModel = mongoose.Model<DBFile, {}, {}>;
 
 const FileSchema = new Schema<DBFile>({
-  fileUser: {
-    type: String,
-    required: true,
-  },
   fileUrl: {
     type: String,
     required: true,

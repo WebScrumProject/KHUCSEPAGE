@@ -1,4 +1,5 @@
 interface ProfCardDTO {
+  profId: string;
   profName: string;
   profMajor: string;
   profEmail: string;

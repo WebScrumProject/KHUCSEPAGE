@@ -10,39 +10,47 @@ interface ProfRequest extends Request {
   };
 }
 
-export async function getImage(req: ProfRequest, res: Response) {
-  const imageId: string = req.params.id;
-  //이거 id->profId?
-  const objectId = new mongoose.Types.ObjectId(imageId);
+// export async function getImage(req: ProfRequest, res: Response) {
+//   const imageId: string = req.params.id;
+//   //이거 id->profId?
+//   const objectId = new mongoose.Types.ObjectId(imageId);
 
-  try {
-    const foundImage = await File.findOne({ fileUser: objectId });
-    res.send(foundImage?.fileUrl);
-  } catch (err) {
-    res.status(500).send("Error getting Image Url");
-  }
-}
+//   try {
+//     const foundImage = await File.findOne({ fileUser: objectId });
+//     res.send(foundImage?.fileUrl);
+//   } catch (err) {
+//     res.status(500).send("Error getting Image Url");
+//   }
+// }
 
-async function postImage(req: Request, res: Response) {
+export async function postImage(req: Request, res: Response) {
   try {
     const multerFile = req.file as Express.MulterS3.File;
     const imageUrl = multerFile.location;
-    // const imageName = multerFile.key;
-    // const newFile: DBFile = new File({
-    //   fileUrl: imageUrl,
-    //   fileName: imageName,
-    // });
-    // await newFile.save();
-    return imageUrl;
+    const imageName = multerFile.key;
+    const newFile: DBFile = new File({
+      fileUrl: imageUrl,
+      fileName: imageName,
+    });
+    await newFile.save();
+    res.send(imageUrl);
   } catch (err) {
     throw new Error(err.message);
   }
 }
 
 export async function getProfCard(req: Request, res: Response) {
+  const page: number = parseInt(req.query.page as string, 10) || 1;
+  const pageSize: number = parseInt(req.query.pageSize as string, 10) || 4;
+
   try {
-    const allData: DBProf[] = await Prof.find({});
+    const skipCount = (page - 1) * pageSize;
+
+    const allData: DBProf[] = await Prof.find({})
+      .skip(skipCount)
+      .limit(pageSize);
     const cardData: ProfCardDTO[] = allData.map((data) => ({
+      profId: data._id.toString(),
       profName: data.profName,
       profMajor: data.profMajor,
       profEmail: data.profEmail,
@@ -102,17 +110,17 @@ export async function putProfDetail(req: ProfRequest, res: Response) {
   }
 }
 
-export async function deleteProf(req: Request, res: Response) {
-  const profId: string = req.params.id;
-  const objectId = new mongoose.Types.ObjectId(profId);
-  try {
-    await Prof.findByIdAndDelete(objectId);
-    await File.deleteMany({ fileUser: profId });
-    res.send(`${objectId} deleted successfully`);
-  } catch (err) {
-    res.status(500).send("Error deleting Prof");
-  }
-}
+// export async function deleteProf(req: Request, res: Response) {
+//   const profId: string = req.params.id;
+//   const objectId = new mongoose.Types.ObjectId(profId);
+//   try {
+//     await Prof.findByIdAndDelete(objectId);
+//     await File.deleteMany({ fileUser: profId });
+//     res.send(`${objectId} deleted successfully`);
+//   } catch (err) {
+//     res.status(500).send("Error deleting Prof");
+//   }
+// }
 
 export async function postProf(req: Request, res: Response) {
   try {
