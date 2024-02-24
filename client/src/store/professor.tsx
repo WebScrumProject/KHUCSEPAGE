@@ -13,10 +13,10 @@ interface ProfessorState {
 }
 export let professor = createSlice ({
     name : 'professor',
-    initialState: [
+    initialState: [ 
         {
         _id: '',
-        profName: '홍길동',
+        profName: '홍길동', 
         profMajor: 'none',
         profPhone: '010-1234-5678',
         profEmail: 'none',
@@ -32,7 +32,7 @@ export let professor = createSlice ({
         },
         deleteProfessor(state, action) {
             const idToDelete = action.payload;
-            const indexToDelete = state.findIndex(item => item._id == idToDelete);
+            const indexToDelete = state.findIndex(item => item._id === idToDelete);
             state.splice(indexToDelete, 1)
         }
     }
