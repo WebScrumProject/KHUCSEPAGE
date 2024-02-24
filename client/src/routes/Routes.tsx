@@ -17,7 +17,7 @@ export default function Routing() {
         <Route path='/newuser' element={<NewUser></NewUser>} />
         <Route path='/research' element={<Research></Research>} />
         <Route path='/addProfessor' element={<AddProfessor></AddProfessor>} />
-        <Route path='/detail' element={<UndergraduateStudentDetail></UndergraduateStudentDetail>} />
+        <Route path='/detail/:profId' element={<UndergraduateStudentDetail></UndergraduateStudentDetail>} />
         {/* <Route path='/detail/:id' element={<UndergraduateStudentDetail></UndergraduateStudentDetail>} /> */}
       </Routes>
     </div>

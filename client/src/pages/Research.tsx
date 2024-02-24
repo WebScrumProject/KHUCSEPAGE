@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import {RootState} from '../store/store'
-import {addProfessor, deleteProfessor} from '../store/professor'
+import {addProfessor, deleteProfessor, resetProfessor} from '../store/professor'
 import { useNavigate } from 'react-router-dom'
 import styles from '../styles/Research.module.css'
 import axios from 'axios';
@@ -12,13 +12,13 @@ import { MdDelete } from "react-icons/md";
 
 
 function Research() {
-    let professor = useSelector((state: RootState) => state.professor);
-    // const proId = professor?.id <- typescript에서 redux의 state 부르는 방법 알압괴
+    // let professor = useSelector((state: RootState) => state.professor);
+    const professor = useSelector((state: RootState) => state.professor.prof); // state 타입은 RootState로 가정
 
     let dispatch = useDispatch()
     let navigate = useNavigate()
     let [page, setPage] = useState(1) // 현재 페이지
-    let [pageSize, setPageSize] = useState(3);
+    const pageSize = 6;
     let [count, setCount] = useState(0) // 카드의 개수
 
     const handlePageChange = (page: number) => {
@@ -36,10 +36,11 @@ function Research() {
 
     const fetchUndergraduateInfo = async () => {
         try {
-            const res = await axios.get(`http://localhost:8080/undergraduate_student/api/info`);
+            const res = await axios.get(`http://localhost:8080/undergraduate_student/api/info?page=${page}&pageSize=${pageSize}`);
             navigate('/research')
             const info_count = res.data
             setCount(info_count.length)
+            dispatch(resetProfessor());
             res.data.map((a:any, i:number) => {
                 dispatch(addProfessor(a))
             })
@@ -52,11 +53,11 @@ function Research() {
     }
 
     // 삭제할 때마다 axios.delete
-    const deleteUndergraduate = (i:number) => {
+    const deleteUndergraduate = (id:string) => {
         if(window.confirm('정말 삭제할까요?')) {
-            axios.delete(`http://localhost:8080//undergraduate_student/api/info/${i}`)
+            axios.delete(`http://localhost:8080//undergraduate_student/api/info/${id}`)
             .then((res) => { 
-                dispatch(deleteProfessor(i))
+                dispatch(deleteProfessor(id))
                 alert('삭제되었습니다.')
             })
             .catch((err) => {
@@ -81,7 +82,7 @@ function Research() {
           <button className={styles.add_professor} onClick={() => {navigate('/addProfessor')}}> 페이지 추가 </button>
           <div className={styles.research_container}>
               {
-                professor.map((a:any, i:any) => {
+                professor.map((a:any, index:any) => {
                   return(
                     <div className={styles.research_box}>
                       <div className={styles.research_profile}>
@@ -98,13 +99,13 @@ function Research() {
                         <button type='submit' 
                         className={styles.delete_button}
                         onClick={() => {
-                          var id = a._id
-                          deleteUndergraduate(i)}}> 
+                          var id = a.profId
+                          deleteUndergraduate(id)}}> 
                           <MdDelete color="white"/> </button>
                         <button type='submit' 
                           className={styles.detail_button} 
                           onClick={() => {
-                            var id = a._id
+                            var id = a.profId
                             navigate(`/detail/${id}`)}}> + </button>
                       </div>
                     </div>
