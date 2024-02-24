@@ -92,14 +92,14 @@ function AddProfessor() {
       const formData = new FormData();
       if (image) {
         try {
-          const decodedImage = await decodeImage(image);
+          const decodedImage = await decodeImage(image as string);
           const imageExtension = imageName ? imageName.split('.').pop() : 'defaultExtension';
           const blobImage = new Blob([decodedImage], { type: `image/${imageExtension}` });
           formData.append("imageUrl", blobImage, imageName || 'defaultName');
 
-          const res = await axios.post('/undergraduate_student/image', formData, {
+          const res = await axios.post('http://localhost:8080/undergraduate_student/image', formData ,{
             headers: {
-              'Content-Type': 'multipart/form-data'
+              'Content-type': "application/json"
             }
           })
           console.log('이미지가 성공적으로 업로드되었습니다.', res.data);
@@ -111,7 +111,7 @@ function AddProfessor() {
       }
     }
 
-    const decodeImage = async (base64Image: any) => {
+    const decodeImage = async (base64Image: string) => {
       const blobImage = await fetch(base64Image).then((res) => res.blob());
       return blobImage; 
     };
@@ -119,6 +119,7 @@ function AddProfessor() {
   
     // axios 코드 (나중에 axios 파일 만들어서 옮길 예정)
     const sendProfessorData = (professorData: any) => {
+      handleImageUpload()
       const serverURL = 'http://localhost:8080/undergraduate_student/write';
       handleImageUpload(); 
       axios.post(serverURL, professorData)
@@ -179,10 +180,17 @@ function AddProfessor() {
         <div className={styles.add_professor_profile}>
           <div className={styles.add_professor_profile_top}>
             <div className={styles.add_professor_picture}>
-              {image && (<img className={styles.image_preview} src={typeof image === 'string' ? image : ''} alt="Image Preview"></img>)}
+              {image ? (
+                <label htmlFor='inputTag'>
+                  <img src={typeof image === 'string' ? image : undefined} alt={imageName || 'Image Description'}></img>
+                </label>
+              ) : (
+                <label htmlFor="inputTag">
+                  <p>룸 이미지 추가</p>
+                </label>
+              )}
+              <input type='file' id='inputTag' className={styles.image_input} onChange={handleImageChange}/>  
             </div>
-            <input type='file' accept='image/*' id='inputTag' className={styles.image_input} onChange={handleImageChange}/>  
-            <label htmlFor='inputTag'>이미지 선택</label>
           </div>
 
           <div className={styles.add_professor_profile_bottom}>
@@ -213,30 +221,33 @@ function AddProfessor() {
                 console.log(professor)
                 sendProfessorData(professorData)
                 sendHistory(history)
-                handleImageUpload()
                 navigate('/research')
               }}>완료</button>
           </div>
         </div>
+        
           <div className={styles.add_professor_history}>
-            <div className={styles.history_content}>
-            {
-              profHistory.map((value:any, index:any) => {
-                return (
-                  <div key={index}>
-                    <p style={{ textAlign: 'start' }} key={index}>
-                      {`${value.date} CONTENT: ${value.content}`}
-                    </p>
-                    <div className={styles.line}></div>
-                  </div>
+            <div style={{height: '400px'}}>
+              {
+                profHistory.map((value:any, index:any) => {
+                  return (
+                    <div key={index} >
+                      <div className={styles.history_content}>
+                        <p style={{width:'90px'}} key={index}>
+                          {value.date} </p>
+                          <p>{value.content}</p>
+                      </div>
+                      <div className={styles.line}></div>
+                    </div>
+                  )
+                }
                 )
               }
-              )
-            }
             </div>
             <div className={styles.history_bottom}>
               <input 
-              type='date' 
+              type='date'
+              className={styles.input_date} 
               onChange={(e) => handleInputHistoryChange(e, 'date')}
               />
               <input 
@@ -246,6 +257,7 @@ function AddProfessor() {
                 />
               <div>
                 <button
+                className={styles.input_button}
                 onClick={(e) => {
                 //임시로 넣은 dispatch, 성공 시 뺄 예정
                   dispatch(addProfHistory({

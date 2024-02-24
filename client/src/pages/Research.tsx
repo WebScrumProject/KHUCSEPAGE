@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import '../styles/Paging.css';
 import Pagination from 'react-js-pagination'
+import { MdDelete } from "react-icons/md";
 // import { ObjectId } from 'mongodb';
 
 
@@ -17,6 +18,7 @@ function Research() {
     let dispatch = useDispatch()
     let navigate = useNavigate()
     let [page, setPage] = useState(1) // 현재 페이지
+    let [pageSize, setPageSize] = useState(3);
     let [count, setCount] = useState(0) // 카드의 개수
 
     const handlePageChange = (page: number) => {
@@ -34,7 +36,7 @@ function Research() {
 
     const fetchUndergraduateInfo = async () => {
         try {
-            const res = await axios.get(`/undergraduate_student?page=${page}/info`);
+            const res = await axios.get(`http://localhost:8080/undergraduate_student/api/info`);
             navigate('/research')
             const info_count = res.data
             setCount(info_count.length)
@@ -42,7 +44,7 @@ function Research() {
                 dispatch(addProfessor(a))
             })
             console.log(res.data)
-            console.log('카드 개수 : ', count)
+            console.log('카드 개수 : ', count) 
             window.scrollTo(0, 0);
         } catch (error) {
             console.error(error);
@@ -52,7 +54,7 @@ function Research() {
     // 삭제할 때마다 axios.delete
     const deleteUndergraduate = (i:number) => {
         if(window.confirm('정말 삭제할까요?')) {
-            axios.delete(`/undergraduate_student/${i}`)
+            axios.delete(`http://localhost:8080//undergraduate_student/api/info/${i}`)
             .then((res) => { 
                 dispatch(deleteProfessor(i))
                 alert('삭제되었습니다.')
@@ -63,10 +65,9 @@ function Research() {
         }
     }
 
-    // useEffect(() => { 
-    //     // fetchUndergraduat ePage()
-    //     fetchUndergraduateInfo()
-    // }, [page])
+    useEffect(() => { 
+      fetchUndergraduateInfo();
+    }, [page])
     // 그 카드의 상세페이지로 이동할 때 axios.get
 
     const selectCard = (id:any, name:string) => {
@@ -98,7 +99,8 @@ function Research() {
                         className={styles.delete_button}
                         onClick={() => {
                           var id = a._id
-                          deleteUndergraduate(i)}}> - </button>
+                          deleteUndergraduate(i)}}> 
+                          <MdDelete color="white"/> </button>
                         <button type='submit' 
                           className={styles.detail_button} 
                           onClick={() => {
