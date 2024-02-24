@@ -9,7 +9,7 @@ router.post("/image", upload.single("img"), profController.postImage);
 router.get("/api/info", profController.getProfCard);
 router.get("/api/info/:id", profController.getProfDetail);
 router.put("/api/info/:id", profController.putProfDetail);
-// router.delete("/api/info/:id", profController.deleteProf);
+router.delete("/api/info/:id", profController.deleteProf);
 router.post("/write", profController.postProf);
 
 export default router;

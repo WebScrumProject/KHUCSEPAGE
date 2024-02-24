@@ -110,17 +110,16 @@ export async function putProfDetail(req: ProfRequest, res: Response) {
   }
 }
 
-// export async function deleteProf(req: Request, res: Response) {
-//   const profId: string = req.params.id;
-//   const objectId = new mongoose.Types.ObjectId(profId);
-//   try {
-//     await Prof.findByIdAndDelete(objectId);
-//     await File.deleteMany({ fileUser: profId });
-//     res.send(`${objectId} deleted successfully`);
-//   } catch (err) {
-//     res.status(500).send("Error deleting Prof");
-//   }
-// }
+export async function deleteProf(req: Request, res: Response) {
+  const profId: string = req.params.id;
+  const objectId = new mongoose.Types.ObjectId(profId);
+  try {
+    await Prof.findByIdAndDelete(objectId);
+    res.send(`${objectId} deleted successfully`);
+  } catch (err) {
+    res.status(500).send("Error deleting Prof");
+  }
+}
 
 export async function postProf(req: Request, res: Response) {
   try {
@@ -135,6 +134,7 @@ export async function postProf(req: Request, res: Response) {
       recDate,
       profHistory,
       labHistory,
+      profImage,
     } = req.body;
 
     const newProf: DBProf = new Prof({
@@ -148,6 +148,7 @@ export async function postProf(req: Request, res: Response) {
       recDate,
       profHistory,
       labHistory,
+      profImage,
     });
     const savedProf = await newProf.save();
     res.status(200).json({ ObjectId: savedProf._id });

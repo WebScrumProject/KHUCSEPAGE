@@ -18,6 +18,7 @@ interface DBProf extends mongoose.Document {
   recDate: string;
   profHistory: History[];
   labHistory: History[];
+  profImage: string;
 }
 
 type DBProfModel = mongoose.Model<DBProf, {}, {}>;
@@ -43,6 +44,7 @@ const profSchema = new Schema<DBProf>({
       Content: { type: String },
     },
   ],
+  profImage: { type: String },
 });
 
 const Prof = mongoose.model<DBProf, DBProfModel>("Prof", profSchema);
