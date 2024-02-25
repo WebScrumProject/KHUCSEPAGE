@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useRef, useState, ChangeEvent } from "react";
 import styles from "../styles/AddProfessor.module.css";
 import axios from "axios";
-// import { ObjectId } from 'mongodb';
 import InputProfessor from "../components/InputProfessor";
 
 function AddProfessor() {
@@ -17,15 +16,15 @@ function AddProfessor() {
   let dispatch = useDispatch();
 
   interface ProfessorData {
-    _id: String;
-    profName: String;
-    profMajor: String;
-    profPhone: String;
-    profEmail: String;
-    profLab: String;
-    profLink: String;
-    recNumber: String;
-    recDate: String;
+    _id: string;
+    profName: string;
+    profMajor: string;
+    profPhone: string;
+    profEmail: string;
+    profLab: string;
+    profLink: string;
+    recNumber: number;
+    recDate: string;
   }
   const [professorData, setProfessorData] = useState<ProfessorData>({
     _id: "",
@@ -35,7 +34,7 @@ function AddProfessor() {
     profEmail: "",
     profLab: "",
     profLink: "",
-    recNumber: "",
+    recNumber: 0,
     recDate: "",
   });
 
@@ -53,83 +52,67 @@ function AddProfessor() {
     { placeholder: "기간을 입력해주세요.", name: "recDate" },
   ];
 
-    //히스토리
-    interface History {
-      date: String;
-      content: String;
+  //히스토리
+  interface History {
+    date: String;
+    content: String;
+  }
+  const [history, setHistory] = useState<History>({
+    date: "2000-00-00",
+    content: "",
+  });
+  const handleInputHistoryChange = (e: any, field: string) => {
+    setHistory({ ...history, [field]: e.target.value });
+  };
+
+  // 이미지 파일 추가
+  const [image, setImage] = useState<string | ArrayBuffer | null>(null);
+  const [imageName, setImageName] = useState<string | null>(null);
+  const [file, setFile] = useState<File>();
+  // 이미지 선택
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const showFile: File = e.target.files[0];
+      setFile(e.target.files[0]);
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+      if (showFile) {
+        reader.readAsDataURL(showFile);
+        setImageName(showFile.name);
+      }
     }
-    const [history, setHistory] = useState<History>({
-      date: '2000-00-00',
-      content: ''
-    })
-    const handleInputHistoryChange = (e: any, field: string) => {
-      setHistory({ ...history, [field]: e.target.value });
-    };
-
- 
-    // 이미지 파일 추가
-    const [image, setImage] = useState<string | ArrayBuffer | null>(null);
-    const [imageName, setImageName] = useState<string | null>(null);
-
-
-    // 이미지 선택
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files && e.target.files.length > 0) {
-        const file : File = e.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImage(reader.result);
-        };
-        if (file) {
-          reader.readAsDataURL(file);
-          setImageName(file.name);
-        }
-      }
-    };
-     // 서버에 이미지 파일 전송
-    const handleImageUpload = async() => {
-      const formData = new FormData();
-      if (image) {
-        try {
-          const decodedImage = await decodeImage(image as string);
-          const imageExtension = imageName ? imageName.split('.').pop() : 'defaultExtension';
-          const blobImage = new Blob([decodedImage], { type: `image/${imageExtension}` });
-          formData.append("imageUrl", blobImage, imageName || 'defaultName');
-
-          const res = await axios.post('http://localhost:8080/undergraduate_student/image', formData ,{
-            headers: {
-              'Content-type': "application/json"
-            }
-          })
-          console.log('이미지가 성공적으로 업로드되었습니다.', res.data);
-        } catch (error) {
-          console.error('이미지 업로드에 실패했습니다.', error);
-        }
-      } else {
-        console.error('이미지 파일을 선택해주세요.');
-      }
-    } else {
-      console.error("이미지 파일을 선택해주세요.");
+  };
+  // 서버에 이미지 파일 전송
+  const handleImageUpload = async () => {
+    const formData = new FormData();
+    if (file) {
+      formData.append("img", file);
+    }
+    try {
+      const imageUrl = await axios.post(
+        "http://localhost:8080/undergraduate_student/image",
+        formData
+      );
+      console.log(imageUrl);
+    } catch (err) {
+      console.log(err);
     }
   };
 
-    const decodeImage = async (base64Image: string) => {
-      const blobImage = await fetch(base64Image).then((res) => res.blob());
-      return blobImage; 
-    };
-
-  
-    // axios 코드 (나중에 axios 파일 만들어서 옮길 예정)
-    const sendProfessorData = (professorData: any) => {
-      handleImageUpload()
-      const serverURL = 'http://localhost:8080/undergraduate_student/write';
-      handleImageUpload(); 
-      axios.post(serverURL, professorData)
-        .then((res) => {
-          console.log(res.data);
-          dispatch(addProfessor({
-            _id : res.data,
-            profName : professorData.profName,
+  // axios 코드 (나중에 axios 파일 만들어서 옮길 예정)
+  const sendProfessorData = (professorData: any) => {
+    const serverURL = "http://localhost:8080/undergraduate_student/write";
+    axios
+      .post(serverURL, professorData)
+      .then((res) => {
+        console.log(res.data);
+        dispatch(
+          addProfessor({
+            profId: res.data,
+            profName: professorData.profName,
             profMajor: professorData.profMajor,
             profPhone: professorData.profPhone,
             profEmail: professorData.profEmail,
@@ -137,145 +120,148 @@ function AddProfessor() {
             profLink: professorData.profLink,
             recNumber: professorData.recNumber,
             recDate: professorData.recDate,
-          }))
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-    const sendHistory = (history: any) => {
-      const serverURL = 'http://localhost:8080/undergraduate_student/write';
-    
-      axios.post(serverURL, history)
-        .then((res) => {
-          console.log(res.data);
-          dispatch(addProfHistory({
-            date : history.date,
-            content : history.content,
-          }))
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-      
-    // const fetchId = async () => {
-    //   try {
-    //       const res = await axios.get(`/undergraduate_student?page=${1}/info`);
-    //       const lastProfessor = res.data[res.data.length - 1];
-    //       // const lastId = lastProfessor.id;
-    //       // setNextId(lastId)
-    //       console.log(res.data)
-    //   } catch (error) {
-    //       console.error(error);
-    //     }
-    // }
+  const sendHistory = (history: any) => {
+    const serverURL = "http://localhost:8080/undergraduate_student/write";
 
-    // useEffect(() => {
-    //   fetchId()
-    // 2}, )
+    axios
+      .post(serverURL, history)
+      .then((res) => {
+        console.log(res.data);
+        dispatch(
+          addProfHistory({
+            date: history.date,
+            content: history.content,
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-    return (
-    <div style={{display:'flex', flexDirection:'column', width:'100%'}}>
+  return (
+    <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <div className={styles.add_professor_container}>
         <div className={styles.add_professor_profile}>
           <div className={styles.add_professor_profile_top}>
             <div className={styles.add_professor_picture}>
               {image ? (
-                <label htmlFor='inputTag'>
-                  <img src={typeof image === 'string' ? image : undefined} alt={imageName || 'Image Description'}></img>
+                <label htmlFor="inputTag">
+                  <img
+                    src={typeof image === "string" ? image : undefined}
+                    alt={imageName || "Image Description"}
+                  ></img>
                 </label>
               ) : (
                 <label htmlFor="inputTag">
                   <p>룸 이미지 추가</p>
                 </label>
               )}
-              <input type='file' id='inputTag' className={styles.image_input} onChange={handleImageChange}/>  
+              <input
+                type="file"
+                id="inputTag"
+                className={styles.image_input}
+                onChange={handleImageChange}
+              />
             </div>
+            <button onClick={handleImageUpload}>이미지 등록하기</button>
           </div>
 
           <div className={styles.add_professor_profile_bottom}>
-          {
-            inputFields.map((field, index) => (
-            <InputProfessor
-              key={index}
-              placeholder={field.placeholder}
-              name={field.name}
-              onChange={(e) => handleInputProfessorChange(e, field.name)}
-              styles={styles}
-            />
-            ))
-            }
-              <button onClick={(e) => {
-              //임시로 넣은 dispatch, 성공 시 뺄 예정
-                dispatch(addProfessor({
-                  _id : '',
-                  profName : professorData.profName,
-                  profMajor: professorData.profMajor,
-                  profPhone: professorData.profPhone,
-                  profEmail: professorData.profEmail,
-                  profLab :professorData.profLab,
-                  profLink: professorData.profLink,
-                  recNumber: professorData.recNumber,
-                  recDate: professorData.recDate,
-                }))
-                console.log(professor)
-                sendProfessorData(professorData)
-                sendHistory(history)
-                navigate('/research')
-              }}>완료</button>
+            {inputFields.map((field, index) => (
+              <InputProfessor
+                key={index}
+                placeholder={field.placeholder}
+                name={field.name}
+                onChange={(e) => handleInputProfessorChange(e, field.name)}
+                styles={styles}
+              />
+            ))}
+            <button
+              onClick={(e) => {
+                //임시로 넣은 dispatch, 성공 시 뺄 예정
+                dispatch(
+                  addProfessor({
+                    profId: "",
+                    profName: professorData.profName,
+                    profMajor: professorData.profMajor,
+                    profPhone: professorData.profPhone,
+                    profEmail: professorData.profEmail,
+                    profLab: professorData.profLab,
+                    profLink: professorData.profLink,
+                    recNumber: professorData.recNumber,
+                    recDate: professorData.recDate,
+                  })
+                );
+                console.log(professor);
+                sendProfessorData(professorData);
+                sendHistory(history);
+                navigate("/research");
+              }}
+            >
+              완료
+            </button>
           </div>
         </div>
-        
-          <div className={styles.add_professor_history}>
-            <div style={{height: '400px'}}>
-              {
-                profHistory.map((value:any, index:any) => {
-                  return (
-                    <div key={index} >
-                      <div className={styles.history_content}>
-                        <p style={{width:'90px'}} key={index}>
-                          {value.date} </p>
-                          <p>{value.content}</p>
-                      </div>
-                      <div className={styles.line}></div>
-                    </div>
-                  )
-                }
-                )
-              }
-            </div>
-            <div className={styles.history_bottom}>
-              <input 
-              type='date'
-              className={styles.input_date} 
-              onChange={(e) => handleInputHistoryChange(e, 'date')}
-              />
-              <input 
+
+        <div className={styles.add_professor_history}>
+          <div style={{ height: "400px" }}>
+            {profHistory.map((value: any, index: any) => {
+              return (
+                <div key={index}>
+                  <div className={styles.history_content}>
+                    <p style={{ width: "90px" }} key={index}>
+                      {value.date}{" "}
+                    </p>
+                    <p>{value.content}</p>
+                  </div>
+                  <div className={styles.line}></div>
+                </div>
+              );
+            })}
+          </div>
+          <div className={styles.history_bottom}>
+            <input
+              type="date"
+              className={styles.input_date}
+              onChange={(e) => handleInputHistoryChange(e, "date")}
+            />
+            <input
               className={styles.history_input}
-              placeholder='입력'
-              onChange={(e) => handleInputHistoryChange(e, 'content')}
-                />
-              <div>
-                <button
+              placeholder="입력"
+              onChange={(e) => handleInputHistoryChange(e, "content")}
+            />
+            <div>
+              <button
                 className={styles.input_button}
                 onClick={(e) => {
-                //임시로 넣은 dispatch, 성공 시 뺄 예정
-                  dispatch(addProfHistory({
-                    date : history.date,
-                    content : history.content,
-                  }))
-                  console.log(profHistory)
+                  //임시로 넣은 dispatch, 성공 시 뺄 예정
+                  dispatch(
+                    addProfHistory({
+                      date: history.date,
+                      content: history.content,
+                    })
+                  );
+                  console.log(profHistory);
                 }}
-                >추가</button>
-              </div>
+              >
+                추가
+              </button>
             </div>
           </div>
+        </div>
       </div>
       <div className={styles.add_professor_project}></div>
     </div>
-  )
+  );
 }
 
 export default AddProfessor;
