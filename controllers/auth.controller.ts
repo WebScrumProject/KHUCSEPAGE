@@ -14,9 +14,7 @@ import {
 
 export async function googleLogin(req: Request, res: Response) {
   const url = getGoogleAuthURL();
-  return res.status(200).json({
-    url,
-  });
+  return res.redirect(url);
 }
 
 export async function googleOauthHandler(req: Request, res: Response) {
@@ -39,22 +37,25 @@ export async function googleOauthHandler(req: Request, res: Response) {
       hd: userDetails.hd,
     });
 
-    //upsertUser하고 반환되는 값을 통해서 email name을 할당하려고 했지만 잘 안돼서 임시로..
+    const googleId = data.userId;
+    const email = data.useremail;
+    const name = data.username;
+    const type = data.usertype;
 
-    const email = userDetails.email;
-    const name = userDetails.name;
+    const token = generateJWT({ googleId, email, name, type }); //jwt생성
 
-    const token = generateJWT({ email, name });
-
-    const refreshToken = generateRefreshJWT({ email, name });
-
+    const refreshToken = generateRefreshJWT({ email, name, type });
     //store refreshToken on redis
     await appendRefreshToken(email, refreshToken);
 
-    return res.status(200).json({
-      token,
-      refreshToken,
-    });
+    // return res.status(200).json({
+    //   token,
+    //   refreshToken,
+    // });
+
+    res.cookie("jwt", token, { httpOnly: true, maxAge: 3600000 });
+    return res.redirect("/mypage");
+    //1시간동안 유효한 쿠키 설정
   } catch (err) {
     console.log(err);
     return res.status(400).json({
@@ -64,17 +65,17 @@ export async function googleOauthHandler(req: Request, res: Response) {
 }
 
 export async function getTokenWithRefreshToken(req, res) {
-  const { name, email } = req.user;
-  const token = generateJWT({ email, name });
+  const { googleId, name, email, type } = req.user;
+  const token = generateJWT({ googleId, email, name, type });
   return res.status(200).json({
     token,
   });
 }
 
 export async function logout(req, res) {
-  const { name } = req.user;
+  const { email } = req.user;
   try {
-    await emptyRefreshTokens(name);
+    await emptyRefreshTokens(email);
     return res.status(200).json({
       message: "Logout succesful",
     });

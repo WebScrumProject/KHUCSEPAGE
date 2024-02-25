@@ -1,26 +1,29 @@
 import * as jwt from "jsonwebtoken";
 import { redisClient } from "./database";
 
-function generateJWT({ email, name }) {
+function generateJWT({ googleId, email, name, type }) {
   const token = jwt.sign(
     {
+      googleId,
       email,
       name,
+      type,
     },
     process.env.JWT_SECRET,
-    { expiresIn: 60 * 5 }
+    { expiresIn: "1h" } //1시간 후 만료
   );
   return token;
 }
 
-function generateRefreshJWT({ email, name }) {
+function generateRefreshJWT({ email, name, type }) {
   const refreshToken = jwt.sign(
     {
       email,
       name,
+      type,
     },
     process.env.REFRESH_JWT_SECRET,
-    { expiresIn: "150d" }
+    { expiresIn: "10d" }
   );
 
   return refreshToken;

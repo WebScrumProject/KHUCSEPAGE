@@ -13,6 +13,7 @@ import {
 } from "./libs/database";
 import authRoutes from "./routes/login";
 import profRoutes from "./routes/prof";
+import mypageRoutes from "./routes/mypage";
 
 const RedisStore = require("connect-redis").default;
 const app = express();
@@ -24,6 +25,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, "../client/build")));
 
 app.use(authRoutes);
+app.use(mypageRoutes);
 app.use("/undergraduate_student", profRoutes);
 
 dotenv.config();

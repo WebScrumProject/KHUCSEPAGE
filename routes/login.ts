@@ -1,14 +1,12 @@
 import express from "express";
 import * as authController from "../controllers/auth.controller";
-import verifyRefreshToken from "../middlewares/refresh";
+import verifyRefreshToken from "../middlewares/verify";
 
 //url앞에 login있음
 
 const router = express.Router();
 
 router.get("/login/google", authController.googleLogin);
-
-// router.get("/oauth2/redirect/google", authController.googleOauthHandler);
 
 router.get("/login/redirect", authController.googleOauthHandler);
 

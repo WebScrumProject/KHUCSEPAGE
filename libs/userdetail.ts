@@ -1,6 +1,12 @@
 import axios from "axios";
 import { redisClient } from "./database";
-import { doesNotMatch } from "assert";
+
+interface InsertedUser {
+  userId?: string;
+  useremail?: string;
+  username?: string;
+  usertype?: string;
+}
 
 async function getUserDetails(access_token) {
   const url = "https://www.googleapis.com/oauth2/v2/userinfo";
@@ -49,6 +55,7 @@ function InsertUser({ id, email, name, picture, hd }) {
     useremail: email,
     userphone: "",
     usertype: "newuser",
+    userimage: picture,
   };
 
   redisClient.hmset(id, user, (err, reply) => {
@@ -75,6 +82,7 @@ async function upsertUser({ id, email, name, picture, hd }) {
     const reply = await redisClient.exists(id);
 
     if (reply === 1) {
+      //이미 등록된 사용자라면
       console.log(`User already exists in Redis: ${id}`);
     } else if (hd === "khu.ac.kr") {
       InsertUser({ id, email, name, picture, hd });
@@ -82,14 +90,32 @@ async function upsertUser({ id, email, name, picture, hd }) {
     } else {
       console.log("Try again with khu mail");
     }
-    const data = await redisClient.hmget(id, "useremail", "username");
+    const data = await redisClient.hmget(
+      id,
+      "useremail",
+      "username",
+      "usertype"
+    );
 
-    const result = data.reduce((acc, value, index) => {
-      const field = index === 0 ? "useremail" : "username";
-      acc[field] = value;
+    const result: InsertedUser = data.reduce((acc, value, index) => {
+      switch (index) {
+        case 0:
+          acc.useremail = value;
+          break;
+        case 1:
+          acc.username = value;
+          break;
+        case 2:
+          acc.usertype = value;
+          break;
+        default:
+          break;
+      }
       return acc;
-    }, {});
+    }, {} as InsertedUser);
 
+    result.userId = id;
+    console.log(result);
     return result;
   } catch (err) {
     throw new Error(err.message);
