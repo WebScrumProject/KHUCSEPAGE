@@ -1,42 +1,44 @@
-import {configureStore, createSlice} from '@reduxjs/toolkit'
+import {configureStore, createSlice, PayloadAction} from '@reduxjs/toolkit'
 
-interface ProfessorState {
-    _id: string;
+interface Professor {
+    profId: string;
     profName: string;
     profMajor: string;
     profPhone: string;
     profEmail: string;
     profLab: string;
     profLink: string;
-    recNumber: string;
+    recNumber: number;
     recDate: string;
+  }
+
+interface ProfessorState {
+    prof: Professor[];
 }
+
+const initialState: ProfessorState = {
+    prof: [],
+};
+
 export let professor = createSlice ({
     name : 'professor',
-    initialState: [ 
-        {
-        _id: '',
-        profName: '홍길동', 
-        profMajor: 'none',
-        profPhone: '010-1234-5678',
-        profEmail: 'none',
-        profLab: 'none',
-        profLink: 'none',
-        recNumber: '0',
-        recDate: 'none',
-        }
-    ],
+    initialState,
     reducers: {
-        addProfessor(state, action) {
-            state.push(action.payload);
+        // addProfessor(state, action) {
+        //     state.push(action.payload);
+        // },
+        addProfessor(state, action: PayloadAction<Professor>) {
+            state.prof.push(action.payload);
         },
-        deleteProfessor(state, action) {
+        deleteProfessor(state, action: PayloadAction<string>) {
             const idToDelete = action.payload;
-            const indexToDelete = state.findIndex(item => item._id === idToDelete);
-            state.splice(indexToDelete, 1)
-        }
+            state.prof = state.prof.filter(item => item.profId !== idToDelete);
+        },
+        resetProfessor(state) {
+            state.prof = [];
+        },
     }
 })
 
-export const { addProfessor, deleteProfessor } = professor.actions;
+export const { addProfessor, deleteProfessor, resetProfessor } = professor.actions;
 export default professor.reducer

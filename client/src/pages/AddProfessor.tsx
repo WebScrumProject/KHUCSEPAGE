@@ -84,6 +84,7 @@ function AddProfessor() {
         setImageName(showFile.name);
       }
     }
+<<<<<<< HEAD
   };
   // 서버에 이미지 파일 전송
   const handleImageUpload = async () => {
@@ -113,6 +114,75 @@ function AddProfessor() {
           addProfessor({
             profId: res.data,
             profName: professorData.profName,
+=======
+    const [history, setHistory] = useState<History>({
+      date: '2000-00-00',
+      content: ''
+    })
+    const handleInputHistoryChange = (e: any, field: string) => {
+      setHistory({ ...history, [field]: e.target.value });
+    };
+
+ 
+    // 이미지 파일 추가
+    const [image, setImage] = useState<string | ArrayBuffer | null>(null);
+    const [imageName, setImageName] = useState<string | null>(null);
+
+
+    // 이미지 선택
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files && e.target.files.length > 0) {
+        const file : File = e.target.files[0];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImage(reader.result);
+        };
+        if (file) {
+          reader.readAsDataURL(file);
+          setImageName(file.name);
+        }
+      }
+    };
+     // 서버에 이미지 파일 전송
+    const handleImageUpload = async() => {
+      const formData = new FormData();
+      if (image) {
+        try {
+          const decodedImage = await decodeImage(image as string);
+          const imageExtension = imageName ? imageName.split('.').pop() : 'defaultExtension';
+          const blobImage = new Blob([decodedImage], { type: `image/${imageExtension}` });
+          formData.append("imageUrl", blobImage, imageName || 'defaultName');
+
+          const res = await axios.post('http://localhost:8080/undergraduate_student/image', formData ,{
+            headers: {
+              'Content-type': "application/json"
+            }
+          })
+          console.log('이미지가 성공적으로 업로드되었습니다.', res.data);
+        } catch (error) {
+          console.error('이미지 업로드에 실패했습니다.', error);
+        }
+      } else {
+        console.error('이미지 파일을 선택해주세요.');
+      }
+  };
+
+    const decodeImage = async (base64Image: string) => {
+      const blobImage = await fetch(base64Image).then((res) => res.blob());
+      return blobImage; 
+    };
+
+  
+    // axios 코드 (나중에 axios 파일 만들어서 옮길 예정)
+    const sendProfessorData = (professorData: any) => {
+      const serverURL = 'http://localhost:8080/undergraduate_student/write';
+      axios.post(serverURL, professorData)
+        .then((res) => {
+          console.log(res.data);
+          dispatch(addProfessor({
+            profId : res.data,
+            profName : professorData.profName,
+>>>>>>> 85cf02f196ff57bb343ffcef6362b53bc91a10da
             profMajor: professorData.profMajor,
             profPhone: professorData.profPhone,
             profEmail: professorData.profEmail,
@@ -128,6 +198,7 @@ function AddProfessor() {
       });
   };
 
+<<<<<<< HEAD
   const sendHistory = (history: any) => {
     const serverURL = "http://localhost:8080/undergraduate_student/write";
 
@@ -146,6 +217,23 @@ function AddProfessor() {
         console.log(err);
       });
   };
+=======
+    const sendHistory = (history: any) => {
+      const serverURL = 'http://localhost:8080/undergraduate_student/write';
+    
+      axios.post(serverURL, history)
+        .then((res) => {
+          console.log(res.data);
+          dispatch(addProfHistory({
+            date : history.date,
+            content : history.content,
+          }))
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+>>>>>>> 85cf02f196ff57bb343ffcef6362b53bc91a10da
 
   return (
     <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
@@ -176,6 +264,7 @@ function AddProfessor() {
           </div>
 
           <div className={styles.add_professor_profile_bottom}>
+<<<<<<< HEAD
             {inputFields.map((field, index) => (
               <InputProfessor
                 key={index}
@@ -209,6 +298,37 @@ function AddProfessor() {
             >
               완료
             </button>
+=======
+          {
+            inputFields.map((field, index) => (
+            <InputProfessor
+              key={index}
+              placeholder={field.placeholder}
+              name={field.name}
+              onChange={(e) => handleInputProfessorChange(e, field.name)}
+              styles={styles}
+            />
+            ))
+            }
+              <button onClick={(e) => {
+              //임시로 넣은 dispatch, 성공 시 뺄 예정
+                dispatch(addProfessor({
+                  profId : '',
+                  profName : professorData.profName,
+                  profMajor: professorData.profMajor,
+                  profPhone: professorData.profPhone,
+                  profEmail: professorData.profEmail,
+                  profLab :professorData.profLab,
+                  profLink: professorData.profLink,
+                  recNumber: professorData.recNumber,
+                  recDate: professorData.recDate,
+                }))
+                console.log(professor)
+                sendProfessorData(professorData)
+                sendHistory(history)
+                navigate('/research')
+              }}>완료</button>
+>>>>>>> 85cf02f196ff57bb343ffcef6362b53bc91a10da
           </div>
         </div>
 
