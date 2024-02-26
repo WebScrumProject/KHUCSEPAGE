@@ -25,7 +25,7 @@
     background-color: #ffffff;
 
     display: flex;
-
+    flex-direction: row-reverse;
 
 }
 
@@ -51,7 +51,7 @@
     font-weight: 400;
     line-height: normal;
 
-    margin-left:670px;
+    /* margin-left:670px; */
     margin-top:21px;
  
 }

@@ -9,17 +9,28 @@ import P_Calendar_styles from "../styles/calendar.module.css"
 import background from "../components/calendar_icon.jpg"
 
 const CustomCalendar = ({ onChange , value } : {onChange:any; value:any}) => {
-  const [nowDate, setNowDate] = useState("날짜");
+  const [nowDate, setNowDate] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+
 
   const handleToggleCalendar = () => {
     setIsOpen(!isOpen);
   };
 
   const handleDateChange = (selectedDate:any) => {
+    const selectedDateFormat = moment(selectedDate).format("YYYY/MM/DD");
+  const currentDate = moment().format("YYYY/MM/DD");
+
+  if (moment(selectedDateFormat).isBefore(currentDate)) {
+ 
+    alert("이전 날짜를 선택할 수 없습니다.");
+  } else {
+
     onChange(selectedDate);
     setIsOpen(false);
-    setNowDate(moment(selectedDate).format("YYYY년 MM월 DD일"));
+    setNowDate(selectedDateFormat);
+  }
+    
   };
 
   return (

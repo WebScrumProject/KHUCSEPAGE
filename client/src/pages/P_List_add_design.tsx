@@ -12,7 +12,7 @@ import Mojib from '../components/mojib'
 import { useState } from 'react';
 import axios from 'axios';
 
-import { RootState, p_addcontent ,p_addrecruit,p_addtitle,p_addimage, p_cate_change,p_addfile, p_addvideo } from "../components/store";
+import { RootState, p_addcontent ,p_addrecruit,p_addtitle,p_addimage, p_cate_change,p_addfile, p_addvideo,p_addDate } from "../components/store";
 import { useDispatch, useSelector } from "react-redux";
 
 import { FaRegCalendarAlt } from "react-icons/fa";
@@ -214,6 +214,17 @@ export default function P_List_add_design() {
     useEffect(()=>{
         dispatch(p_addfile(showFiles))
     },[showFiles])
+
+    useEffect(()=>{
+        dispatch(p_addDate(formatDate(value)))
+    },[value])
+
+    function formatDate(date: { getFullYear: () => any; getMonth: () => number; getDate: () => any; }) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}/${month}/${day}`;
+      }
     
 
    
@@ -236,13 +247,13 @@ export default function P_List_add_design() {
                         />
                 </div>
 
-                <button onClick={()=>{console.log(p_list)}}>콘솔</button>
+                <button onClick={()=>{console.log(p_list); console.log(formatDate(value))}}>콘솔</button>
 
                 <div className={J_List_styles.janghak_thin_line}></div>
 
                 <div className={P_add_styles.P_List_title2}>
 
-                    <div className={P_add_styles.P_List_text1}> 카테고리 :  </div>
+                    {/* <div className={P_add_styles.P_List_text1}> 카테고리 :  </div>
 
                     <select className={P_add_styles.P_List_categori} value={cate_val} onChange={(e) => {
                         cate_change(e.target.value)
@@ -252,19 +263,21 @@ export default function P_List_add_design() {
                         <option value="서울">서울 </option>
                         <option value="국제">국제 </option>
                         <option value="기타">기타 </option>
-                    </select>
+                    </select> */}
 
 
-                    <div className={P_add_styles.P_List_text2}>마감 기한 : </div>
+                    
 
-                    <div className={P_add_styles.P_List_date}></div>
+                    <div  className={P_add_styles.P_List_date}> 
+                    <div style={{textAlign:'center', marginTop:7, fontSize:20}}>{formatDate(value)} </div>
+                    </div>
                     
                     {/* <FaRegCalendarAlt className={P_add_styles.calendar_icon}>
                         
                     </FaRegCalendarAlt> */}
                     
                     <P_Calendar onChange={onChange} value={value}></P_Calendar>
-                    
+                    <div className={P_add_styles.P_List_text2}>마감 기한 : </div>
                     
                     {/* <button onClick={()=>{console.log(value)}}>날짜콘솔</button> */}
              
