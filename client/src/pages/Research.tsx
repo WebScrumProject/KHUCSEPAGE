@@ -116,17 +116,13 @@ function Research() {
           <div className={styles.pagination}>
             <Pagination 
               activePage={page}
-              itemsCountPerPage={12}
-              totalItemsCount={60}
+              itemsCountPerPage={pageSize}
+              totalItemsCount={30}
               pageRangeDisplayed={5}
               prevPageText={"<"}
               nextPageText={">"}
               onChange={handlePageChange} // onPageChange 대신 onChange 사용
             />
-            {/* <button className={styles.prev_btn} onClick={prevPage}
-              style={{ opacity: page !== 1 ? 1 : 0, pointerEvents: page !== 1 ? 'auto' : 'none' }}>이전</button>
-              <p className={styles.page_num}>{page}페이지</p>
-            <button className={styles.next_btn} onClick={nextPage}>다음</button>       */}
           </div>
         </div>
     )

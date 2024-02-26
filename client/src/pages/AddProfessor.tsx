@@ -9,14 +9,14 @@ import axios from "axios";
 import InputProfessor from "../components/InputProfessor";
 
 function AddProfessor() {
-  let professor = useSelector((state: RootState) => state.professor) as any;
+  let professor = useSelector((state: RootState) => state.professor.prof) as any;
   let profHistory = useSelector((state: RootState) => state.profHistory) as any;
 
   let navigate = useNavigate();
   let dispatch = useDispatch();
 
   interface ProfessorData {
-    _id: string;
+    profId: string;
     profName: string;
     profMajor: string;
     profPhone: string;
@@ -27,7 +27,7 @@ function AddProfessor() {
     recDate: string;
   }
   const [professorData, setProfessorData] = useState<ProfessorData>({
-    _id: "",
+    profId: "",
     profName: "",
     profMajor: "",
     profPhone: "",
