@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, Ref, useMemo, ChangeEvent} from 'react';
+import React, { useEffect, useRef, Ref, useMemo, ChangeEvent, useInsertionEffect} from 'react';
 import '../styles/App.css';
 import J_List_styles from '../styles/J_List.module.css';
 import JB_styles from '../styles/JB_detail.module.css';
@@ -12,7 +12,7 @@ import Mojib from '../components/mojib'
 import { useState } from 'react';
 import axios from 'axios';
 
-import { RootState, p_addcontent ,p_addrecruit,p_addtitle,p_addimage, p_cate_change,p_addfile, p_addvideo,p_addDate } from "../components/store";
+import { RootState, p_addcontent ,p_addrecruit,p_addtitle,p_addimage, p_cate_change,p_addfile, p_addvideo,p_addDate, p_addUser } from "../components/store";
 import { useDispatch, useSelector } from "react-redux";
 
 import { FaRegCalendarAlt } from "react-icons/fa";
@@ -29,6 +29,7 @@ export default function P_List_add_design() {
     
     const [value, onChange] = useState(new Date());
     let [cate_val, cate_change] = useState("")
+    let [user_name, userChange] = useState("")
 
     const handleChangeContent = (e:any) => {
         dispatch(p_addcontent(e.target.value));
@@ -219,6 +220,23 @@ export default function P_List_add_design() {
         dispatch(p_addDate(formatDate(value)))
     },[value])
 
+    useEffect(()=>{
+        axios.get('/authorization')
+                .then(response => {
+                  console.log(response.data)
+                  if(response.data.isLogined == 'Logined'){
+                    userChange(response.data.name)
+
+                  }
+                  
+                })
+                .catch(error => {
+                });
+    })
+    useEffect(()=>{
+        dispatch(p_addUser(user_name))
+    },[user_name])
+
     function formatDate(date: { getFullYear: () => any; getMonth: () => number; getDate: () => any; }) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -247,7 +265,14 @@ export default function P_List_add_design() {
                         />
                 </div>
 
-                <button onClick={()=>{console.log(p_list); console.log(formatDate(value))}}>콘솔</button>
+                <button onClick={()=>{console.log(p_list);
+                axios.get('/authorization')
+                .then(response => {
+                  console.log(response.data)
+                })
+                .catch(error => {
+                });
+                }}>콘솔</button>
 
                 <div className={J_List_styles.janghak_thin_line}></div>
 

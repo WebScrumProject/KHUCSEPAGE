@@ -156,6 +156,9 @@ let p_list = createSlice ({
         },
         p_addDate(state,action) {
             state[0].date = action.payload;
+        },
+        p_addUser(state,action) {
+            state[0].writer = action.payload;
         }
 
     }
@@ -166,7 +169,7 @@ export const { setList, removeList,resetList } = j_list.actions;
 export const { changeIsLogined } = IsLogined.actions;
 export const { p_addList, p_removeList, p_resetList,
                 p_addrecruit, p_addcontent, p_removerecruit, 
-                p_addtitle,p_addimage, p_addfield, p_addapply_cnt, p_cate_change, p_addfile, p_addvideo, p_addDate} = p_list.actions;
+                p_addtitle,p_addimage, p_addfield, p_addapply_cnt, p_cate_change, p_addfile, p_addvideo, p_addDate, p_addUser} = p_list.actions;
 
 // 스토어 설정
 const store = configureStore({
