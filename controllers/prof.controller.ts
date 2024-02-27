@@ -56,6 +56,7 @@ export async function getProfCard(req: Request, res: Response) {
       profEmail: data.profEmail,
       recNumber: data.recNumber,
       recDate: data.recDate,
+      profImage: data.profImage,
     }));
     res.send(cardData);
   } catch (err) {
