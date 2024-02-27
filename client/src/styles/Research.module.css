@@ -81,7 +81,7 @@
 .research_picture {
   margin-top: 20px;
   position: relative;
-  background-color: black;
+  /* background-color: black; */
   border-radius: 100%;
   width: 128px;
   height: 128px;  

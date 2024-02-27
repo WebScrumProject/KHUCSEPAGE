@@ -10,6 +10,7 @@ interface Professor {
     profLink: string;
     recNumber: number;
     recDate: string;
+    profImage: string;
   }
 
 interface ProfessorState {

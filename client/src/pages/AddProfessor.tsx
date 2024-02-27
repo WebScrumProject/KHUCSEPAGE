@@ -25,6 +25,7 @@ function AddProfessor() {
     profLink: string;
     recNumber: number;
     recDate: string;
+    profImage: string,
   }
   const [professorData, setProfessorData] = useState<ProfessorData>({
     profId: "",
@@ -36,6 +37,7 @@ function AddProfessor() {
     profLink: "",
     recNumber: 0,
     recDate: "",
+    profImage: "",
   });
 
   const handleInputProfessorChange = (e: any, field: string) => {
@@ -68,6 +70,7 @@ function AddProfessor() {
   // 이미지 파일 추가
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);
   const [imageName, setImageName] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string>('');
   const [file, setFile] = useState<File>();
   // 이미지 선택
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,11 +95,12 @@ function AddProfessor() {
       formData.append("img", file);
     }
     try {
-      const imageUrl = await axios.post(
+      const res = await axios.post(
         "http://localhost:8080/undergraduate_student/image",
         formData
       );
-      console.log(imageUrl);
+      setImageUrl(res.data)
+      console.log(res.data)
     } catch (err) {
       console.log(err);
     }
@@ -113,9 +117,6 @@ function AddProfessor() {
           addProfessor({
             profId: res.data,
             profName: professorData.profName,
-
-            // 이미지 선택
-
             profMajor: professorData.profMajor,
             profPhone: professorData.profPhone,
             profEmail: professorData.profEmail,
@@ -123,6 +124,7 @@ function AddProfessor() {
             profLink: professorData.profLink,
             recNumber: professorData.recNumber,
             recDate: professorData.recDate,
+            profImage: imageUrl,
           })
         );
       })
@@ -165,7 +167,7 @@ function AddProfessor() {
                 </label>
               ) : (
                 <label htmlFor="inputTag">
-                  <p>룸 이미지 추가</p>
+                  <p>이미지 삽입</p>
                 </label>
               )}
               <input
@@ -202,6 +204,7 @@ function AddProfessor() {
                     profLink: professorData.profLink,
                     recNumber: professorData.recNumber,
                     recDate: professorData.recDate,
+                    profImage: imageUrl,
                   })
                 );
                 console.log(professor);
