@@ -9,9 +9,10 @@ import { Route } from 'react-router';
 import Detail from '../pages/Detail';
 import P_List_add_design from '../pages/P_List_add_design';
 import P_calendar from '../components/calendar';
+import P_List from '../pages/P_List';
 
 function Routing() {
-  const scholarshipId = 0;
+  
   const [value, onChange] = useState(new Date());
   return (
     
@@ -21,6 +22,7 @@ function Routing() {
         <Route path="/scholarship" element={<J_List/>}></Route>
         <Route path="/scholarship/:key/:page" element={<Detail />} />
         <Route path="/project/write" element={<P_List_add_design/>}/>
+        <Route path="/project" element={ <P_List/> }/>
       </Routes>
     
   );

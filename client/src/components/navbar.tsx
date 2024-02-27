@@ -13,7 +13,7 @@ function Mynavbar() {
         </div>
         <div className="navbar_menu">
           <p className="navbar_text"> 학부 연구생</p>
-          <p className="navbar_text"> 팀원 모집 </p>
+          <p onClick={()=> navigate('/project')} className="navbar_text"> 팀원 모집 </p>
           <p onClick={()=> navigate('/scholarship')} className="navbar_text"> 장학 및 공모전 </p>
           <p className="navbar_text"> 동아리 공지 </p>
         </div>

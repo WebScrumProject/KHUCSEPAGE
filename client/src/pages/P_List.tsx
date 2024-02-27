@@ -1,9 +1,9 @@
 import React from 'react';
 
-import '../css/App.css';
+import '../styles/App.css';
 import J_List_styles from '../styles/J_List.module.css';
 import P_List_styles from '../styles/P_List.module.css'
-import '../css/Paging.css';
+import '../styles/Paging.css';
 
 import Mynavbar from '../components/navbar';
 import Mynavbar_logined from '../components/navbar_logout';

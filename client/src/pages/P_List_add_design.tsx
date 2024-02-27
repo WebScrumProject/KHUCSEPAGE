@@ -12,7 +12,7 @@ import Mojib from '../components/mojib'
 import { useState } from 'react';
 import axios from 'axios';
 
-import { RootState, p_addcontent ,p_addrecruit,p_addtitle,p_addimage, p_cate_change,p_addfile, p_addvideo,p_addDate, p_addUser } from "../components/store";
+import { RootState, p_addcontent ,p_addrecruit,p_addtitle,p_addimage, p_cate_change,p_addfile, p_addvideo,p_addDate, p_addUser,p_addDeadline } from "../components/store";
 import { useDispatch, useSelector } from "react-redux";
 
 import { FaRegCalendarAlt } from "react-icons/fa";
@@ -20,6 +20,7 @@ import { LuImagePlus } from "react-icons/lu";
 import { RiVideoAddFill } from "react-icons/ri";
 import { BsPaperclip } from "react-icons/bs";
 import { VscDiffAdded } from "react-icons/vsc";
+import moment from 'moment';
 
 
 
@@ -28,6 +29,7 @@ export default function P_List_add_design() {
     let dispatch = useDispatch();
     
     const [value, onChange] = useState(new Date());
+    const currentDate = moment().format("YYYY/MM/DD");
     let [cate_val, cate_change] = useState("")
     let [user_name, userChange] = useState("")
 
@@ -217,8 +219,12 @@ export default function P_List_add_design() {
     },[showFiles])
 
     useEffect(()=>{
-        dispatch(p_addDate(formatDate(value)))
+        dispatch(p_addDeadline(formatDate(value)))
     },[value])
+
+    useEffect(()=>{
+        dispatch(p_addDate(currentDate))
+    })
 
     useEffect(()=>{
         axios.get('/authorization')
