@@ -80,7 +80,7 @@ app.get('/logout', (req: CustomRequest, res: Response) => {
 });
 
 
-app.get('/authorization', Logined, (req:CustomRequest, res)=>{
+app.get('/authorization', (req:CustomRequest, res)=>{
   if (req.user){
     res.send({
       "isLogined" : "Logined",
@@ -132,16 +132,6 @@ function register(data:any){
   client.hset(data.id, "applyproj", JSON.stringify([]))
   client.hset(data.id,"portfolio", JSON.stringify([]))
   client.hset(data.id, "profileImage", data._json.picture)
-}
-
-function Logined(req:any,res:any, next:any):void{
-  if (req.user){
-    res.send({isLogined: "Logined", name: req.user.username})
-    next()
-  }
-  else{
-    res.send({isLogined: "Not Logined", name:""})
-  }
 }
 
 passport.use(
