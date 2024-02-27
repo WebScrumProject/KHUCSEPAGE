@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import '../styles/App.css';
 import J_List_styles from '../styles/J_List.module.css';
@@ -20,11 +21,11 @@ function P_List() {
   let p_list = useSelector((state: RootState) => state.j_list);
   const IsLogined = useSelector((state: RootState) => state.IsLogined);
   let dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [page, setPage] = useState(1);
   const handlePageChange = (page: React.SetStateAction<number>) => {
     setPage(page);
-    /* console.log(page) */
     dispatch(p_resetList())
     axios.get(`/project?key=all&page=${page}`)
       .then(response => {
@@ -35,6 +36,10 @@ function P_List() {
       })
       .catch(error => {
       });
+  };
+
+  const handleNavigate = (key: string, page: number) => {
+    navigate(`/project?key=${key}&page=${page}`);
   };
 
 
@@ -109,7 +114,9 @@ function P_List() {
       <img src='/images/search_icon.png' alt="불러올 수 없는 이미지" className={J_List_styles.search_icon} />
       </button>
 
-      <button className={P_List_styles.P_List_icon}> 
+      <button className={P_List_styles.P_List_icon} onClick={()=>{
+        navigate('/project/write')
+      }}> 
       <img src='/images/add_icon.png' alt="불러올 수 없는 이미지" className={J_List_styles.search_icon} />
       </button>
       
@@ -147,7 +154,9 @@ function P_List() {
               </div>
 
               <div className={J_List_styles.j_list_title}> 
-                <a href={`/project/${i}`}>{a.title}</a> 
+              <span onClick={() => {
+                        handleNavigate('all', i)
+                    }}>{a.title}</span>
               </div>
 
               <div className={J_List_styles.j_list_date}> 
