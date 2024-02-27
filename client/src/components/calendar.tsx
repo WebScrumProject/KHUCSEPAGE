@@ -35,7 +35,7 @@ const CustomCalendar = ({ onChange , value } : {onChange:any; value:any}) => {
 
   return (
     <div className={P_Calendar_styles.CalendarContainer}>
-      <div /* className={P_Calendar_styles.DropdownButton} */ onClick={handleToggleCalendar}>
+      <div className={P_Calendar_styles.custom_button}  onClick={handleToggleCalendar}>
         <img style={{height:60, width:60}} src={background}></img>
       </div>
       <div className={P_Calendar_styles.CalendarWrapper }style={{display: isOpen ? "block" : "none" }}  >

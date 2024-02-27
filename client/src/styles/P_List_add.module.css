@@ -110,7 +110,18 @@
     height: 42px;
 
     margin-top:18px;
-    margin-right:18px
+    margin-right:18px;
+
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+ 
+  &:active {
+    background-color: rgba(0, 0, 0, 0.1); 
+  }
 }
 
 .content_box{
@@ -183,3 +194,14 @@
     margin-top: 10px;;
 }
 
+.custom-button {
+    
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s ease; 
+  
+   
+    &:active {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
