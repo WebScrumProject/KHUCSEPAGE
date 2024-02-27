@@ -5,6 +5,7 @@ interface ProfCardDTO {
   profEmail: string;
   recNumber: string;
   recDate: string;
+  profImage: string;
 }
 
 export default ProfCardDTO;
