@@ -51,17 +51,16 @@ function Research() {
             console.error(error);
           }
     }
-
     // 삭제할 때마다 axios.delete
     const deleteUndergraduate = (id:string) => {
         if(window.confirm('정말 삭제할까요?')) {
-            axios.delete(`http://localhost:8080//undergraduate_student/api/info/${id}`)
+            axios.delete(`http://localhost:8080/undergraduate_student/api/info/${id}`)
             .then((res) => { 
                 dispatch(deleteProfessor(id))
                 alert('삭제되었습니다.')
             })
             .catch((err) => {
-                console.log(err)
+              console.log(err)
             })
         }
     }
@@ -86,12 +85,13 @@ function Research() {
                   return(
                     <div className={styles.research_box}>
                       <div className={styles.research_profile}>
-                        <div className={styles.research_picture} />
+                        {/* <div className={styles.research_picture} /> */}
+                        <img src={a.profImage} alt="image"></img>
                         <p>{a.profName} 교수님</p>
                         <p>{a.profEmail}</p>
                       </div>
                       <div className={styles.research_content}>
-                        <p>모집 인원 : {a.recNumber}명</p>
+                        <p>모집 인원 : {a.recNumber}</p>
                         <p>기간 : {a.recDate}</p>
                         <p>연구 분야 : {a.profMajor}</p>
                       </div>
@@ -116,17 +116,13 @@ function Research() {
           <div className={styles.pagination}>
             <Pagination 
               activePage={page}
-              itemsCountPerPage={12}
-              totalItemsCount={60}
+              itemsCountPerPage={pageSize}
+              totalItemsCount={30}
               pageRangeDisplayed={5}
               prevPageText={"<"}
               nextPageText={">"}
               onChange={handlePageChange} // onPageChange 대신 onChange 사용
             />
-            {/* <button className={styles.prev_btn} onClick={prevPage}
-              style={{ opacity: page !== 1 ? 1 : 0, pointerEvents: page !== 1 ? 'auto' : 'none' }}>이전</button>
-              <p className={styles.page_num}>{page}페이지</p>
-            <button className={styles.next_btn} onClick={nextPage}>다음</button>       */}
           </div>
         </div>
     )
