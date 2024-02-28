@@ -78,48 +78,70 @@ function InsertUser({ id, email, name, picture, hd }) {
 }
 
 async function upsertUser({ id, email, name, picture, hd }) {
-  try {
-    const reply = await redisClient.exists(id);
-
-    if (reply === 1) {
-      //이미 등록된 사용자라면
-      console.log(`User already exists in Redis: ${id}`);
-    } else if (hd === "khu.ac.kr") {
-      InsertUser({ id, email, name, picture, hd });
-      console.log(`Succesfully insert in Redis: ${id}`);
-    } else {
-      console.log("Try again with khu mail");
-    }
-    const data = await redisClient.hmget(
-      id,
-      "useremail",
-      "username",
-      "usertype"
-    );
-
-    const result: InsertedUser = data.reduce((acc, value, index) => {
-      switch (index) {
-        case 0:
-          acc.useremail = value;
-          break;
-        case 1:
-          acc.username = value;
-          break;
-        case 2:
-          acc.usertype = value;
-          break;
-        default:
-          break;
+  if (hd === "khu.ac.kr") {
+    try {
+      const reply = await redisClient.exists(id);
+      if (reply === 1) {
+        const url = "/";
+        console.log(`User already exists in Redis: ${id}`);
+        return url;
       }
-      return acc;
-    }, {} as InsertedUser);
+      const url = "/newuser";
 
-    result.userId = id;
-    console.log(result);
-    return result;
-  } catch (err) {
-    throw new Error(err.message);
+      InsertUser({ id, email, name, picture, hd });
+
+      console.log(`Successfully insert in Redis: ${id}`);
+      return url;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  } else {
+    console.log("Try again with khu mail");
   }
 }
+
+// async function upsertUser({ id, email, name, picture, hd }) {
+//   if (hd === "khu.ac.kr") {
+//     try {
+//       const reply = await redisClient.exists(id);
+//       if (reply === 1) {
+//         console.log(`User already exists in Redis: ${id}`);
+
+//       } else {
+//         InsertUser({ id, email, name, picture, hd });
+//         console.log(`Successfully insert in Redis: ${id}`);
+//       }
+//       const data = await redisClient.hmget(
+//         id,
+//         "useremail",
+//         "username",
+//         "usertype"
+//       );
+//       const result: InsertedUser = data.reduce((acc, value, index) => {
+//         switch (index) {
+//           case 0:
+//             acc.useremail = value;
+//             break;
+//           case 1:
+//             acc.username = value;
+//             break;
+//           case 2:
+//             acc.usertype = value;
+//             break;
+//           default:
+//             break;
+//         }
+//         return acc;
+//       }, {} as InsertedUser);
+//       result.userId = id;
+
+//       return result;
+//     } catch (err) {
+//       throw new Error(err.message);
+//     }
+//   } else {
+//     console.log("Try again with khu email");
+//   }
+// }
 
 export { getUserDetails, upsertUser };

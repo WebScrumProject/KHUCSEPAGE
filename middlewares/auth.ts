@@ -17,7 +17,8 @@ function isLoggedIn(req: Request, res: Response, next) {
         error: err.message,
       });
     }
-    req.user = next();
+    req.user = user;
+    next();
   });
 }
 

@@ -17,6 +17,7 @@ export async function googleLogin(req: Request, res: Response) {
   return res.redirect(url);
 }
 
+//소셜로그인 인증 및 유저정보를 가져오는데 성공하면 jwt토큰을 발급
 export async function googleOauthHandler(req: Request, res: Response) {
   const code = req.query.code;
   try {
@@ -29,7 +30,7 @@ export async function googleOauthHandler(req: Request, res: Response) {
       });
     }
     //update or insert user details on the database
-    const data = await upsertUser({
+    const url = await upsertUser({
       id: userDetails.id,
       email: userDetails.email,
       name: userDetails.name,
@@ -37,10 +38,10 @@ export async function googleOauthHandler(req: Request, res: Response) {
       hd: userDetails.hd,
     });
 
-    const googleId = data.userId;
-    const email = data.useremail;
-    const name = data.username;
-    const type = data.usertype;
+    const googleId = userDetails.id;
+    const email = userDetails.email;
+    const name = userDetails.name;
+    const type = userDetails.type;
 
     const token = generateJWT({ googleId, email, name, type }); //jwt생성
 
@@ -54,7 +55,8 @@ export async function googleOauthHandler(req: Request, res: Response) {
     // });
 
     res.cookie("jwt", token, { httpOnly: true, maxAge: 3600000 });
-    return res.redirect("/mypage");
+
+    return res.redirect(url);
     //1시간동안 유효한 쿠키 설정
   } catch (err) {
     console.log(err);
