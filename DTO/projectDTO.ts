@@ -1,4 +1,3 @@
-import { StringArray } from 'aws-sdk/clients/rdsdataservice';
 const projectModel = require('../models/projectSchema.tsx');
 
 interface np {
@@ -7,10 +6,10 @@ interface np {
   id : String,
   date: String,
   content:{
-    image:StringArray,
-    video: StringArray,
+    image:[String],
+    video: [String],
     text: String,
-    file: StringArray
+    file: [String]
   }
   recruit: Array<object>,
   deadline : String,
@@ -18,20 +17,21 @@ interface np {
   apply : Array<object>
 }
 
-export async function writeProject(newProject:np){
+export async function writeProject(newProject:np, userid:string, username:string){
+  console.log(newProject.content.image, typeof newProject.content.image)
     try{
         const project = await projectModel.create({
           title: newProject.title,
-          writer: newProject.writer,
-          writer_id : newProject.id,
+          writer: username,
+          id : userid,
           date: newProject.date,
           content: {
-            image: [],
-            video: [],
+            image: newProject.content.image,
+            video: newProject.content.video,
             text : newProject.content.text,
-            file : []
+            file : newProject.content.file
           },
-          recruit: [],
+          recruit: newProject.recruit,
           deadline : newProject.deadline,
           is_done: false,
           apply : []

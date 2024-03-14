@@ -6,10 +6,11 @@ const {writeProject} = require('../DTO/projectDTO')
 
 interface CustomRequest extends Request {
     files? : any
+    user?:any
 }
 
 router.post('/write',async(req:CustomRequest, res:Response)=>{
-  writeProject(req.body.p_list[0])
+  writeProject(req.body.p_list[0], req.user.userid, req.user.username )
 })
   
 router.post('/write/images',upload.array('image'),async(req:CustomRequest, res:Response)=>{

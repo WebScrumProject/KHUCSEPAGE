@@ -3,7 +3,8 @@ const { Schema } = mongoose;
 
 const recruitSchema = new Schema({
     field:{type:String, required:true},
-    apply_cnt : {type: Number, required:true}
+    apply_cnt : {type: Number, required:true},
+    cate_field: {type:String, required: true}
 })
 
 const applySchema = new Schema({
@@ -19,10 +20,10 @@ const projectSchema = new Schema({
     id: {type : String, required: true},
     date: {type : String, required: true},
     content: {
-        image: {type : Array},
-        video: {type: Array},
+        image: [String],
+        video: [String],
         text : {type: String, required:true},
-        file : {type: Array}
+        file : [String]
     },
     recruit: [recruitSchema],
     deadline : {type: String, required:true},
