@@ -1,8 +1,8 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { RootState} from '../store/store'
 import { addProfessor } from '../store/professor'
 import { useSelector, useDispatch } from 'react-redux';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from '../styles/AddProfessor.module.css'
 import axios from 'axios';
 // import { ObjectId } from 'mongodb';
@@ -20,16 +20,16 @@ function UndergraduateStudentDetail() {
       content: string;
     }
     interface ProfessorData {
-        _id: String;
-        profName: String;
-        profMajor: String;
-        profPhone: String;
-        profEmail: String;
-        profLab: String;
-        profLink: String;
-        recNumber: String;
-        recDate: String;
-        profHistory: History[]
+        _id: string;
+        profName: string;
+        profMajor: string;
+        profPhone: string;
+        profEmail: string;
+        profLab: string;
+        profLink: string;
+        recNumber: string;
+        recDate: string;
+        profImage: '',
     }
     const [professorData, setProfessorData] = useState<ProfessorData>({
         _id: '',
@@ -41,7 +41,7 @@ function UndergraduateStudentDetail() {
         profLink: '',
         recNumber: '',
         recDate: '',
-        profHistory: []
+        profImage: '',
       });
     
 
@@ -58,40 +58,21 @@ function UndergraduateStudentDetail() {
     const [imgFile, setImgFile] = useState<File | null>(null)
     const [previewImg, setPreviewImg] = useState<string | null>(null)
 
-     // 이미지 선택
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files && e.target.files.length > 0) {
-        const file : File = e.target.files[0]
-        setImgFile(file);
-
-        const reader = new FileReader();
-        reader.onload = () => {
-          setPreviewImg(reader.result as string)
-        };
-        reader.readAsDataURL(file);
-      }
-    };
-     // 서버에 이미지 파일 전송
-    const handleImageUpload = async() => {
-      if (imgFile) {
-        try {
-          const formData = new FormData();
-          formData.append('image', imgFile)
-
-          const res = await axios.post('/undergraduate_student/image', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          })
-          console.log('이미지가 성공적으로 업로드되었습니다.', res);
-        } catch (error) {
-          console.error('이미지 업로드에 실패했습니다.', error);
+    const Profid  = useParams().profId;
+    const fetchUndergraduateInfo = async () => {
+      console.log(`/undergraduate_student/api/info/${Profid}`)
+      try {
+          const res = await axios.get(`http://localhost:8080/undergraduate_student/api/info/${Profid}`);
+          console.log('research : ', res.data)
+          setProfessorData(res.data)
+      } catch (error) {
+          console.error(error);
         }
-      } else {
-        console.error('이미지 파일을 선택해주세요.');
-      }
     }
 
+    useEffect(() => {
+      fetchUndergraduateInfo();
+    }, [])
 
     return (
         <div style={{display:'flex', flexDirection:'column', width:'100%'}}>

@@ -25,9 +25,6 @@ export let professor = createSlice ({
     name : 'professor',
     initialState,
     reducers: {
-        // addProfessor(state, action) {
-        //     state.push(action.payload);
-        // },
         addProfessor(state, action: PayloadAction<Professor>) {
             state.prof.push(action.payload);
         },

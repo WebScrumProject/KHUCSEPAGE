@@ -153,6 +153,7 @@ export async function postProf(req: Request, res: Response) {
     });
     const savedProf = await newProf.save();
     res.status(200).json({ ObjectId: savedProf._id });
+    console.log(savedProf)
   } catch (err) {
     res.status(500).send("Error posting Prof");
   }

@@ -44,7 +44,7 @@ function Research() {
             res.data.map((a:any, i:number) => {
                 dispatch(addProfessor(a))
             })
-            console.log(res.data)
+            console.log('research : ', res.data)
             console.log('카드 개수 : ', count) 
             window.scrollTo(0, 0);
         } catch (error) {
@@ -86,7 +86,7 @@ function Research() {
                     <div className={styles.research_box}>
                       <div className={styles.research_profile}>
                         {/* <div className={styles.research_picture} /> */}
-                        <img src={a.profImage} alt="image"></img>
+                        <img className={styles.research_picture} src={a.profImage} alt="image"></img>
                         <p>{a.profName} 교수님</p>
                         <p>{a.profEmail}</p>
                       </div>
