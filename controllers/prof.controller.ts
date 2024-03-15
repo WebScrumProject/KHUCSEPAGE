@@ -35,7 +35,7 @@ export async function postImage(req: Request, res: Response) {
     await newFile.save();
     res.send(imageUrl);
   } catch (err) {
-    throw new Error(err.message);
+    res.status(500).send("Error posting profImage");
   }
 }
 
