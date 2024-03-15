@@ -192,6 +192,7 @@ export default function P_List_add_design() {
         try {
           
             await Promise.all([
+                //파일 있을때만 예외처리
                 handleImageUpload(),
                 handleVideoUpload(),
                 handleFileUpload()
@@ -284,17 +285,6 @@ export default function P_List_add_design() {
 
                 <div className={P_add_styles.P_List_title2}>
 
-                    {/* <div className={P_add_styles.P_List_text1}> 카테고리 :  </div>
-
-                    <select className={P_add_styles.P_List_categori} value={cate_val} onChange={(e) => {
-                        cate_change(e.target.value)
-                        dispatch(p_cate_change(e.target.value))}}>
-                        <option value="전체"> 전체 </option>
-                        <option value="공통"> 공통 </option>
-                        <option value="서울">서울 </option>
-                        <option value="국제">국제 </option>
-                        <option value="기타">기타 </option>
-                    </select> */}
 
 
                     
@@ -303,14 +293,13 @@ export default function P_List_add_design() {
                     <div style={{textAlign:'center', marginTop:7, fontSize:20}}>{formatDate(value)} </div>
                     </div>
                     
-                    {/* <FaRegCalendarAlt className={P_add_styles.calendar_icon}>
-                        
-                    </FaRegCalendarAlt> */}
+                
+
                     
                     <P_Calendar onChange={onChange} value={value}></P_Calendar>
                     <div className={P_add_styles.P_List_text2}>마감 기한 : </div>
-                    
-                    {/* <button onClick={()=>{console.log(value)}}>날짜콘솔</button> */}
+     
+
              
                 </div>
 
@@ -343,10 +332,7 @@ export default function P_List_add_design() {
                 <BsPaperclip className={P_add_styles.func_icon}/>
             </label>
 
-                {/* <button onClick={() =>{
-                    console.log(imageList)
-                    console.log(showImages)
-                }}>콘솔</button> */}
+            
 
                 {showImages.map((image, id) => (
                         <div key={id}>
