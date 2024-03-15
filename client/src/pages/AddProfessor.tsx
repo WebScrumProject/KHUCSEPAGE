@@ -123,12 +123,10 @@ function AddProfessor() {
     handleImageUrl(imageUrl);
     console.log(professorData.profImage)
     const serverURL = "http://localhost:8080/undergraduate_student/write";
-    axios
-      .post(serverURL, professorData)
+    axios.post(serverURL, professorData)
       .then((res) => {
+        console.log('history 확인 : ', professorData)
         console.log(res.data);
-        
-        console.log('url이 과연 있을까?? ', professorData)
         dispatch(
           addProfessor({
             profId: res.data,
@@ -143,28 +141,6 @@ function AddProfessor() {
             profImage: imageUrl,
           })
         );
-        console.log('sendProfData 이미지url 확인 : ', imageUrl)
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const sendHistory = (historyData: History[]) => {
-    const serverURL = "http://localhost:8080/undergraduate_student/write";
-    // console.log('axios 확인(historyArr) : ', historyArr)
-    // console.log('axios 확인(redux history) : ', profHistory)
-    console.log('axios 확인 historyData : ', historyData)
-    axios
-      .post(serverURL, historyData)
-      .then((res) => {
-        console.log(res.data);
-        dispatch(
-          addProfHistory({
-            Date: history.Date,
-            Content: history.Content,
-          })
-        );
       })
       .catch((err) => {
         console.log(err);
@@ -173,18 +149,9 @@ function AddProfessor() {
 
   const handleComplete = async () => {
     try {
-      // 이미지 업로드
       const imageUrl = await handleImageUpload();
-  
-      // 이미지 업로드가 성공한 경우에만 교수 정보 데이터 전송
-      if (imageUrl) {
-        // 교수 정보 데이터 전송
-        sendProfessorData({ ...professorData, profImage: imageUrl });
-        
-        // 히스토리 데이터 전송
-        sendHistory(historyArr);
-        
-        // 페이지 이동
+        if (imageUrl) {
+        sendProfessorData({ ...professorData, profImage: imageUrl, profHistory: historyArr });
         navigate("/research");
       } else {
         console.log("이미지 업로드에 실패했습니다.");

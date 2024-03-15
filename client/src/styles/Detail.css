@@ -1,0 +1,27 @@
+.image_container {
+  width : 150px;
+  height : 150px;
+}
+
+.profile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  width: 150px;
+  height: 150px; 
+}
+
+.history_container {
+  display: flex;
+  width: 800px;
+  height: 60px;
+  align-items: center;
+}
+
+.line {
+  width: 780px;
+  background-color: gray;
+  height: 0.1px;
+  margin-left: 10px;
+}
