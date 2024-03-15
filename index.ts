@@ -124,6 +124,7 @@ function register(data:any){
   }
   major = info.substring(index+1,info.length-1)
   client.hset(data.id, "username", name)
+  client.hset(data.id, "userid", data.id)
   client.hset(data.id, "usercollege", college)
   client.hset(data.id, "usermajor", major)
   client.hset(data.id, "useremail", data.emails[0].value)

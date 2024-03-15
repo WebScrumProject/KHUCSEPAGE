@@ -197,7 +197,6 @@ export default function P_List_add_design() {
                 handleVideoUpload(),
                 handleFileUpload()
             ]);
-
             const response = await axios.post('/project/write', { p_list: p_list });
             console.log("Response from sending p_list:", response.data);
         } catch (error) {
@@ -230,7 +229,7 @@ export default function P_List_add_design() {
     useEffect(()=>{
         axios.get('/authorization')
                 .then(response => {
-                  console.log(response.data)
+                  //console.log(response.data)
                   if(response.data.isLogined == 'Logined'){
                     userChange(response.data.name)
 
@@ -275,7 +274,7 @@ export default function P_List_add_design() {
                 <button onClick={()=>{console.log(p_list);
                 axios.get('/authorization')
                 .then(response => {
-                  console.log(response.data)
+                  //console.log(response.data)
                 })
                 .catch(error => {
                 });
