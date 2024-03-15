@@ -52,6 +52,8 @@ let j_list = createSlice ({
     }
 })
 
+
+
 let p_list = createSlice ({
     name: 'p_list',
     
@@ -64,8 +66,8 @@ let p_list = createSlice ({
             id:"",
 
             content: {
-                image: null,
-                video: null,
+                image: '',
+                video: '',
                 text: '',
                 file: '',
             },

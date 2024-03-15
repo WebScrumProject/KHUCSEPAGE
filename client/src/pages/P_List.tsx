@@ -18,10 +18,12 @@ import Pagination from "react-js-pagination";
 
 
 function P_List() {
-  let p_list = useSelector((state: RootState) => state.j_list);
+  let p_list = useSelector((state: RootState) => state.p_list);
   const IsLogined = useSelector((state: RootState) => state.IsLogined);
   let dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [list, setList] = useState(p_list)
 
   const [page, setPage] = useState(1);
   const handlePageChange = (page: React.SetStateAction<number>) => {
@@ -38,12 +40,22 @@ function P_List() {
       });
   };
 
-  const handleNavigate = (key: string, page: number) => {
-    navigate(`/project?key=${key}&page=${page}`);
+  const handleNavigate = (id: number) => {
+    navigate(`/project/detail/${id}`);
   };
 
 
   useEffect(()=>{
+    axios.get(`/project?key=all&page=${page}`)
+      .then(response => {
+        console.log(response.data);
+        response.data.map((a:any,i:any) => {
+            dispatch(p_addList(a))
+        })
+      })
+      .catch(error => {
+      });
+   
     axios.get('/authorization')
       .then(response => {
         if(response.data.isLogined == 'Logined'){
@@ -52,7 +64,7 @@ function P_List() {
       })
       .catch(error => {
       });
-  })
+  },[])
 
   return (
     
@@ -155,7 +167,7 @@ function P_List() {
 
               <div className={J_List_styles.j_list_title}> 
               <span onClick={() => {
-                        handleNavigate('all', i)
+                        handleNavigate(i)
                     }}>{a.title}</span>
               </div>
 

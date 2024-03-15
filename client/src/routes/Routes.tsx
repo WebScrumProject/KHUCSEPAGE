@@ -21,8 +21,11 @@ function Routing() {
         <Route path="/calendar" element={<P_calendar onChange={onChange} value={value}></P_calendar>}></Route>
         <Route path="/scholarship" element={<J_List/>}></Route>
         <Route path="/scholarship/:key/:page" element={<Detail />} />
+
+        <Route path="/project" element={<P_List />} />
+        <Route path="/project/detail/:id" element={<Detail />} />
         <Route path="/project/write" element={<P_List_add_design/>}/>
-        <Route path="/project" element={ <P_List/> }/>
+        <Route path="/project/:key/:page" element={ <P_List/> }/>
       </Routes>
     
   );

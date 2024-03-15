@@ -45,7 +45,7 @@ export async function writeProject(newProject:np, userid:string, username:string
 
 export async function editProject(newProject:np, projectId:mongoose.Types.ObjectId){
   projectModel.find({_id:projectId})
-  .then(res=>{
+  .then((res: { title: String; content: { image: [String]; video: [String]; text: String; file: [String]; }; recruit: object[]; deadline: String; save: () => any; })=>{
     if(!res){
       throw new Error('프로젝트를 찾을 수 없습니다.');
     }
@@ -61,7 +61,7 @@ export async function editProject(newProject:np, projectId:mongoose.Types.Object
   .then(() => {
     console.log('프로젝트가 성공적으로 수정되었습니다.');
   })
-  .catch(error => {
+  .catch((error: any) => {
     console.error('프로젝트 수정 중 오류 발생:', error);
   });
 }

@@ -19,7 +19,7 @@ const CustomCalendar = ({ onChange , value } : {onChange:any; value:any}) => {
 
   const handleDateChange = (selectedDate:any) => {
     const selectedDateFormat = moment(selectedDate).format("YYYY/MM/DD");
-  const currentDate = moment().format("YYYY/MM/DD");
+    const currentDate = moment().format("YYYY/MM/DD");
 
   if (moment(selectedDateFormat).isBefore(currentDate)) {
  

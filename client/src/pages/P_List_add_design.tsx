@@ -22,10 +22,20 @@ import { BsPaperclip } from "react-icons/bs";
 import { VscDiffAdded } from "react-icons/vsc";
 import moment from 'moment';
 
+import produce from 'immer'
 
 
 export default function P_List_add_design() {
+
+    
     let p_list = useSelector((state: RootState) => state.p_list);
+    let temp_image:string
+    let temp_video:string
+    let temp_file:string
+
+    
+    
+    
     let dispatch = useDispatch();
     
     const [value, onChange] = useState(new Date());
@@ -135,75 +145,95 @@ export default function P_List_add_design() {
         setShowImages(showImages.filter((_, index) => index !== id));
     };
 
-    const handleImageUpload = () => {
+    const handleImageUpload = async () => {
         const formData = new FormData();
         for (let i = 0; i < imageList.length; i++) {
-        formData.append("image", imageList[i]);
+            formData.append("image", imageList[i]);
         }
+    
         try {
-            const imageRes = axios.post('/project/write/images', formData)
-            .then(response => {
-                console.log(response.data)
-                dispatch(p_addimage(response.data))
-            })
-          } catch (error) {
-            console.log(error);
+            const response = await axios.post('/project/write/images', formData);
+            console.log("handleImageupload", response.data);
+            /* dispatch(p_addimage(response.data)); */
+            temp_image = response.data.image;
+            
+            return true; // 성공적으로 업로드되었음을 신호로 전달
+        } catch (error) {
+            console.error(error);
             alert('server error');
-          }
-    }
-
-    const handleVideoUpload = () => {
+            return false; // 업로드에 실패했음을 신호로 전달
+        }
+    };
+    
+    const handleVideoUpload = async () => {
         const formData = new FormData();
         for (let i = 0; i < videoList.length; i++) {
             formData.append("video", videoList[i]);
         }
+    
         try {
-            const imageRes = axios.post('/project/write/videos', formData)
-            .then(response => {
-                console.log(response.data)
-                dispatch(p_addvideo(response.data))
-            })
-          } catch (error) {
-            console.log(error);
+            const response = await axios.post('/project/write/videos', formData);
+            console.log(response.data);
+           /* dispatch(p_addvideo(response.data)); */
+           temp_video=response.data.video;
+            return true; // 성공적으로 업로드되었음을 신호로 전달
+        } catch (error) {
+            console.error(error);
             alert('server error');
-          }
+            return false; // 업로드에 실패했음을 신호로 전달
+        }
     };
     
-    // 파일 업로드
-    const handleFileUpload = () => {
+    const handleFileUpload = async () => {
         const formData = new FormData();
         for (let i = 0; i < fileList.length; i++) {
             formData.append("file", fileList[i]);
         }
+    
         try {
-            const imageRes = axios.post('/project/write/files', formData)
-            .then(response => {
-                console.log(response.data)
-                dispatch(p_addfile(response.data))
-            })
-          } catch (error) {
-            console.log(error);
+            const response = await axios.post('/project/write/files', formData);
+            console.log(response.data);
+          /* dispatch(p_addfile(response.data)); */
+          temp_file=response.data.file;
+            return true; // 성공적으로 업로드되었음을 신호로 전달
+        } catch (error) {
+            console.error(error);
             alert('server error');
-          }
+            return false; // 업로드에 실패했음을 신호로 전달
+        }
     };
     
     // 모든 업로드가 완료되면 실행할 함수
     const handleAllUploadsComplete = async () => {
         try {
-          
-            await Promise.all([
-                //파일 있을때만 예외처리
-                handleImageUpload(),
-                handleVideoUpload(),
-                handleFileUpload()
-            ]);
-            const response = await axios.post('/project/write', { p_list: p_list });
-            console.log("Response from sending p_list:", response.data);
+            const imageUploadResult = await handleImageUpload();
+            const videoUploadResult = await handleVideoUpload();
+            const fileUploadResult = await handleFileUpload();
+         
+    
+            // 모든 파일 업로드가 성공적으로 완료됐을 때만 p_list를 찍음
+            if (imageUploadResult && videoUploadResult && fileUploadResult) {
+               
+              
+                const temp_p_list = produce(p_list, draftState => {
+                    // 원하는 변경을 수행
+                    console.log(temp_image)
+                    draftState[0].content.file = temp_file as string;
+                    draftState[0].content.image= temp_image as string;
+                    draftState[0].content.video = temp_video as string;
+                   
+                });
+               
+               console.log(temp_p_list)
+               axios.post('/project/write', { p_list: temp_p_list });
+
+                
+            }
         } catch (error) {
             console.error("Error during uploads:", error);
         }
     };
-
+    
     
 
     useEffect(()=>{
@@ -272,12 +302,7 @@ export default function P_List_add_design() {
                 </div>
 
                 <button onClick={()=>{console.log(p_list);
-                axios.get('/authorization')
-                .then(response => {
-                  //console.log(response.data)
-                })
-                .catch(error => {
-                });
+                
                 }}>콘솔</button>
 
                 <div className={J_List_styles.janghak_thin_line}></div>
@@ -382,10 +407,11 @@ export default function P_List_add_design() {
 
             <div className={P_List_styles.button_list}>
                 <button className='navbar_button'>목록</button>
-                <button className='navbar_button' onClick={() => {
+                <button className='navbar_button' onClick={async () => {
                    
-                    handleAllUploadsComplete()
-                       
+                    await handleAllUploadsComplete()
+                    
+                   
                     
                 }}>글쓰기</button> 
             </div>
