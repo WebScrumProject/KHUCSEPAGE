@@ -2,10 +2,17 @@ import axios from "axios";
 import { redisClient } from "./database";
 
 interface InsertedUser {
-  userId?: string;
+  userid?: string;
   useremail?: string;
   username?: string;
   usertype?: string;
+}
+
+interface SessionUser {
+  userid: string;
+  useremail: string;
+  username: string;
+  userimage: string;
 }
 
 async function getUserDetails(access_token) {
@@ -22,6 +29,26 @@ async function getUserDetails(access_token) {
 
   return userInfo;
 }
+
+// function setSession({ id, email, name, picture }) {
+//   const userInfo: SessionUser = {
+//     userid: id,
+//     useremail: email,
+//     username: name,
+//     userimage: picture,
+//   };
+//   console.log(userInfo);
+//   sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+// }
+
+// function getSession(): SessionUser | null {
+//   const userInfo = sessionStorage.getItem("userInfo");
+//   return userInfo ? JSON.parse(userInfo) : null;
+// }
+
+// function clearSession(): void {
+//   sessionStorage.removeItem("userInfo");
+// }
 
 function InsertUser({ id, email, name, picture, hd }) {
   let username: string = "",

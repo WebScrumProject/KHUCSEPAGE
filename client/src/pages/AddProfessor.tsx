@@ -9,7 +9,9 @@ import axios from "axios";
 import InputProfessor from "../components/InputProfessor";
 
 function AddProfessor() {
-  let professor = useSelector((state: RootState) => state.professor.prof) as any;
+  let professor = useSelector(
+    (state: RootState) => state.professor.prof
+  ) as any;
   let profHistory = useSelector((state: RootState) => state.profHistory) as any;
 
   let navigate = useNavigate();
@@ -25,7 +27,7 @@ function AddProfessor() {
     profLink: string;
     recNumber: number;
     recDate: string;
-    profImage: string,
+    profImage: string;
   }
   const [professorData, setProfessorData] = useState<ProfessorData>({
     profId: "",
@@ -70,7 +72,7 @@ function AddProfessor() {
   // 이미지 파일 추가
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);
   const [imageName, setImageName] = useState<string | null>(null);
-  const [imageUrl, setImageUrl] = useState<string>('');
+  const [imageUrl, setImageUrl] = useState<string>("");
   const [file, setFile] = useState<File>();
   // 이미지 선택
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,8 +101,10 @@ function AddProfessor() {
         "http://localhost:8080/undergraduate_student/image",
         formData
       );
-      setImageUrl(res.data)
-      console.log(res.data)
+      console.log("res: ", res);
+      console.log("res.data: ", res.data);
+      setImageUrl(res.data);
+      console.log("imageUrl: ", imageUrl);
     } catch (err) {
       console.log(err);
     }

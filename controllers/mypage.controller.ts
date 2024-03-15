@@ -17,3 +17,4 @@ export function welcome(req, res) {
     message: `Hello ${req.user.name}, Welcome to the mypage route`,
   });
 }
+3;
