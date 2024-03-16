@@ -29,9 +29,9 @@ export default function P_List_add_design() {
 
     
     let p_list = useSelector((state: RootState) => state.p_list);
-    let temp_image:string
-    let temp_video:string
-    let temp_file:string
+    let temp_image:string;
+    let temp_video:string;
+    let temp_file:string;
 
     
     
