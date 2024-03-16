@@ -29,7 +29,7 @@ export default function P_List_add_design() {
 
     
         
-    
+    let [code,setCode] = useState(0);
     
     let p_list = useSelector((state: RootState) => state.p_list);
 
@@ -269,6 +269,7 @@ export default function P_List_add_design() {
                temp_p_list.content.image= temp_image 
                temp_p_list.content.video = temp_video  */
                 console.log(temp_image)
+                
                 console.log(im2)
                setTempPList(prevState => ({
                 ...prevState,
@@ -279,10 +280,13 @@ export default function P_List_add_design() {
                   video: [...temp_video], // 배열 복사
                 },
               }));
-                   
-                console.log(temp_p_list)
-                console.log("yeah", temp_p_list)
-                axios.post('/project/write', { p_list: temp_p_list });
+              
+              setCode(1);
+              console.log(code)
+
+              axios.post('/project/write', { p_list: temp_p_list })
+                
+                
                
 
 
@@ -291,6 +295,33 @@ export default function P_List_add_design() {
             console.error("Error during uploads:", error);
         }
     };
+
+    const gogo  = async () => {
+        try {
+            console.log(333)
+            const res = await axios.post('/project/write', { p_list: temp_p_list })
+            .then((response) => {
+                console.log("dma?", response.data);
+                // POST 요청이 성공한 경우에 대한 처리
+            })
+            .catch((error) => {
+                console.error("에러 발생:", error);
+                // POST 요청이 실패한 경우에 대한 처리
+            });
+            }
+        catch {
+            }
+        }
+
+   
+
+    useEffect(() => {
+        if (code !== 0) {
+            console.log("yeah", temp_p_list)
+            gogo();
+        }
+    }, [code]); // setcode 값이 변경될 때만 실행
+    
     
     useEffect(()=>{
        /*  temp_p_list.content.image = showImages;
