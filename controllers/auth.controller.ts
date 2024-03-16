@@ -23,64 +23,64 @@ export async function googleOauthHandler(req: Request, res: Response) {
   //google에서 제공된 코드를 통해 애플리케이션이 사용자 데이터에 접근할 수 있게된다.
   const code = req.query.code;
 
+  return res.redirect(`/login/api/auth/google?authCode=${code}`);
+
+  //   // const refreshToken = generateRefreshJWT({ email, name, type });
+  //   // //store refreshToken on redis
+  //   // await appendRefreshToken(email, refreshToken);
+
+  //   return res.status(200).json({
+  //     token,
+  //     // refreshToken,
+  //   });
+  //   // .redirect(url);
+
+  //   // res.cookie("jwt", token, { httpOnly: true, maxAge: 3600000 });
+
+  //   // return res.redirect(url);
+  //   //1시간동안 유효한 쿠키 설정
+  // } catch (err) {
+  //   console.log(err);
+  //   return res.status(400).json({
+  //     error: err.message,
+  //   });
+  // }
+}
+
+export async function authCodeHandler(req, res) {
+  const code = req.query.authCode;
+
   try {
-    const access_token = await getAccessTokenFromGoogle(code);
-    return res.send(access_token);
-    // const userDetails = await getUserDetails(access_token);
+    const accessToken = await getAccessTokenFromGoogle(code);
+    const userDetails = await getUserDetails(accessToken);
 
-    // if (!userDetails.verified_email) {
-    //   return res.status(403).json({
-    //     error: "You have not verified your google account",
-    //   });
-    // }
+    if (!userDetails.verified_email) {
+      return res.status(403).json({
+        error: "You have not verified your google account",
+      });
+    }
 
-    // setSession({
-    //   id: userDetails.id,
-    //   email: userDetails.email,
-    //   name: userDetails.name,
-    //   picture: userDetails.picture,
-    // });
-    // const storedUserInfo = getSession();
+    if (userDetails.hd != "khu.ac.kr") {
+      return res.send("Try again with khu email");
+    }
 
-    // if (storedUserInfo) {
-    //   //회원가입페이지로 리디렉션 url
-    // } else {
-    //   //sessionStorage에 정보가 없으면 오류메시지
-    //   return res.status(403).json({
-    //     error: "User information not found in session storage.",
-    //   });
-    // }
+    await upsertUser({
+      id: userDetails.id,
+      email: userDetails.email,
+      name: userDetails.name,
+      picture: userDetails.picture,
+      hd: userDetails.hd,
+    });
 
-    //update or insert user details on the database
-    //근데 이부분은 추가정보 입력받고 난 다음에 수행해야할듯.. 함수를 분리해야하나?
-    // const url = await upsertUser({
-    //   id: userDetails.id,
-    //   email: userDetails.email,
-    //   name: userDetails.name,
-    //   picture: userDetails.picture,
-    //   hd: userDetails.hd,
-    // });
+    const googleId = userDetails.id;
+    const email = userDetails.email;
+    const name = userDetails.name;
+    const type = userDetails.type;
 
-    // const googleId = userDetails.id;
-    // const email = userDetails.email;
-    // const name = userDetails.name;
-    // const type = userDetails.type;
+    //jwt생성 : 1시간 후 만료
+    const token = generateJWT({ googleId, email, name, type });
 
-    // const token = generateJWT({ googleId, email, name, type }); //jwt생성
-
-    // const refreshToken = generateRefreshJWT({ email, name, type });
-    // //store refreshToken on redis
-    // await appendRefreshToken(email, refreshToken);
-
-    // return res.status(200).json({
-    //   token,
-    //   refreshToken,
-    // });
-
-    // res.cookie("jwt", token, { httpOnly: true, maxAge: 3600000 });
-
-    // return res.redirect(url);
-    //1시간동안 유효한 쿠키 설정
+    return res.send(token);
   } catch (err) {
     console.log(err);
     return res.status(400).json({
@@ -88,8 +88,6 @@ export async function googleOauthHandler(req: Request, res: Response) {
     });
   }
 }
-
-export async function getSessionInfo(req, res) {}
 
 export async function getTokenWithRefreshToken(req, res) {
   const { googleId, name, email, type } = req.user;

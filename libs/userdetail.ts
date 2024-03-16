@@ -30,26 +30,6 @@ async function getUserDetails(access_token) {
   return userInfo;
 }
 
-// function setSession({ id, email, name, picture }) {
-//   const userInfo: SessionUser = {
-//     userid: id,
-//     useremail: email,
-//     username: name,
-//     userimage: picture,
-//   };
-//   console.log(userInfo);
-//   sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
-// }
-
-// function getSession(): SessionUser | null {
-//   const userInfo = sessionStorage.getItem("userInfo");
-//   return userInfo ? JSON.parse(userInfo) : null;
-// }
-
-// function clearSession(): void {
-//   sessionStorage.removeItem("userInfo");
-// }
-
 function InsertUser({ id, email, name, picture, hd }) {
   let username: string = "",
     college: string = "",
@@ -104,26 +84,23 @@ function InsertUser({ id, email, name, picture, hd }) {
   // redisClient.hset(userDetails.id, "profileImage", userDetails._json.picture);
 }
 
+//1. khu메일인지 확인하고 2-1. redis에 이미 존재하는 user이면 main으로 바로 리다이렉션 2-2. redis에 존재하지 않는 유저면 InsertUser하고 리다이렉션
 async function upsertUser({ id, email, name, picture, hd }) {
-  if (hd === "khu.ac.kr") {
-    try {
-      const reply = await redisClient.exists(id);
-      if (reply === 1) {
-        const url = "/";
-        console.log(`User already exists in Redis: ${id}`);
-        return url;
-      }
-      const url = "/newuser";
-
-      InsertUser({ id, email, name, picture, hd });
-
-      console.log(`Successfully insert in Redis: ${id}`);
-      return url;
-    } catch (err) {
-      throw new Error(err.message);
+  // const url = "/";
+  try {
+    const reply = await redisClient.exists(id);
+    if (reply === 1) {
+      console.log(`User already exists in Redis: ${id}`);
+      return;
+      // return url;
     }
-  } else {
-    console.log("Try again with khu mail");
+
+    InsertUser({ id, email, name, picture, hd });
+    console.log(`Successfully insert in Redis: ${id}`);
+    // return url;
+  } catch (err) {
+    // throw new Error(err.message);
+    console.log(err.message);
   }
 }
 
