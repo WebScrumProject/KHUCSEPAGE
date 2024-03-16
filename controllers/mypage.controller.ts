@@ -52,8 +52,20 @@ export async function putUserDetail(req, res) {
       usercollege,
       username,
     });
-    res.status(200).json(updatedUser);
+    res.status(200).send(updatedUser);
   } catch (err) {
-    res.status(500).send("Error updating User");
+    res.status(500).send("Error updating User:", err.message);
+  }
+}
+
+export function deleteUser(req, res) {
+  const userId: string = req.user.googleId;
+
+  try {
+    const deletedUser = redisClient.hdel(userId);
+    console.log(deletedUser);
+    res.status(200).send(deletedUser).redirect("/");
+  } catch (err) {
+    console.error("Error deleting User: ", err.message);
   }
 }

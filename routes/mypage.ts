@@ -12,4 +12,10 @@ router.put("/profile/api/edit", [isLoggedIn], mypageController.putUserDetail);
 
 // router.get('/profile/api/myproject', [isLoggedIn], mypageController.)
 
+router.delete(
+  "/profile/api/withdrawal",
+  [isLoggedIn],
+  mypageController.putUserDetail
+);
+
 export default router;
