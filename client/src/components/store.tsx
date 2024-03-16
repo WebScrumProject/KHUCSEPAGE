@@ -1,4 +1,5 @@
 import {configureStore, createSlice} from '@reduxjs/toolkit'
+import {PListItem, PListState} from './type'
 
 let IsLogined = createSlice ({
     name : 'IsLogined',
@@ -52,50 +53,15 @@ let j_list = createSlice ({
     }
 })
 
-
+const initialState:PListState=[];
 
 let p_list = createSlice ({
     name: 'p_list',
     
-    initialState: [
-        {
-            title: '',
-            category: '',
-            writer: '',
-            date: 0,
-            id:"",
-
-            content: {
-                image: '',
-                video: '',
-                text: '',
-                file: '',
-            },
-
-            recruit: [
-                {
-                    field: '',
-                    apply_cnt: 0,
-                    cate_field:''
-                }
-            ],
-            
-            deadline: 0,
-            is_done: false,
-
-            apply: [
-                {
-                    date: 0,
-                    name: '',
-                    field: '',
-                    memo: '',
-                }
-            ]
-        },
-    ],
+    initialState,
     reducers: {
         p_addList(state,action) {
-            state.push(action.payload)
+            state.unshift(action.payload)
         },
         p_resetList(state) {
             state.splice(0,state.length)
@@ -129,32 +95,11 @@ let p_list = createSlice ({
             state[0].content.file = action.payload;
         },
         p_addfield(state,action){
-            if(state[0].recruit.length!=action.payload.num) {
-                
-                /* while(state[0].recruit.length!=action.payload.num) {
-                    state[0].recruit.push(
-                        {
-                            field: '',
-                            apply_cnt: 0,
-                        }
-                    )
-                } */
-            }
-            
             state[0].recruit[action.payload.num].field =action.payload.field;
             state[0].recruit[action.payload.num].cate_field =action.payload.cate_field;
         },
         p_addapply_cnt(state,action){
-            if(state[0].recruit.length!=action.payload.num) {
-                /* while(state[0].recruit.length!=action.payload.num) {
-                    state[0].recruit.push(
-                        {
-                            field: '',
-                            apply_cnt: 0,
-                        }
-                    )
-                } */
-            }
+           
             state[0].recruit[action.payload.num].apply_cnt=action.payload.apply_cnt;
         },
         p_cate_change(state,action){

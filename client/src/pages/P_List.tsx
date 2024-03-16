@@ -28,7 +28,7 @@ function P_List() {
   const [page, setPage] = useState(1);
   const handlePageChange = (page: React.SetStateAction<number>) => {
     setPage(page);
-    dispatch(p_resetList())
+    /* dispatch(p_resetList())
     axios.get(`/project?key=all&page=${page}`)
       .then(response => {
         console.log(response.data);
@@ -37,7 +37,7 @@ function P_List() {
         })
       })
       .catch(error => {
-      });
+      }); */
   };
 
   const handleNavigate = (id: number) => {

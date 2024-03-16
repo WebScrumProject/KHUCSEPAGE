@@ -23,35 +23,81 @@ import { VscDiffAdded } from "react-icons/vsc";
 import moment from 'moment';
 
 import produce from 'immer'
-
+import { PListItem, PListState } from '../components/type';
 
 export default function P_List_add_design() {
 
     
+        
+    
+    
     let p_list = useSelector((state: RootState) => state.p_list);
-    let temp_image:string;
-    let temp_video:string;
-    let temp_file:string;
 
+    let InitialState: PListItem = {
+        title: '',
+        category: '',
+        writer: '',
+        date: '',
+        id: '',
+        content: {
+            image: [],
+            video: [],
+            text: '',
+            file: [],
+        },
+        recruit: [
+            {
+                field: '',
+                apply_cnt: 0,
+                cate_field: '',
+            },
+        ],
+        deadline: '',
+        is_done: false,
+        apply: [
+            {
+                date: '',
+                name: '',
+                field: '',
+                memo: '',
+            },
+        ],
+    };
+    const [temp_image, setTempImage] = useState<string[]>([]);
+    const [temp_video, setTempVideo] = useState<string[]>([]);
+    const [temp_file, setTempFile] = useState<string[]>([]);
+    const [temp_p_list, setTempPList] = useState<PListItem>(InitialState);
     
-    
+    let im2:string[];
     
     let dispatch = useDispatch();
     
     const [value, onChange] = useState(new Date());
     const currentDate = moment().format("YYYY/MM/DD");
-    let [cate_val, cate_change] = useState("")
     let [user_name, userChange] = useState("")
 
     const handleChangeContent = (e:any) => {
-        dispatch(p_addcontent(e.target.value));
+       
+        /* temp_p_list.content.text = e.target.value; */
+
+        setTempPList(prevState => ({
+            ...prevState,
+            content: {
+                ...prevState.content,
+                text: e.target.value,
+            },
+        }));
     };
 
     const handleChangeTitle = (e:any) => {
-        dispatch(p_addtitle(e.target.value));
+        /* dispatch(p_addtitle(e.target.value)); */
+        /* temp_p_list.title = e.target.value; */
+        setTempPList(prevState => ({
+            ...prevState,
+            title:e.target.value,
+        }));
     };
 
-    let [mojib_cnt, setmojib_cnt] = useState(0);
 
     const [showImages, setShowImages] = useState<string[]>([]);
     const [imageList, setImageList]  = useState<File[]>([]);
@@ -155,7 +201,10 @@ export default function P_List_add_design() {
             const response = await axios.post('/project/write/images', formData);
             console.log("handleImageupload", response.data);
             /* dispatch(p_addimage(response.data)); */
-            temp_image = response.data.image;
+            /* temp_image = response.data.image; */
+            setTempImage([...response.data.image]);
+            im2 = response.data.image
+        
             
             return true; // 성공적으로 업로드되었음을 신호로 전달
         } catch (error) {
@@ -175,7 +224,8 @@ export default function P_List_add_design() {
             const response = await axios.post('/project/write/videos', formData);
             console.log(response.data);
            /* dispatch(p_addvideo(response.data)); */
-           temp_video=response.data.video;
+           /* temp_video=response.data.video; */
+           setTempVideo(response.data.video)
             return true; // 성공적으로 업로드되었음을 신호로 전달
         } catch (error) {
             console.error(error);
@@ -194,7 +244,8 @@ export default function P_List_add_design() {
             const response = await axios.post('/project/write/files', formData);
             console.log(response.data);
           /* dispatch(p_addfile(response.data)); */
-          temp_file=response.data.file;
+          /* temp_file=response.data.file; */
+          setTempFile(response.data.file)
             return true; // 성공적으로 업로드되었음을 신호로 전달
         } catch (error) {
             console.error(error);
@@ -213,30 +264,58 @@ export default function P_List_add_design() {
     
             // 모든 파일 업로드가 성공적으로 완료됐을 때만 p_list를 찍음
             if (imageUploadResult && videoUploadResult && fileUploadResult) {
-               
-              
-                const temp_p_list = produce(p_list, draftState => {
-                    // 원하는 변경을 수행
-                    console.log(temp_image)
-                    draftState[0].content.file = temp_file as string;
-                    draftState[0].content.image= temp_image as string;
-                    draftState[0].content.video = temp_video as string;
+          
+               /* temp_p_list.content.file = temp_file 
+               temp_p_list.content.image= temp_image 
+               temp_p_list.content.video = temp_video  */
+                console.log(temp_image)
+                console.log(im2)
+               setTempPList(prevState => ({
+                ...prevState,
+                content: {
+                  ...prevState.content,
+                  file: [...temp_file], // 배열 복사
+                  image: [...im2], // 배열 복사
+                  video: [...temp_video], // 배열 복사
+                },
+              }));
                    
-                });
+                console.log(temp_p_list)
+                console.log("yeah", temp_p_list)
+                axios.post('/project/write', { p_list: temp_p_list });
                
-               console.log(temp_p_list)
-               axios.post('/project/write', { p_list: temp_p_list });
 
-                
+
             }
         } catch (error) {
             console.error("Error during uploads:", error);
         }
     };
     
-    
-
     useEffect(()=>{
+       /*  temp_p_list.content.image = showImages;
+        temp_p_list.content.video = showVideos;
+        temp_p_list.content.file = showFiles;
+        temp_p_list.deadline = formatDate(value);
+        temp_p_list.date = currentDate;
+        temp_p_list.writer = user_name; */
+
+        setTempPList(prevState => ({
+            ...prevState,
+            deadline:formatDate(value),
+            date: currentDate,
+            writer: user_name,
+            content: {
+                ...prevState.content,
+                file:temp_file,
+                image:temp_image,
+                video:temp_video
+            },
+             }));
+
+    },[showImages,showVideos,showFiles,value,user_name])
+
+    /* useEffect(()=>{
         dispatch(p_addimage(showImages))
     },[showImages])
 
@@ -257,6 +336,11 @@ export default function P_List_add_design() {
     })
 
     useEffect(()=>{
+        dispatch(p_addUser(user_name))
+    },[user_name]) */
+    
+
+    useEffect(()=>{
         axios.get('/authorization')
                 .then(response => {
                   //console.log(response.data)
@@ -269,9 +353,7 @@ export default function P_List_add_design() {
                 .catch(error => {
                 });
     })
-    useEffect(()=>{
-        dispatch(p_addUser(user_name))
-    },[user_name])
+    
 
     function formatDate(date: { getFullYear: () => any; getMonth: () => number; getDate: () => any; }) {
         const year = date.getFullYear();
@@ -295,13 +377,13 @@ export default function P_List_add_design() {
                     <input 
                         className={P_add_styles.P_List_text1}
                         name="title" 
-                        value={p_list[0].title} 
+                        /* value={p_list[0].title}  */
                         onChange={handleChangeTitle}
                         placeholder="제목을 입력해주세요"
                         />
                 </div>
 
-                <button onClick={()=>{console.log(p_list);
+                <button onClick={()=>{console.log(temp_p_list);
                 
                 }}>콘솔</button>
 
@@ -333,7 +415,7 @@ export default function P_List_add_design() {
             
             <textarea className={P_add_styles.content_box}
                     name="content_text" 
-                    value={p_list[0].content.text} 
+                    /* value={p_list[0].content.text}  */
                     onChange={handleChangeContent}
                     placeholder="여기에 당신의 프로젝트를 소개해보세요"/>
 
@@ -370,7 +452,7 @@ export default function P_List_add_design() {
 
 
             {
-                p_list[0].recruit.map((a:any, i:any)=> {
+               temp_p_list.recruit.map((a:any, i:any)=> {
                     return (
                         <div key={i}>
                             <div style={{ display: i > 0 ? 'none' : 'inline-flex' }}>
@@ -387,13 +469,29 @@ export default function P_List_add_design() {
                                         height:50,
                                         marginLeft:13,
                                     }} onClick={() => {
-                                        dispatch(p_addrecruit());
+                                        /* dispatch(p_addrecruit()); */
+                                        /* temp_p_list.recruit.push({
+                                            field: '',
+                                            apply_cnt: 0,
+                                            cate_field:''
+                                        }) */
+                                        setTempPList(prevState => ({
+                                            ...prevState,
+                                            recruit: [
+                                              ...prevState.recruit,
+                                              {
+                                                field: '',
+                                                apply_cnt: 0,
+                                                cate_field: '',
+                                              },
+                                            ],
+                                          }));
                                     }} />
                                 </div>
                             </div>
 
                             <div style={{ display:'inline-flex', marginLeft:i >0 ? 215 : 0}} >
-                                <Mojib num={i} ></Mojib>          
+                                <Mojib temp_p_list={temp_p_list} setTempPList={setTempPList} num={i} ></Mojib>          
                             </div>
 
                             

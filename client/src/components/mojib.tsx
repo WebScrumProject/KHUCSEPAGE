@@ -16,6 +16,8 @@ import { RiVideoAddFill } from "react-icons/ri";
 import { BsPaperclip } from "react-icons/bs";
 import { MdCancel } from "react-icons/md";
 
+import { PListItem, PListState } from '../components/type';
+
 export default function Mojib(props:any) {
 
     let p_list = useSelector((state: RootState) => state.p_list);
@@ -24,21 +26,46 @@ export default function Mojib(props:any) {
    
 
     const handleChangeField = (e:any) => {
-        dispatch(p_addfield(
+        /* dispatch(p_addfield(
             {
                 field : e.target.value,
                 num : props.num,
                 cate_field : mojib_cate_val
             }
-        ));
+
+            state[0].recruit[action.payload.num].field =action.payload.field;
+            state[0].recruit[action.payload.num].cate_field =action.payload.cate_field;
+        )); */
+        
+        props.setTempPList((prevState: { recruit: any; }) => {
+            const updatedRecruit = [...prevState.recruit]; 
+            updatedRecruit[props.num] = {
+              ...updatedRecruit[props.num], 
+              field: e.target.value,
+              cate_field: mojib_cate_val
+            };
+            return {
+              ...prevState,
+              recruit: updatedRecruit 
+            };
+            
+          });
+          
         
     };
 
     const handleChangeApply_cnt = (e:any) => {
-        dispatch(p_addapply_cnt({
-            apply_cnt : e.target.value,
-            num : props.num
-        }));
+        props.setTempPList((prevState: { recruit: any; }) => {
+            const updatedRecruit = [...prevState.recruit]; // 이전 배열을 복사합니다.
+            updatedRecruit[props.num] = {
+              ...updatedRecruit[props.num], // 기존 요소를 복사합니다.
+              apply_cnt: e.target.value
+            };
+            return {
+              ...prevState,
+              recruit: updatedRecruit // 업데이트된 배열을 새로운 상태에 할당합니다.
+            };
+          });
         
     };
 
@@ -94,9 +121,14 @@ export default function Mojib(props:any) {
             />
 
             <MdCancel onClick={() => {
-                if(props.num>0) {
-                    dispatch(p_removerecruit(props.num))
-                }
+                setTempPList(prevState => {
+                    const updatedRecruit = [...prevState.recruit]; 
+                    updatedRecruit.splice(props.num, 1); 
+                    return {
+                      ...prevState,
+                      recruit: updatedRecruit 
+                    };
+                  });
             }} className={P_add_styles.mojib_container}/>
         </div>
 
@@ -104,4 +136,8 @@ export default function Mojib(props:any) {
         
        
 
+}
+
+function setTempPList(arg0: (prevState: any) => any) {
+    throw new Error('Function not implemented.');
 }

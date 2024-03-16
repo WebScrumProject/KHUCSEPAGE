@@ -10,7 +10,7 @@ interface CustomRequest extends Request {
 }
 
 router.post('/write',async(req:CustomRequest, res:Response)=>{
-  writeProject(req.body.p_list[0], req.user.userid, req.user.username )
+  writeProject(req.body.p_list, req.user.userid, req.user.username )
 })
   
 router.post('/write/images',upload.array('image'),async(req:CustomRequest, res:Response)=>{
