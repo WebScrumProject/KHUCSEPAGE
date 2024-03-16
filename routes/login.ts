@@ -10,7 +10,7 @@ router.get("/login/google", authController.googleLogin);
 
 router.get("/login/redirect", authController.googleOauthHandler);
 
-router.get("/login/api/auth/google", authController.authCodeHandler);
+router.post("/login/api/auth/google", authController.authCodeHandler);
 
 router.post(
   "/token",
