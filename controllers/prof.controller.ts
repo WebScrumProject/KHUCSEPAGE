@@ -10,19 +10,6 @@ interface ProfRequest extends Request {
   };
 }
 
-// export async function getImage(req: ProfRequest, res: Response) {
-//   const imageId: string = req.params.id;
-//   //이거 id->profId?
-//   const objectId = new mongoose.Types.ObjectId(imageId);
-
-//   try {
-//     const foundImage = await File.findOne({ fileUser: objectId });
-//     res.send(foundImage?.fileUrl);
-//   } catch (err) {
-//     res.status(500).send("Error getting Image Url");
-//   }
-// }
-
 export async function postImage(req: Request, res: Response) {
   try {
     const multerFile = req.file as Express.MulterS3.File;

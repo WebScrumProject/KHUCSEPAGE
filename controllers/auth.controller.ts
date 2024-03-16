@@ -80,6 +80,8 @@ export async function authCodeHandler(req, res) {
     //jwt생성 : 1시간 후 만료
     const token = generateJWT({ googleId, email, name, type });
 
+    console.log(token);
+
     return res.send(token);
   } catch (err) {
     console.log(err);
