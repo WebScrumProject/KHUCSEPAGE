@@ -10,6 +10,7 @@ import Detail from '../pages/Detail';
 import P_List_add_design from '../pages/P_List_add_design';
 import P_calendar from '../components/calendar';
 import P_List from '../pages/P_List';
+import P_List_edit from '../pages/P_List_edit';
 
 function Routing() {
   
@@ -26,6 +27,7 @@ function Routing() {
         <Route path="/project/detail/:id" element={<Detail />} />
         <Route path="/project/write" element={<P_List_add_design/>}/>
         <Route path="/project/:key/:page" element={ <P_List/> }/>
+        <Route path="/project/edit/:id" element={<P_List_edit/>}/>
       </Routes>
     
   );

@@ -28,33 +28,28 @@ function P_List() {
   const [page, setPage] = useState(1);
   const handlePageChange = (page: React.SetStateAction<number>) => {
     setPage(page);
-    /* dispatch(p_resetList())
-    axios.get(`/project?key=all&page=${page}`)
-      .then(response => {
-        console.log(response.data);
-        response.data.map((a:any,i:any) => {
-           dispatch(p_addList(a))
-        })
-      })
-      .catch(error => {
-      }); */
   };
+
+  
 
   const handleNavigate = (id: number) => {
     navigate(`/project/detail/${id}`);
   };
 
+  useEffect(()=>{
+    dispatch(p_resetList())
+    axios.get(`/project?key=all&page=${page}`)
+    .then(response => {
+      console.log(response.data);
+      response.data.map((a:any,i:any) => {
+          dispatch(p_addList(a))
+      })
+    })
+    .catch(error => {
+    })
+  },[page])
 
   useEffect(()=>{
-    axios.get(`/project?key=all&page=${page}`)
-      .then(response => {
-        console.log(response.data);
-        response.data.map((a:any,i:any) => {
-            dispatch(p_addList(a))
-        })
-      })
-      .catch(error => {
-      });
    
     axios.get('/authorization')
       .then(response => {
@@ -77,25 +72,13 @@ function P_List() {
     <div className={J_List_styles.janghak_text}> 프로젝트 모집 </div>
 
 
-    <button onClick={() => {
-      axios.get(`/project?key=all&page=${page}`)
-      .then(response => {
-        console.log(response.data);
-        response.data.map((a:any,i:any) => {
-            dispatch(p_addList(a))
-        })
-      })
-      .catch(error => {
-      });
-    }}>불러오기</button>
+    
 
     <button onClick={() => {
       console.log(p_list)
     }}>??</button>
 
-    <button onClick={() => {
-      dispatch(p_resetList())
-    }}>!!</button>
+ 
 
     <Pagination
       activePage={page}

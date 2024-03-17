@@ -11,16 +11,17 @@ import { RootState } from "../components/store";
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
 
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 
 
 export default function Detail(props:any) {
-    /* const { key, page } = useParams<{ key: string; page: string }>(); */
+   
     const { id } = useParams() as unknown as { id: number };
 
     let p_list = useSelector((state: RootState) => state.p_list);
     
+    const navigate = useNavigate();
 
 
     return (
@@ -29,6 +30,20 @@ export default function Detail(props:any) {
            
 
             <div className={J_List_styles.janghak_text}> 프로젝트 </div>
+
+            <button onClick={()=>{ 
+                    axios.get('/authorization')
+                    .then(response => {
+                      if(response.data.userid == p_list[id].id){
+                        navigate(`/project/edit/${id}`);
+                      }
+                      else {
+                        alert("당신은 작성자가 아닙니다.")
+                      }
+                    })
+                    .catch(error => {
+                    });
+                }} >Edit</button>
          
 
             <div className={JB_styles.detail_container} >
@@ -59,7 +74,7 @@ export default function Detail(props:any) {
                 <div> {p_list[id].content.text} </div>    
                 </div>
 
-                <Prev_next scholarshipId={id} ></Prev_next>
+                <Prev_next id={id} ></Prev_next>
                 
             </div>
 

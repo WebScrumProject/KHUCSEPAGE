@@ -7,7 +7,11 @@ import { useSelector } from 'react-redux';
 
 export default function Prev_next(props:any) {
     let p_list = useSelector((state: RootState) => state.p_list);
-    if(props.scholarshipId==0) {
+    console.log(props.id, typeof(props.id));
+    console.log(p_list);
+    const num: number = parseInt(props.id, 10);
+
+    if(num==0) {
         return (
             <div>
                 <div className={Prev_next_styles.prev_container}>
@@ -24,12 +28,12 @@ export default function Prev_next(props:any) {
 
         )
     }
-    else if(props.scholarshipId==499) {
+    else if(num==9) {
         return (
             <div>
                 <div className={Prev_next_styles.prev_container}>
                     <div style={{backgroundColor:'black'}} className={J_List_styles.janghak_thin_line}></div>
-                    <div className={Prev_next_styles.prev_text}>이전글 {props.p_list[0].title} </div>
+                    <div className={Prev_next_styles.prev_text}>이전글 {p_list[0].title} </div>
                     <div style={{backgroundColor:'black', marginTop:24}} className={J_List_styles.janghak_thin_line}></div>
                 </div>
 
@@ -46,12 +50,12 @@ export default function Prev_next(props:any) {
             
                 <div className={Prev_next_styles.prev_container}>
                     <div style={{backgroundColor:'black'}} className={J_List_styles.janghak_thin_line}></div>
-                    <div className={Prev_next_styles.prev_text}>이전글 {props.j_list[props.id-1].title} </div>
+                    <div className={Prev_next_styles.prev_text}>이전글 {p_list[num-1].title} </div>
                     <div style={{backgroundColor:'black', marginTop:24}} className={J_List_styles.janghak_thin_line}></div>
                 </div>
 
                 <div className={Prev_next_styles.prev_container}>
-                    <div className={Prev_next_styles.prev_text}>다음글 {props.j_list[props.id+1].title}</div>
+                    <div className={Prev_next_styles.prev_text}>다음글 {p_list[num+1].title}</div>
                     <div style={{backgroundColor:'black',marginTop:24}} className={J_List_styles.janghak_thin_line}></div>
                 </div>
 

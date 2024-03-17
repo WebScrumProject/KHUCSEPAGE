@@ -13,7 +13,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-import { RootState, p_addcontent ,p_addrecruit,p_addtitle,p_addimage, p_cate_change,p_addfile, p_addvideo,p_addDate, p_addUser,p_addDeadline } from "../components/store";
+import { RootState, p_addcontent ,p_addrecruit,p_addtitle,p_addimage, p_cate_change,p_addfile, p_addvideo,p_addDate, p_addUser,p_addDeadline, p_resetList, p_addList } from "../components/store";
 import { useDispatch, useSelector } from "react-redux";
 
 import { FaRegCalendarAlt } from "react-icons/fa";
@@ -25,16 +25,32 @@ import moment from 'moment';
 
 import produce from 'immer'
 import { PListItem, PListState } from '../components/type';
+import { useParams } from 'react-router';
 
-export default function P_List_add_design() {
+export default function P_List_edit(props:any) {
 
     const navigate = useNavigate();
+    const { id } = useParams() as unknown as { id: number };
         
     let [code,setCode] = useState(0);
     
     let p_list = useSelector((state: RootState) => state.p_list);
 
+    /* useEffect(()=>{
+        dispatch(p_resetList())
+        axios.get(`/project?key=all&page=${page}`)
+        .then(response => {
+          console.log(response.data);
+          response.data.map((a:any,i:any) => {
+              dispatch(p_addList(a))
+          })
+        })
+        .catch(error => {
+        })
+      },[page]) */
+
     let InitialState: PListItem = {
+        
         title: '',
         category: '',
         writer: '',
@@ -78,9 +94,6 @@ export default function P_List_add_design() {
     let [user_name, userChange] = useState("")
 
     const handleChangeContent = (e:any) => {
-       
-        /* temp_p_list.content.text = e.target.value; */
-
         setTempPList(prevState => ({
             ...prevState,
             content: {
@@ -91,8 +104,6 @@ export default function P_List_add_design() {
     };
 
     const handleChangeTitle = (e:any) => {
-        /* dispatch(p_addtitle(e.target.value)); */
-        /* temp_p_list.title = e.target.value; */
         setTempPList(prevState => ({
             ...prevState,
             title:e.target.value,
@@ -266,11 +277,7 @@ export default function P_List_add_design() {
             // 모든 파일 업로드가 성공적으로 완료됐을 때만 p_list를 찍음
             if (imageUploadResult && videoUploadResult && fileUploadResult) {
           
-               /* temp_p_list.content.file = temp_file 
-               temp_p_list.content.image= temp_image 
-               temp_p_list.content.video = temp_video  */
                 console.log(temp_image)
-                
                 console.log(im2)
                setTempPList(prevState => ({
                 ...prevState,
@@ -285,11 +292,6 @@ export default function P_List_add_design() {
               setCode(1);
               
 
- 
-                
-                
-               
-
 
             }
         } catch (error) {
@@ -301,7 +303,7 @@ export default function P_List_add_design() {
         try {
             
             /* const res = await  */axios.post('/project/write', { p_list: temp_p_list })
-            alert("글을 작성하셨습니다.")
+            alert("글을 수정하셨습니다..")
             navigate('/project');
             
             }
@@ -377,9 +379,9 @@ export default function P_List_add_design() {
                     <input 
                         className={P_add_styles.P_List_text1}
                         name="title" 
-                        /* value={p_list[0].title}  */
+                    
                         onChange={handleChangeTitle}
-                        placeholder="제목을 입력해주세요"
+                        placeholder={p_list[id].title}
                         />
                 </div>
 
@@ -415,9 +417,9 @@ export default function P_List_add_design() {
             
             <textarea className={P_add_styles.content_box}
                     name="content_text" 
-                    /* value={p_list[0].content.text}  */
+                    
                     onChange={handleChangeContent}
-                    placeholder="여기에 당신의 프로젝트를 소개해보세요"/>
+                    placeholder={p_list[id].content.text}/>
 
             <div className={P_add_styles.func_container}>
                 
@@ -469,12 +471,7 @@ export default function P_List_add_design() {
                                         height:50,
                                         marginLeft:13,
                                     }} onClick={() => {
-                                        /* dispatch(p_addrecruit()); */
-                                        /* temp_p_list.recruit.push({
-                                            field: '',
-                                            apply_cnt: 0,
-                                            cate_field:''
-                                        }) */
+                                        
                                         setTempPList(prevState => ({
                                             ...prevState,
                                             recruit: [
@@ -511,7 +508,7 @@ export default function P_List_add_design() {
                     
                    
                     
-                }}>글쓰기</button> 
+                }}>수정하기</button> 
             </div>
             
             <button onClick={()=>{console.log(p_list)}}>zhsth</button>
