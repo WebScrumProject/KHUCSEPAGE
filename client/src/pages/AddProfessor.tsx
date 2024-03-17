@@ -9,14 +9,20 @@ import axios from "axios";
 import InputProfessor from "../components/InputProfessor";
 
 function AddProfessor() {
+<<<<<<< HEAD
   let professor = useSelector(
     (state: RootState) => state.professor.prof
   ) as any;
   let profHistory = useSelector((state: RootState) => state.profHistory) as any;
+=======
+  let professor = useSelector((state: RootState) => state.professor.prof) as any;
+  let profHistory = useSelector((state: RootState) => state.profHistory.history) as any;
+>>>>>>> 0ea28446828139fcf03d0d489f92d2194ee84590
 
   let navigate = useNavigate();
   let dispatch = useDispatch();
-
+  let imageUrl = 'default';
+  
   interface ProfessorData {
     profId: string;
     profName: string;
@@ -39,12 +45,19 @@ function AddProfessor() {
     profLink: "",
     recNumber: 0,
     recDate: "",
-    profImage: "",
+    profImage: '',
   });
 
   const handleInputProfessorChange = (e: any, field: string) => {
     setProfessorData({ ...professorData, [field]: e.target.value });
   };
+  const handleImageUrl = (imageUrl: string) => {
+    setProfessorData(prevState => ({
+      ...prevState,
+      profImage: imageUrl,
+    }));
+  };
+
   const inputFields = [
     { placeholder: "이름을 입력해주세요.", name: "profName" },
     { placeholder: "연구분야를 입력해주세요.", name: "profMajor" },
@@ -58,13 +71,16 @@ function AddProfessor() {
 
   //히스토리
   interface History {
-    date: String;
-    content: String;
+    Date: string;
+    Content: string;
   }
   const [history, setHistory] = useState<History>({
-    date: "2000-00-00",
-    content: "",
+    Date: "2000-00-00",
+    Content: "",
   });
+
+  const [historyArr, setHistoryArr] = useState<History[]>([]);
+
   const handleInputHistoryChange = (e: any, field: string) => {
     setHistory({ ...history, [field]: e.target.value });
   };
@@ -72,7 +88,10 @@ function AddProfessor() {
   // 이미지 파일 추가
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);
   const [imageName, setImageName] = useState<string | null>(null);
+<<<<<<< HEAD
   const [imageUrl, setImageUrl] = useState<string>("");
+=======
+>>>>>>> 0ea28446828139fcf03d0d489f92d2194ee84590
   const [file, setFile] = useState<File>();
   // 이미지 선택
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,10 +120,17 @@ function AddProfessor() {
         "http://localhost:8080/undergraduate_student/image",
         formData
       );
+<<<<<<< HEAD
       console.log("res: ", res);
       console.log("res.data: ", res.data);
       setImageUrl(res.data);
       console.log("imageUrl: ", imageUrl);
+=======
+      imageUrl = res.data;
+      handleImageUrl(imageUrl);
+      console.log('imageUrl : ', imageUrl)
+      return imageUrl;
+>>>>>>> 0ea28446828139fcf03d0d489f92d2194ee84590
     } catch (err) {
       console.log(err);
     }
@@ -112,10 +138,12 @@ function AddProfessor() {
 
   // axios 코드 (나중에 axios 파일 만들어서 옮길 예정)
   const sendProfessorData = (professorData: any) => {
+    handleImageUrl(imageUrl);
+    console.log(professorData.profImage)
     const serverURL = "http://localhost:8080/undergraduate_student/write";
-    axios
-      .post(serverURL, professorData)
+    axios.post(serverURL, professorData)
       .then((res) => {
+        console.log('history 확인 : ', professorData)
         console.log(res.data);
         dispatch(
           addProfessor({
@@ -137,23 +165,18 @@ function AddProfessor() {
       });
   };
 
-  const sendHistory = (history: any) => {
-    const serverURL = "http://localhost:8080/undergraduate_student/write";
-
-    axios
-      .post(serverURL, history)
-      .then((res) => {
-        console.log(res.data);
-        dispatch(
-          addProfHistory({
-            date: history.date,
-            content: history.content,
-          })
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const handleComplete = async () => {
+    try {
+      const imageUrl = await handleImageUpload();
+        if (imageUrl) {
+        sendProfessorData({ ...professorData, profImage: imageUrl, profHistory: historyArr });
+        navigate("/research");
+      } else {
+        console.log("이미지 업로드에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("오류 발생:", error);
+    }
   };
 
   return (
@@ -195,43 +218,21 @@ function AddProfessor() {
               />
             ))}
             <button
-              onClick={(e) => {
-                //임시로 넣은 dispatch, 성공 시 뺄 예정
-                dispatch(
-                  addProfessor({
-                    profId: "",
-                    profName: professorData.profName,
-                    profMajor: professorData.profMajor,
-                    profPhone: professorData.profPhone,
-                    profEmail: professorData.profEmail,
-                    profLab: professorData.profLab,
-                    profLink: professorData.profLink,
-                    recNumber: professorData.recNumber,
-                    recDate: professorData.recDate,
-                    profImage: imageUrl,
-                  })
-                );
-                console.log(professor);
-                sendProfessorData(professorData);
-                sendHistory(history);
-                navigate("/research");
-              }}
-            >
-              완료
-            </button>
+              onClick={handleComplete}
+            >완료</button>
           </div>
         </div>
 
         <div className={styles.add_professor_history}>
           <div style={{ height: "400px" }}>
-            {profHistory.map((value: any, index: any) => {
+            {historyArr.map((value: any, index: any) => {
               return (
                 <div key={index}>
                   <div className={styles.history_content}>
                     <p style={{ width: "90px" }} key={index}>
-                      {value.date}{" "}
+                      {value.Date}{" "}
                     </p>
-                    <p>{value.content}</p>
+                    <p>{value.Content}</p>
                   </div>
                   <div className={styles.line}></div>
                 </div>
@@ -242,12 +243,12 @@ function AddProfessor() {
             <input
               type="date"
               className={styles.input_date}
-              onChange={(e) => handleInputHistoryChange(e, "date")}
+              onChange={(e) => handleInputHistoryChange(e, "Date")}
             />
             <input
               className={styles.history_input}
               placeholder="입력"
-              onChange={(e) => handleInputHistoryChange(e, "content")}
+              onChange={(e) => handleInputHistoryChange(e, "Content")}
             />
             <div>
               <button
@@ -256,11 +257,14 @@ function AddProfessor() {
                   //임시로 넣은 dispatch, 성공 시 뺄 예정
                   dispatch(
                     addProfHistory({
-                      date: history.date,
-                      content: history.content,
+                      Date: history.Date,
+                      Content: history.Content,
                     })
                   );
-                  console.log(profHistory);
+                  let copy = [...historyArr];
+                  copy.push(history);
+                  setHistoryArr(copy);
+                  console.log('이거는 히스토리어레이 state : ', historyArr)
                 }}
               >
                 추가

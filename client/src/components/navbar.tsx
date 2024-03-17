@@ -3,6 +3,14 @@ import "../styles/App.css";
 import axios from "axios";
 
 function Mynavbar() {
+  const CLIENT_ID = process.env.OAUTH_ID;
+  const REDIRECT_URI = process.env.OAUTH_URI;
+  const googleURL = `https://accounts.google.com/o/oauth2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=openid email profile`
+
+  const handleGoogleLogin = () => {
+    window.location.href = googleURL;
+  }
+
   return (
     <div>
       <div className="navbar">
@@ -16,7 +24,8 @@ function Mynavbar() {
           <p className="navbar_text"> 동아리 공지 </p>
         </div>
         <form method="GET" action="/login/google">
-          <button className="navbar_button">로그인</button>
+          <button className="navbar_button" onClick={handleGoogleLogin}>로그인</button>
+          {/* <button className="navbar_button">로그인</button> */}
         </form>
       </div>
     </div>

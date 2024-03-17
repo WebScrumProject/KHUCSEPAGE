@@ -1,28 +1,33 @@
 import {configureStore, createSlice} from '@reduxjs/toolkit'
 
-interface ProfessorHistory {
-    date: string;
-    content: string;
+interface History {
+    Date: string;
+    Content: string;
 }
-export let profHistory:any = createSlice ({
+interface ProfessorHistoryState {
+    history: History[];
+}
+const initialState: ProfessorHistoryState = {
+    history: [],
+};
+export let profHistory = createSlice ({
     name : 'profHistory',
-    initialState : [
-        {
-        date : '2000-00-00',
-        content : ''
-        }
-    ],
+    initialState,
     reducers: {
         addProfHistory(state, action) {
-            state.push(action.payload)
+            state.history.push(action.payload)
         },
         // deleteProfHistory(state, action) {
         //     const idToDelete = action.payload;
         //     const indexToDelete = state.findIndex(item => item._id == idToDelete);
         //     state.splice(indexToDelete, 1)
         // }
+        resetProfHistory(state) {
+            state.history = [];
+        },
+
     }
 })
 
-export const { addProfHistory, deleteProfHistory } = profHistory.actions;
+export const { addProfHistory, resetProfHistory } = profHistory.actions;
 export default profHistory.reducer
