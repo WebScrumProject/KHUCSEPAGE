@@ -75,9 +75,9 @@ function Mypage() {
     }
   };
 
-  // useEffect(() => {
-  //   fetchUserInfo();
-  // }, [])
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
 
   return (
     <div>

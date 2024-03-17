@@ -5,8 +5,6 @@ import { useNavigate } from "react-router-dom";
 export default function GoogleRedirect() {
   const code = new URL(window.location.href).searchParams.get("authCode");
 
-  console.log(code);
-
   let navigate = useNavigate();
 
   const fetchGoogleData = async () => {
