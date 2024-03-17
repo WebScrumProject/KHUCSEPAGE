@@ -33,7 +33,7 @@ function P_List() {
   
 
   const handleNavigate = (id: number) => {
-    navigate(`/project/detail/${id}`);
+    navigate(`/project/detail/${page}/${id}`);
   };
 
   useEffect(()=>{

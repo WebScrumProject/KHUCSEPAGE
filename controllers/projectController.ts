@@ -57,7 +57,7 @@ router.get('/detail/:id', async (req,res)=>{
 })
 
 router.post('/edit',async(req:CustomRequest, res:Response)=>{
-  editProject(req.body.p_list[0], req.user.userid, req.user.username )
+  editProject(req.body.p_list, req.user.userid, req.user.username )
 })
 
 export default router

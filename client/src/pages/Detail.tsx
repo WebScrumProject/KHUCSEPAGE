@@ -17,7 +17,7 @@ import { useNavigate, useParams } from 'react-router';
 
 export default function Detail(props:any) {
    
-    const { id } = useParams() as unknown as { id: number };
+    const { page, id } = useParams() as unknown as { id: number, page:number };
 
     let p_list = useSelector((state: RootState) => state.p_list);
     
@@ -32,10 +32,11 @@ export default function Detail(props:any) {
             <div className={J_List_styles.janghak_text}> 프로젝트 </div>
 
             <button onClick={()=>{ 
+                console.log(page);
                     axios.get('/authorization')
                     .then(response => {
                       if(response.data.userid == p_list[id].id){
-                        navigate(`/project/edit/${id}`);
+                        navigate(`/project/edit/${page}/${id}`);
                       }
                       else {
                         alert("당신은 작성자가 아닙니다.")

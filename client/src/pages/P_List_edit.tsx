@@ -27,27 +27,31 @@ import produce from 'immer'
 import { PListItem, PListState } from '../components/type';
 import { useParams } from 'react-router';
 
+
 export default function P_List_edit(props:any) {
 
     const navigate = useNavigate();
-    const { id } = useParams() as unknown as { id: number };
+    const { page, id } = useParams() as unknown as { id: number, page:number };
         
     let [code,setCode] = useState(0);
     
     let p_list = useSelector((state: RootState) => state.p_list);
 
-    /* useEffect(()=>{
-        dispatch(p_resetList())
+    useEffect(()=>{
+        
         axios.get(`/project?key=all&page=${page}`)
         .then(response => {
-          console.log(response.data);
-          response.data.map((a:any,i:any) => {
-              dispatch(p_addList(a))
-          })
+          console.log(response.data,response.data[9-id]._id);
+          
+          setTempPList(prevState => ({
+            ...prevState,
+            _id : response.data[9-id]._id
+        }));
+          
         })
         .catch(error => {
         })
-      },[page]) */
+      },[page])
 
     let InitialState: PListItem = {
         
@@ -302,7 +306,7 @@ export default function P_List_edit(props:any) {
     const gogo  = async () => {
         try {
             
-            /* const res = await  */axios.post('/project/write', { p_list: temp_p_list })
+            /* const res = await  */axios.post('/project/edit', { p_list: temp_p_list })
             alert("글을 수정하셨습니다..")
             navigate('/project');
             
@@ -386,6 +390,7 @@ export default function P_List_edit(props:any) {
                 </div>
 
                 <button onClick={()=>{console.log(temp_p_list);
+                console.log("page", page)
                 
                 }}>콘솔</button>
 

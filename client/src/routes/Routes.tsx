@@ -24,10 +24,10 @@ function Routing() {
         <Route path="/scholarship/:key/:page" element={<Detail />} />
 
         <Route path="/project" element={<P_List />} />
-        <Route path="/project/detail/:id" element={<Detail />} />
+        <Route path="/project/detail/:page/:id" element={<Detail />} />
         <Route path="/project/write" element={<P_List_add_design/>}/>
         <Route path="/project/:key/:page" element={ <P_List/> }/>
-        <Route path="/project/edit/:id" element={<P_List_edit/>}/>
+        <Route path="/project/edit/:page/:id" element={<P_List_edit/>}/>
       </Routes>
     
   );
