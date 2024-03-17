@@ -8,6 +8,7 @@ import Research from '../pages/Research'
 import AddProfessor from '../pages/AddProfessor';
 import UndergraduateStudentDetail from '../pages/UndergraduateStudentDetail'
 import { Route, Routes } from 'react-router-dom';
+import GoogleRedirect from '../pages/GoogleRedirect';
 
 export default function Routing() {
   return (
@@ -18,7 +19,7 @@ export default function Routing() {
         <Route path='/research' element={<Research></Research>} />
         <Route path='/addProfessor' element={<AddProfessor></AddProfessor>} />
         <Route path='/detail/:profId' element={<UndergraduateStudentDetail></UndergraduateStudentDetail>} />
-        {/* <Route path='/detail/:id' element={<UndergraduateStudentDetail></UndergraduateStudentDetail>} /> */}
+        <Route path="/login/redirect" element={<GoogleRedirect />} />
       </Routes>
     </div>
   )
