@@ -8,11 +8,12 @@ const user = createSlice({
 	},
 	reducers : {
 		setUser(state, action) { // 로그인
-			const { usermajor, usercollege, username, useremail} = action.payload;
+			const { usermajor, usercollege, username, useremail, userphone} = action.payload;
 			state.usermajor = usermajor;
 			state.usercollege = usercollege;
 			state.username = username;
 			state.useremail = useremail;
+			state.userphone = userphone;
 		},
 		setLogin(state, action) {
 			const {username, accessToken} = action.payload;

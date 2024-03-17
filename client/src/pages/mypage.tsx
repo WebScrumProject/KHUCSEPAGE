@@ -5,6 +5,8 @@ import axios from "axios";
 import MypageTab from "../components/MypageTab/MypageTab";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/user";
 
 function Mypage() {
   //이 페이지를 보여주면서 mypage/api/info로 get요청을 보내면 사용자정보 전체를 준다.
@@ -16,10 +18,38 @@ function Mypage() {
   // router.put("/profile/api/edit", [isLoggedIn], mypageController.putUserDetail);
 
   const user = useSelector((state: RootState) => state.user); // state 타입은 RootState로 가정
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [college, setCollege] = useState('');
+  const [major, setMajor] = useState('');
+  const [email, setEmail] = useState('');
+
+  let dispatch = useDispatch();
   const receivedToken = localStorage.getItem('token');
 
   const fetchUserInfo = async() => {
     const res = await axios.get("http://localhost:8080/mypage/api/info", 
+    {
+      headers: {
+        'Authorization': `Bearer ${receivedToken}`
+      },
+    })
+    try {
+      console.log(res.data)
+      dispatch(setUser({
+       usermajor: res.data.usermajor,
+       usercollege: res.data.usercollege,
+       username: res.data.username,
+       useremail: res.data.useremail,
+       userphone: res.data.userphone
+      }))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const fetchUserProject = async() => {
+    const res = await axios.get("http://localhost:8080/profile/api/myproject", 
     {
       headers: {
         'Authorization': `Bearer ${receivedToken}`
@@ -32,9 +62,23 @@ function Mypage() {
     }
   }
 
-  useEffect(() => {
-    fetchUserInfo();
-  }, [])
+  const putUserInfo = async() => {
+    const res = await axios.put("http://localhost:8080/profile/api/edit", 
+    {
+      headers: {
+        'Authorization': `Bearer ${receivedToken}`
+      },
+    })
+    try {
+      console.log(res.data)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  // useEffect(() => {
+  //   fetchUserInfo();
+  // }, [])
 
   return (
     <div>
@@ -47,19 +91,16 @@ function Mypage() {
             ></img>
           </div>
           <div>
-            <p>홍길동</p>
-            <p>abcdefg@khu.ac.kr</p>
-            <p>010-1234-1234</p>
-            <p>소프트웨어융합대학</p>
-            <p>컴퓨터공학부 컴퓨터공학과</p>
+            <p>{user.username}</p>
+            <p>{user.useremail}</p>
+            <p>{user.userphone}</p>
+            <p>{user.usercollege}</p>
+            <p>{user.usermajor}</p>
           </div>
           <button className={styles.mypage_button}>수정</button>
         </div>
         <div className={styles.mypage_content}>
           <div className={styles.button_container}>
-            {/* <button className={styles.content_button}>작성한 글 목록</button>
-            <button className={styles.content_button}>관심한 글 목록</button>
-            <button className={styles.content_button}>지원한 프로젝트</button> */}
             <MypageTab/>
           </div>
         </div>
