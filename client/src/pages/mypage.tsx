@@ -13,68 +13,67 @@ function Mypage() {
   //get요청보낼때 headers:{'authorization':`Bearer ${token}} 하기
   //token은 cookie에 저장되어있다
   //페이로드 정보에는 gooleId, email, name, type이 있다
-  
+
   // router.get("/profile/api/info", [isLoggedIn], mypageController.getUserDetail);
   // router.put("/profile/api/edit", [isLoggedIn], mypageController.putUserDetail);
 
   const user = useSelector((state: RootState) => state.user); // state 타입은 RootState로 가정
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [college, setCollege] = useState('');
-  const [major, setMajor] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [college, setCollege] = useState("");
+  const [major, setMajor] = useState("");
+  const [email, setEmail] = useState("");
 
   let dispatch = useDispatch();
-  const receivedToken = localStorage.getItem('token');
+  const receivedToken = localStorage.getItem("token");
 
-  const fetchUserInfo = async() => {
-    const res = await axios.get("http://localhost:8080/mypage/api/info", 
-    {
+  const fetchUserInfo = async () => {
+    const res = await axios.get("http://localhost:8080/profile/api/info", {
       headers: {
-        'Authorization': `Bearer ${receivedToken}`
+        Authorization: `Bearer ${receivedToken}`,
       },
-    })
+    });
     try {
-      console.log(res.data)
-      dispatch(setUser({
-       usermajor: res.data.usermajor,
-       usercollege: res.data.usercollege,
-       username: res.data.username,
-       useremail: res.data.useremail,
-       userphone: res.data.userphone
-      }))
+      console.log(res.data);
+      dispatch(
+        setUser({
+          usermajor: res.data.usermajor,
+          usercollege: res.data.usercollege,
+          username: res.data.username,
+          useremail: res.data.useremail,
+          userphone: res.data.userphone,
+        })
+      );
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
-  const fetchUserProject = async() => {
-    const res = await axios.get("http://localhost:8080/profile/api/myproject", 
-    {
+  const fetchUserProject = async () => {
+    const res = await axios.get("http://localhost:8080/profile/api/myproject", {
       headers: {
-        'Authorization': `Bearer ${receivedToken}`
+        Authorization: `Bearer ${receivedToken}`,
       },
-    })
+    });
     try {
-      console.log(res.data)
+      console.log(res.data);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
-  const putUserInfo = async() => {
-    const res = await axios.put("http://localhost:8080/profile/api/edit", 
-    {
+  const putUserInfo = async () => {
+    const res = await axios.put("http://localhost:8080/profile/api/edit", {
       headers: {
-        'Authorization': `Bearer ${receivedToken}`
+        Authorization: `Bearer ${receivedToken}`,
       },
-    })
+    });
     try {
-      console.log(res.data)
+      console.log(res.data);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   // useEffect(() => {
   //   fetchUserInfo();
@@ -101,7 +100,7 @@ function Mypage() {
         </div>
         <div className={styles.mypage_content}>
           <div className={styles.button_container}>
-            <MypageTab/>
+            <MypageTab />
           </div>
         </div>
       </div>

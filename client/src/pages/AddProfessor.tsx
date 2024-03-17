@@ -9,20 +9,17 @@ import axios from "axios";
 import InputProfessor from "../components/InputProfessor";
 
 function AddProfessor() {
-<<<<<<< HEAD
   let professor = useSelector(
     (state: RootState) => state.professor.prof
   ) as any;
-  let profHistory = useSelector((state: RootState) => state.profHistory) as any;
-=======
-  let professor = useSelector((state: RootState) => state.professor.prof) as any;
-  let profHistory = useSelector((state: RootState) => state.profHistory.history) as any;
->>>>>>> 0ea28446828139fcf03d0d489f92d2194ee84590
+  let profHistory = useSelector(
+    (state: RootState) => state.profHistory.history
+  ) as any;
 
   let navigate = useNavigate();
   let dispatch = useDispatch();
-  let imageUrl = 'default';
-  
+  let imageUrl = "default";
+
   interface ProfessorData {
     profId: string;
     profName: string;
@@ -45,14 +42,14 @@ function AddProfessor() {
     profLink: "",
     recNumber: 0,
     recDate: "",
-    profImage: '',
+    profImage: "",
   });
 
   const handleInputProfessorChange = (e: any, field: string) => {
     setProfessorData({ ...professorData, [field]: e.target.value });
   };
   const handleImageUrl = (imageUrl: string) => {
-    setProfessorData(prevState => ({
+    setProfessorData((prevState) => ({
       ...prevState,
       profImage: imageUrl,
     }));
@@ -88,10 +85,6 @@ function AddProfessor() {
   // 이미지 파일 추가
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);
   const [imageName, setImageName] = useState<string | null>(null);
-<<<<<<< HEAD
-  const [imageUrl, setImageUrl] = useState<string>("");
-=======
->>>>>>> 0ea28446828139fcf03d0d489f92d2194ee84590
   const [file, setFile] = useState<File>();
   // 이미지 선택
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,17 +113,10 @@ function AddProfessor() {
         "http://localhost:8080/undergraduate_student/image",
         formData
       );
-<<<<<<< HEAD
-      console.log("res: ", res);
-      console.log("res.data: ", res.data);
-      setImageUrl(res.data);
-      console.log("imageUrl: ", imageUrl);
-=======
       imageUrl = res.data;
       handleImageUrl(imageUrl);
-      console.log('imageUrl : ', imageUrl)
+      console.log("imageUrl : ", imageUrl);
       return imageUrl;
->>>>>>> 0ea28446828139fcf03d0d489f92d2194ee84590
     } catch (err) {
       console.log(err);
     }
@@ -139,11 +125,12 @@ function AddProfessor() {
   // axios 코드 (나중에 axios 파일 만들어서 옮길 예정)
   const sendProfessorData = (professorData: any) => {
     handleImageUrl(imageUrl);
-    console.log(professorData.profImage)
+    console.log(professorData.profImage);
     const serverURL = "http://localhost:8080/undergraduate_student/write";
-    axios.post(serverURL, professorData)
+    axios
+      .post(serverURL, professorData)
       .then((res) => {
-        console.log('history 확인 : ', professorData)
+        console.log("history 확인 : ", professorData);
         console.log(res.data);
         dispatch(
           addProfessor({
@@ -168,8 +155,12 @@ function AddProfessor() {
   const handleComplete = async () => {
     try {
       const imageUrl = await handleImageUpload();
-        if (imageUrl) {
-        sendProfessorData({ ...professorData, profImage: imageUrl, profHistory: historyArr });
+      if (imageUrl) {
+        sendProfessorData({
+          ...professorData,
+          profImage: imageUrl,
+          profHistory: historyArr,
+        });
         navigate("/research");
       } else {
         console.log("이미지 업로드에 실패했습니다.");
@@ -217,9 +208,7 @@ function AddProfessor() {
                 styles={styles}
               />
             ))}
-            <button
-              onClick={handleComplete}
-            >완료</button>
+            <button onClick={handleComplete}>완료</button>
           </div>
         </div>
 
@@ -264,7 +253,7 @@ function AddProfessor() {
                   let copy = [...historyArr];
                   copy.push(history);
                   setHistoryArr(copy);
-                  console.log('이거는 히스토리어레이 state : ', historyArr)
+                  console.log("이거는 히스토리어레이 state : ", historyArr);
                 }}
               >
                 추가
