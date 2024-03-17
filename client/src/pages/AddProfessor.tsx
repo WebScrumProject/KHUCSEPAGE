@@ -9,15 +9,8 @@ import axios from "axios";
 import InputProfessor from "../components/InputProfessor";
 
 function AddProfessor() {
-<<<<<<< HEAD
-  let professor = useSelector(
-    (state: RootState) => state.professor.prof
-  ) as any;
-  let profHistory = useSelector((state: RootState) => state.profHistory) as any;
-=======
   let professor = useSelector((state: RootState) => state.professor.prof) as any;
   let profHistory = useSelector((state: RootState) => state.profHistory.history) as any;
->>>>>>> 0ea28446828139fcf03d0d489f92d2194ee84590
 
   let navigate = useNavigate();
   let dispatch = useDispatch();
@@ -88,10 +81,6 @@ function AddProfessor() {
   // 이미지 파일 추가
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);
   const [imageName, setImageName] = useState<string | null>(null);
-<<<<<<< HEAD
-  const [imageUrl, setImageUrl] = useState<string>("");
-=======
->>>>>>> 0ea28446828139fcf03d0d489f92d2194ee84590
   const [file, setFile] = useState<File>();
   // 이미지 선택
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,17 +109,10 @@ function AddProfessor() {
         "http://localhost:8080/undergraduate_student/image",
         formData
       );
-<<<<<<< HEAD
-      console.log("res: ", res);
-      console.log("res.data: ", res.data);
-      setImageUrl(res.data);
-      console.log("imageUrl: ", imageUrl);
-=======
       imageUrl = res.data;
       handleImageUrl(imageUrl);
       console.log('imageUrl : ', imageUrl)
       return imageUrl;
->>>>>>> 0ea28446828139fcf03d0d489f92d2194ee84590
     } catch (err) {
       console.log(err);
     }

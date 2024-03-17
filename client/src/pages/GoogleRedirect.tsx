@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 export default function GoogleRedirect() {
-  const code = new URL(window.location.href).searchParams.get("code");
+  const code = new URL(window.location.href).searchParams.get("authCode");
 
   let navigate = useNavigate();
 
@@ -13,7 +13,7 @@ export default function GoogleRedirect() {
       console.log(res.data);
       const receivedToken = res.data;
       localStorage.setItem('accessToken', receivedToken);
-      navigate("/main");
+      navigate("/");
     } catch (error) {
       console.log(error);
     }

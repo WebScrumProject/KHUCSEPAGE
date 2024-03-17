@@ -28,14 +28,14 @@ function Mypage() {
   const receivedToken = localStorage.getItem('token');
 
   const fetchUserInfo = async() => {
-    const res = await axios.get("http://localhost:8080/mypage/api/info", 
+    const res = await axios.get("http://localhost:8080/profile/api/info", 
     {
       headers: {
         'Authorization': `Bearer ${receivedToken}`
       },
     })
     try {
-      console.log(res.data)
+      console.log(res)
       dispatch(setUser({
        usermajor: res.data.usermajor,
        usercollege: res.data.usercollege,
@@ -76,9 +76,9 @@ function Mypage() {
     }
   }
 
-  // useEffect(() => {
-  //   fetchUserInfo();
-  // }, [])
+  useEffect(() => {
+    fetchUserInfo();
+  }, [])
 
   return (
     <div>

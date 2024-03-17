@@ -19,8 +19,7 @@ export default function Routing() {
         <Route path='/research' element={<Research></Research>} />
         <Route path='/addProfessor' element={<AddProfessor></AddProfessor>} />
         <Route path='/detail/:profId' element={<UndergraduateStudentDetail></UndergraduateStudentDetail>} />
-        <Route path="/login/redirect" element={<GoogleRedirect />} />
-      </Routes>
+        <Route path="/login/api/auth/google" element={<GoogleRedirect />} />      </Routes>
     </div>
   )
 }
