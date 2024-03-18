@@ -61,7 +61,7 @@ let p_list = createSlice ({
     initialState,
     reducers: {
         p_addList(state,action) {
-            state.unshift(action.payload)
+            state.push(action.payload)
         },
         p_resetList(state) {
             state.splice(0,state.length)

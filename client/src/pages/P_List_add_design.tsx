@@ -69,7 +69,9 @@ export default function P_List_add_design() {
     const [temp_file, setTempFile] = useState<string[]>([]);
     const [temp_p_list, setTempPList] = useState<PListItem>(InitialState);
     
-    let im2:string[];
+    let im2:string[]
+    let vi2:string[]
+    let fi2:string[]
     
     let dispatch = useDispatch();
     
@@ -137,10 +139,14 @@ export default function P_List_add_design() {
         setImageList(newImageList);
     };
 
+    const [videoNames, setVideoNames] = useState<string[]>([]);
+    const [fileNames, setFileNames] = useState<string[]>([]);
+
     const handleAddVideos = (event: { target: { files: any; }; } | any) => {
         const videoFiles = event.target.files;
         let videoUrlList = [...showVideos];
         let newVideoList = [...videoList];
+        let newVideoNames = [...videoNames];
 
         for (let i = 0; i < videoFiles.length; i++) {
             const file = videoFiles[i];
@@ -154,6 +160,7 @@ export default function P_List_add_design() {
             const currentVideoUrl = URL.createObjectURL(file);
             videoUrlList.push(currentVideoUrl);
             newVideoList.push(file);
+            newVideoNames.push(file.name); 
         }
 
         if (videoUrlList.length > 30) {
@@ -163,18 +170,21 @@ export default function P_List_add_design() {
 
         setShowVideos(videoUrlList);
         setVideoList(newVideoList);
+        setVideoNames(newVideoNames);
     };
 
     const handleAddFiles = (event: { target: { files: any; }; } | any) => {
         const files = event.target.files;
         let fileUrlList = [...showFiles];
         let newFileList = [...fileList];
+        let newFileNames = [...fileNames];
     
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             const currentFileUrl = URL.createObjectURL(file);
             fileUrlList.push(currentFileUrl);
             newFileList.push(file);
+            newFileNames.push(file.name);
         }
     
         if (fileUrlList.length > 30) {
@@ -184,6 +194,7 @@ export default function P_List_add_design() {
     
         setShowFiles(fileUrlList);
         setFileList(newFileList);
+        setFileNames(newFileNames);
     };
     
 
@@ -227,6 +238,7 @@ export default function P_List_add_design() {
            /* dispatch(p_addvideo(response.data)); */
            /* temp_video=response.data.video; */
            setTempVideo(response.data.video)
+           vi2 = response.data.video
             return true; // 성공적으로 업로드되었음을 신호로 전달
         } catch (error) {
             console.error(error);
@@ -247,6 +259,7 @@ export default function P_List_add_design() {
           /* dispatch(p_addfile(response.data)); */
           /* temp_file=response.data.file; */
           setTempFile(response.data.file)
+          fi2 = response.data.file
             return true; // 성공적으로 업로드되었음을 신호로 전달
         } catch (error) {
             console.error(error);
@@ -271,14 +284,14 @@ export default function P_List_add_design() {
                temp_p_list.content.video = temp_video  */
                 console.log(temp_image)
                 
-                console.log(im2)
+                
                setTempPList(prevState => ({
                 ...prevState,
                 content: {
                   ...prevState.content,
-                  file: [...temp_file], // 배열 복사
+                  file: [...fi2], // 배열 복사
                   image: [...im2], // 배열 복사
-                  video: [...temp_video], // 배열 복사
+                  video: [...vi2], // 배열 복사
                 },
               }));
               
@@ -445,7 +458,19 @@ export default function P_List_add_design() {
                         <img style={{marginLeft:10}} src={image} alt={`${image}-${id}`} width="80" height="80" />
                         </div>
                     ))}
+
                 
+                
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                {/* 여기에 업로드한 비디오 파일 이름 보여주기 */}
+                {videoNames.map((name, index) => (
+                    <div key={index} style={{ marginBottom: '5px', marginRight: '10px' }}>{name}</div>
+                ))}
+                {fileNames.map((name, index) => (
+                    <div key={index} style={{ marginBottom: '5px', marginRight: '10px' }}>{name}</div>
+                ))}
             </div>
 
             <div style={{marginTop:48}} className={J_List_styles.janghak_thin_line}></div>

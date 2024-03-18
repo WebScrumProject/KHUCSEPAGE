@@ -28,12 +28,12 @@ export default function Prev_next(props:any) {
 
         )
     }
-    else if(num==9) {
+    else if(num==p_list.length-1) {
         return (
             <div>
                 <div className={Prev_next_styles.prev_container}>
                     <div style={{backgroundColor:'black'}} className={J_List_styles.janghak_thin_line}></div>
-                    <div className={Prev_next_styles.prev_text}>이전글 {p_list[0].title} </div>
+                    <div className={Prev_next_styles.prev_text}>이전글 {p_list[num-1].title} </div>
                     <div style={{backgroundColor:'black', marginTop:24}} className={J_List_styles.janghak_thin_line}></div>
                 </div>
 

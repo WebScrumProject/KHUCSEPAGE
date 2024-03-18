@@ -23,6 +23,7 @@ export default function Detail(props:any) {
     
     const navigate = useNavigate();
 
+   
 
     return (
         <div>
@@ -45,6 +46,8 @@ export default function Detail(props:any) {
                     .catch(error => {
                     });
                 }} >Edit</button>
+
+                <button onClick={()=>{console.log(p_list)}} >버튼</button>
          
 
             <div className={JB_styles.detail_container} >
@@ -73,6 +76,21 @@ export default function Detail(props:any) {
 
                 <div className={JB_styles.detail_content}>
                 <div> {p_list[id].content.text} </div>    
+                </div>
+
+
+                <div className={P_add_styles.func_container}>
+                {p_list[id].content.image&&p_list[id].content.image.map((image, id) => (
+                        <div key={id}>
+                            <img style={{marginLeft:10}} src={image} alt={`${image}-${id}`} width="80" height="80" />
+                        </div>
+                    ))}
+                    {p_list[id].content.video&&p_list[id].content.video.map((image, id) => (
+                        <div key={id}>
+                            <img style={{marginLeft:10}} src={image} alt={`${image}-${id}`} width="80" height="80" />
+                        </div>
+                    ))}
+                
                 </div>
 
                 <Prev_next id={id} ></Prev_next>
