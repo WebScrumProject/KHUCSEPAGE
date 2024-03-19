@@ -127,8 +127,7 @@ function AddProfessor() {
     handleImageUrl(imageUrl);
     console.log(professorData.profImage);
     const serverURL = "http://localhost:8080/undergraduate_student/write";
-    axios
-      .post(serverURL, professorData)
+    axios.post(serverURL, professorData)
       .then((res) => {
         console.log("history 확인 : ", professorData);
         console.log(res.data);
@@ -148,6 +147,7 @@ function AddProfessor() {
         );
       })
       .catch((err) => {
+        alert('모든 필드를 입력해주세요!');
         console.log(err);
       });
   };
@@ -155,15 +155,29 @@ function AddProfessor() {
   const handleComplete = async () => {
     try {
       const imageUrl = await handleImageUpload();
-      if (imageUrl) {
+      if (!imageUrl) {
+        alert("이미지 업로드에 실패했습니다.");
+      }
+      else if (
+        !professorData.profName ||
+        !professorData.profMajor ||
+        !professorData.profPhone ||
+        !professorData.profEmail ||
+        !professorData.profLab ||
+        !professorData.profLink ||
+        !professorData.recNumber ||
+        !professorData.recDate ||
+        !professorData.profImage
+      ) {
+        console.log(professorData)
+        alert('모든 필드를 입력해주세요!');
+      } else {
         sendProfessorData({
           ...professorData,
           profImage: imageUrl,
           profHistory: historyArr,
         });
         navigate("/research");
-      } else {
-        console.log("이미지 업로드에 실패했습니다.");
       }
     } catch (error) {
       console.error("오류 발생:", error);
@@ -255,8 +269,7 @@ function AddProfessor() {
                   setHistoryArr(copy);
                   console.log("이거는 히스토리어레이 state : ", historyArr);
                 }}
-              >
-                추가
+              >추가
               </button>
             </div>
           </div>
