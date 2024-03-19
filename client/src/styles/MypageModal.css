@@ -1,0 +1,127 @@
+.modalBackground {
+    position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 999;
+}
+
+.modalBox {
+    width: 1000px;
+    height: 590px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 999;
+    background-color: white;
+}
+
+.topButton {
+    width: 950px;
+    height: 50px;
+    margin-top: 10px;
+}
+
+.content {
+    width: 950px;
+    height: 400px;
+    display: flex;
+}
+
+.contentLeft {
+    width: 350px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.contentLeft img {
+    width: 241px;
+    height: 241px;
+    object-fit: cover;
+}
+
+.contentLeft label { 
+    width: 176px;
+    height: 42px;
+    background-color: #CCCCCC;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.contentRight {
+    width: 600px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.contentRight input {
+    width: 484px;
+    height: 50px;
+    border: none;
+    border-bottom: 1px black solid;
+    background-color: transparent;
+    padding-left: 10px;
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+.contentRight input::placeholder {
+    color: black;
+    font-size: 20px;
+}
+
+.buttonBox {
+    width: 950px;
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.secessionButton {
+    width: 100px;
+    height: 57px;
+    background-color: #CCCCCC;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.editButton {
+    width: 100px;
+    height: 57px;
+    background-color: #990000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
