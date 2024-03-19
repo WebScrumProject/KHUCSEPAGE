@@ -2,7 +2,7 @@ import { StringArray } from 'aws-sdk/clients/rdsdataservice';
 import express, {Request, Response} from 'express'
 const router = express.Router()
 const upload = require('../middlewares/multer')
-const {writeProject, editProject, getList, getDetail} = require('../DTO/projectDTO')
+const {writeProject, editProject, getList, endProject, applyProject, deleteProject} = require('../DTO/projectDTO')
 
 interface CustomRequest extends Request {
     files? : any
@@ -47,17 +47,20 @@ router.get('/', async (req, res)=>{
   }
 })
 
-router.get('/detail/:id', async (req,res)=>{
-  try {
-      const detail = await getList(req.params.id);
-      res.send(detail)
-  } catch (error) {
-      console.error
-  }
+router.put('/edit/:id',async(req:CustomRequest, res:Response)=>{
+  editProject(req.body.p_list, req.user.userid, req.user.username)
 })
 
-router.post('/edit',async(req:CustomRequest, res:Response)=>{
-  editProject(req.body.p_list, req.user.userid, req.user.username )
+router.put('/end/:id', async(req:CustomRequest, res:Response)=>{
+  endProject(req.params.id)
+})
+
+router.put('/applyment/:id', async(req:CustomRequest, res:Response)=>{
+  applyProject(req.params.id)
+})
+
+router.delete('/delete/:id', async(req:CustomRequest, res:Response)=>{
+  deleteProject(req.params.id)
 })
 
 export default router

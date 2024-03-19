@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 const projectModel = require('../models/projectSchema.tsx');
+const alertUsers = require('../middlewares/alertUsers')
 
 interface np {
   title: String,
@@ -43,8 +44,9 @@ export async function writeProject(newProject:np, userid:string, username:string
       }
 }
 
-export async function editProject(newProject:np, projectId:mongoose.Types.ObjectId){
-  projectModel.find({_id:projectId})
+export async function editProject(newProject:np, projectId:string){
+  const objectId: mongoose.Types.ObjectId = new mongoose.Types.ObjectId(projectId)
+  projectModel.find({_id:objectId})
   .then((res: { title: String; content: { image: [String]; video: [String]; text: String; file: [String]; }; recruit: object[]; deadline: String; save: () => any; })=>{
     if(!res){
       throw new Error('프로젝트를 찾을 수 없습니다.');
@@ -60,6 +62,7 @@ export async function editProject(newProject:np, projectId:mongoose.Types.Object
   })
   .then(() => {
     console.log('프로젝트가 성공적으로 수정되었습니다.');
+    alertUsers(projectId)
   })
   .catch((error: any) => {
     console.error('프로젝트 수정 중 오류 발생:', error);
@@ -84,30 +87,31 @@ export async function getList(page: string) {
   }
 }
 
-export async function getDetail(id:number) {
-  var skip_number:number, limit_number:number
-  if(id==0){
-      skip_number = id
-      limit_number = 2
-  }
-  else if (id==499){
-      skip_number =  id-1
-      limit_number = 2
-  }
-  else{
-      skip_number = id-1
-      limit_number = 3
-  }
-  try {
-      const result = await projectModel
-          .find({})
-          .sort({_id:-1})
-          .skip(skip_number)
-          .limit(limit_number)
-          .exec()
-      return result;
-  } catch (err) {
-      console.error(err);
-      throw new Error('프로젝트 상세 데이터 가져오기에 실패했습니다.');
-  }
+export async function endProject(projectId: string){
+  const objectId: mongoose.Types.ObjectId = new mongoose.Types.ObjectId(projectId)
+  projectModel.find({_id:objectId})
+  .then((res)=>{
+    if(!res){
+      throw new Error('프로젝트를 찾을 수 없습니다.');
+    }
+    res.is_done = true
+    return res.save()
+  })
+  .then(() => {
+    console.log('프로젝트가 성공적으로 마감되었습니다.');
+    alertUsers(projectId)
+  })
+  .catch((error: any) => {
+    console.error('프로젝트 마감 중 오류 발생:', error);
+  });
+}
+
+export async function applyProject(projectId: string){
+  
+}
+
+export async function deleteProject(projectId: string){
+  const objectId: mongoose.Types.ObjectId = new mongoose.Types.ObjectId(projectId)
+  const result = await projectModel.deleteOne({ _id: objectId });
+  console.log('프로젝트가 성공적으로 삭제되었습니다')
 }
