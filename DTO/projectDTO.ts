@@ -152,6 +152,7 @@ export async function applyProject(projectId: string, newApply:applier){
   const objectId: mongoose.Types.ObjectId = new mongoose.Types.ObjectId(projectId)
   projectModel.findOne({_id:objectId})
   .then((res:any)=>{
+    console.log(newApply)
     if(!res){
       throw new Error('프로젝트를 찾을 수 없습니다.');
     }

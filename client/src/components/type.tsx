@@ -1,4 +1,5 @@
 export interface PListItem {
+    _id: any;
     title: string;
     category: string;
     writer: string;
@@ -18,8 +19,9 @@ export interface PListItem {
     deadline: string,
     is_done: boolean;
     apply: {
+        id:string;
         date: string;
-        name: string;
+        fieldDetail: string;
         field: string;
         memo: string;
     }[];

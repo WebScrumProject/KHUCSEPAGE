@@ -35,6 +35,7 @@ export default function P_List_add_design() {
     let p_list = useSelector((state: RootState) => state.p_list);
 
     let InitialState: PListItem = {
+        _id:'',
         title: '',
         category: '',
         writer: '',
@@ -49,7 +50,7 @@ export default function P_List_add_design() {
         recruit: [
             {
                 field: '',
-                apply_cnt: 0,
+                apply_cnt: -1,
                 cate_field: '',
             },
         ],
@@ -58,7 +59,8 @@ export default function P_List_add_design() {
         apply: [
             {
                 date: '',
-                name: '',
+                fieldDetail: '',
+                id:'',
                 field: '',
                 memo: '',
             },
@@ -531,8 +533,13 @@ export default function P_List_add_design() {
             <div className={P_List_styles.button_list}>
                 <button className='navbar_button'>목록</button>
                 <button className='navbar_button' onClick={async () => {
-                   
-                    await handleAllUploadsComplete()
+                    if(temp_p_list.recruit[0].apply_cnt<0||temp_p_list.recruit[0].cate_field==''||temp_p_list.recruit[0].cate_field=='') {
+                        alert("모집 카테고리와 인원수를 다시 확인해주세요.")
+                    }
+                    else{ 
+                        await handleAllUploadsComplete()
+                    }
+                    
                     
                    
                     
