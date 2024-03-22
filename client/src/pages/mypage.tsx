@@ -48,20 +48,6 @@ function Mypage() {
     }
   };
 
-  const fetchUserProject = async () => {
-    const res = await axios.get("http://localhost:8080/profile/api/myproject", {
-      headers: {
-        Authorization: `Bearer ${receivedToken}`,
-      },
-    });
-    try {
-      console.log(res.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-
 
   useEffect(() => {
     fetchUserInfo();
