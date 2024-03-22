@@ -62,7 +62,7 @@ function AddProfessor() {
     { placeholder: "이메일을 입력해주세요.", name: "profEmail" },
     { placeholder: "연구실의 위치를 입력해주세요.", name: "profLab" },
     { placeholder: "홈페이지의 링크를 입력해주세요.", name: "profLink" },
-    { placeholder: "모집인원을 입력해주세요.", name: "recNumber" },
+    { placeholder: "모집인원을 입력해주세요. (숫자만 입력)", name: "recNumber" },
     { placeholder: "기간을 입력해주세요.", name: "recDate" },
   ];
 
@@ -147,7 +147,7 @@ function AddProfessor() {
         );
       })
       .catch((err) => {
-        alert('모든 필드를 입력해주세요!');
+        alert('이미지 등록을 안 하셨거나, 모든 필드를 채우지 않았습니다!');
         console.log(err);
       });
   };
@@ -267,7 +267,6 @@ function AddProfessor() {
                   let copy = [...historyArr];
                   copy.push(history);
                   setHistoryArr(copy);
-                  console.log("이거는 히스토리어레이 state : ", historyArr);
                 }}
               >추가
               </button>

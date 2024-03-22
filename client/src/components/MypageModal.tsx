@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser, setUserCollege, setUserImage, setUserMajor, setUserName, setUserPhone } from '../store/user';
 
 interface MypageModalProps {
     isOpen: boolean,
@@ -16,11 +18,10 @@ export default function MypageModal({isOpen, onClose}: MypageModalProps) {
 
 
   let navigate = useNavigate();
+  let dispatch = useDispatch();
   // 이미지 선택
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);
-  const [imageName, setImageName] = useState<string | null>(null);
   const [file, setFile] = useState<File>();
-  let imageUrl = user.userimage;
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -33,7 +34,6 @@ export default function MypageModal({isOpen, onClose}: MypageModalProps) {
       };
       if (showFile) {
         reader.readAsDataURL(showFile);
-        setImageName(showFile.name);
       }
     }
   };
@@ -47,31 +47,33 @@ export default function MypageModal({isOpen, onClose}: MypageModalProps) {
         "http://localhost:8080/undergraduate_student/image",
         formData
       );
-      imageUrl = res.data;
-      console.log("imageUrl : ", imageUrl);
-      return imageUrl;
+      // setUserInfo(prevState => ({
+      //   ...prevState,
+      //   userimage: res.data
+      // }));
+      dispatch(setUserImage(res.data))
     } catch (err) {
       console.log(err);
     }
   };
 
   //사용자 정보 수정
-  const [userInfo, setUserInfo] = useState({
-    usermajor: user.usermajor,
-    userphone: user.userphone,
-    userimage:  imageUrl,
-    useremail: user.useremail,
-    usertype: user.usertype,
-    usercollege: user.usercollege,
-    username: user.username,
-  })
+  // const [userInfo, setUserInfo] = useState({
+  //   usermajor: user.usermajor,
+  //   userphone: user.userphone,
+  //   userimage:  user.userimage,
+  //   useremail: user.useremail,
+  //   usertype: user.usertype,
+  //   usercollege: user.usercollege,
+  //   username: user.username,
+  // })
 
-  const handleInputUserChange = (e: any, field: string) => {
-    setUserInfo({ ...userInfo, [field]: e.target.value });
-  };
+  // const handleInputUserChange = (e: any, field: string) => {
+  //   setUserInfo({ ...userInfo, [field]: e.target.value });
+  // };
 
   const putUserInfo = async () => {
-    const res = await axios.put("http://localhost:8080/profile/api/edit", userInfo, {
+    const res = await axios.put("http://localhost:8080/profile/api/edit", user, {
       headers: {
         Authorization: `Bearer ${receivedToken}`,
       },
@@ -132,13 +134,17 @@ export default function MypageModal({isOpen, onClose}: MypageModalProps) {
           </div>
           <div className='contentRight'>
             <input placeholder='이름' defaultValue={user.username}
-            onChange={(e) => handleInputUserChange(e, 'username')}/>
+            // onChange={(e) => handleInputUserChange(e, 'username')}/>
+            onChange={(e) => dispatch(setUserName(e.target.value))}/>
             <input placeholder='단과대' defaultValue={user.usercollege}
-            onChange={(e) => handleInputUserChange(e, 'usercollege')}/>
+            onChange={(e) => dispatch(setUserCollege(e.target.value))}/>
+            {/* onChange={(e) => handleInputUserChange(e, 'usercollege')}/> */}
             <input placeholder='학과' defaultValue={user.usermajor}
-            onChange={(e) => handleInputUserChange(e, 'usermajor')}/>
+            onChange={(e) => dispatch(setUserMajor(e.target.value))}/>
+            {/* onChange={(e) => handleInputUserChange(e, 'usermajor')}/> */}
             <input placeholder='연락처' defaultValue={user.userphone}
-            onChange={(e) => handleInputUserChange(e, 'userphone')}/>
+            onChange={(e) => dispatch(setUserPhone(e.target.value))}/>
+            {/* onChange={(e) => handleInputUserChange(e, 'userphone')}/> */}
           </div>
         </div>
         <div className='buttonBox'>

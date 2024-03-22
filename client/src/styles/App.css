@@ -15,6 +15,7 @@
   font-weight: 700;
   margin-left: 33px;
   z-index: 800;
+  cursor: pointer;
 }
 
 .navbar_menu {
@@ -30,6 +31,7 @@
 .navbar_text {
   padding : 0 60px;
   z-index: 800;
+  cursor: pointer;
 }
 
 .navbar_button {
@@ -44,6 +46,18 @@
   font-weight: 700;
   font-size: 20px;
   z-index: 800;
+}
+
+.navbar_user {
+  display: flex;
+}
+
+.navbar_user img {
+  width: 43px;
+  height: 43px;
+  border-radius: 20px;
+  object-fit: cover;
+  cursor: pointer;
 }
 
 .container {
