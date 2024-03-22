@@ -78,7 +78,8 @@ export default function P_List_edit(props:any) {
         apply: [
             {
                 date: '',
-                name: '',
+                fieldDetail: '',
+                id:'',
                 field: '',
                 memo: '',
             },

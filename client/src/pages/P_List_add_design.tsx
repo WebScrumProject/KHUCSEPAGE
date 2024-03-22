@@ -58,7 +58,8 @@ export default function P_List_add_design() {
         apply: [
             {
                 date: '',
-                name: '',
+                fieldDetail: '',
+                id:'',
                 field: '',
                 memo: '',
             },

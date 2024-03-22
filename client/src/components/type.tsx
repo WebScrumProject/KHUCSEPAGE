@@ -18,8 +18,9 @@ export interface PListItem {
     deadline: string,
     is_done: boolean;
     apply: {
+        id:string;
         date: string;
-        name: string;
+        fieldDetail: string;
         field: string;
         memo: string;
     }[];
