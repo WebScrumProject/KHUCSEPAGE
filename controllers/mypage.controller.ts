@@ -66,11 +66,10 @@ export async function putUserDetail(req, res) {
 
 export function deleteUser(req, res) {
   const userId: string = req.user.googleId;
-
+  console.log(userId);
   try {
-    const deletedUser = redisClient.hdel(userId);
-    console.log(deletedUser);
-    res.status(200).send(deletedUser).redirect("/");
+    const deletedUser = redisClient.del(userId);
+    res.status(200).redirect("/");
   } catch (err) {
     console.error("Error deleting User: ", err.message);
   }
