@@ -39,6 +39,7 @@ function Mypage() {
       },
     });
     try {
+      console.log(res)
       dispatch(
         getUser({
           usermajor: res.data.usermajor,
