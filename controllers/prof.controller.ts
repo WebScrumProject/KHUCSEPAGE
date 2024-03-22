@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
-import { DBFile, File } from "../models/File";
 import { DBProf, Prof } from "../models/Prof";
 import ProfCardDTO from "../DTO/prof.dto";
 

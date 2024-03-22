@@ -5,20 +5,22 @@ import upload from "../libs/multer";
 
 const router = express.Router();
 
-// router.get("/mypage/api/info", [isLoggedIn], mypageController.welcome);
-
 router.get("/profile/api/info", [isLoggedIn], mypageController.getUserDetail);
 
 router.put("/profile/api/edit", [isLoggedIn], mypageController.putUserDetail);
 
 router.post("/profile/image", upload.single("img"), mypageController.postImage);
 
-// router.get('/profile/api/myproject', [isLoggedIn], mypageController.)
+router.get(
+  "/profile/api/myproject",
+  [isLoggedIn],
+  mypageController.getUserProject
+);
 
 router.delete(
   "/profile/api/withdrawal",
   [isLoggedIn],
-  mypageController.putUserDetail
+  mypageController.deleteUser
 );
 
 export default router;

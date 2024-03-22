@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+import mongoose from "mongoose";
+
 import jwt from "jsonwebtoken";
 import {
   getAccessTokenFromGoogle,
@@ -12,6 +14,8 @@ import {
   generateRefreshJWT,
 } from "../libs/jwt";
 import { redisClient } from "../libs/database";
+import projectModel from "../models/projectSchema";
+import ProjCardDTO from "../DTO/proj.dto";
 
 export async function postImage(req: Request, res: Response) {
   try {
@@ -21,11 +25,31 @@ export async function postImage(req: Request, res: Response) {
     console.log(imageUrl);
     res.send(imageUrl);
   } catch (err) {
-    res.status(500).send("Error posting profImage");
+    res.status(500).send(`Error getting User Project: ${err}`);
   }
 }
 
-export async function getUserDetail(req, res) {
+export async function getUserProject(req, res: Response) {
+  const userId: string = req.user.googleId;
+  console.log(userId);
+  try {
+    const result = await projectModel.find({ id: userId });
+
+    if (result) {
+      const userProj: ProjCardDTO[] = result.map((data) => ({
+        projTitle: data.title,
+        projDate: data.date,
+      }));
+      res.send(userProj);
+    } else {
+      console.log("해당 id를 가진 project를 찾을 수 없습니다.");
+    }
+  } catch (err) {
+    res.status(500).send(`Error getting User Project : ${err}`);
+  }
+}
+
+export async function getUserDetail(req, res: Response) {
   const userId: string = req.user.googleId;
   try {
     const foundUser = await redisClient.hgetall(userId);
@@ -66,11 +90,10 @@ export async function putUserDetail(req, res) {
 
 export function deleteUser(req, res) {
   const userId: string = req.user.googleId;
-
+  console.log(userId);
   try {
-    const deletedUser = redisClient.hdel(userId);
-    console.log(deletedUser);
-    res.status(200).send(deletedUser).redirect("/");
+    const deletedUser = redisClient.del(userId);
+    res.status(200).redirect("/");
   } catch (err) {
     console.error("Error deleting User: ", err.message);
   }
