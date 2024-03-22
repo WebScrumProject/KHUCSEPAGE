@@ -1,4 +1,5 @@
 export interface PListItem {
+    _id: any;
     title: string;
     category: string;
     writer: string;

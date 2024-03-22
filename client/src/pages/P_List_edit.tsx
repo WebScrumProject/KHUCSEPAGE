@@ -54,7 +54,7 @@ export default function P_List_edit(props:any) {
       },[page])
 
     let InitialState: PListItem = {
-        
+        _id:'',
         title: '',
         category: '',
         writer: '',

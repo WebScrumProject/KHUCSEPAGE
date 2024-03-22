@@ -47,6 +47,21 @@ export default function Detail(props:any) {
                     });
                 }} >Edit</button>
 
+            <button onClick={()=>{ 
+                console.log(page);
+                    axios.get('/authorization')
+                    .then(response => {
+                      if(response.data.userid == p_list[id].id){
+                        axios.put(`/project/end/${p_list[id]._id}`)
+                      }
+                      else {
+                        alert("당신은 작성자가 아닙니다.")
+                      }
+                    })
+                    .catch(error => {
+                    });
+                }} >마감</button>
+
                 <button onClick={()=>{console.log(p_list)}} >버튼</button>
          
 

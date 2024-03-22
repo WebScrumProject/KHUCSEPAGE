@@ -35,6 +35,7 @@ export default function P_List_add_design() {
     let p_list = useSelector((state: RootState) => state.p_list);
 
     let InitialState: PListItem = {
+        _id:'',
         title: '',
         category: '',
         writer: '',
