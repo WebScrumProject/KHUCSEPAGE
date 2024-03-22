@@ -27,7 +27,7 @@ export async function alertUsers(applierMail:string, purpose:string, applierName
         from : process.env.NODEMAILER_USER,
         to: applierMail,
         subject: (await content).subject,
-        text: (await content).html
+        html: (await content).html
     };
 
     transporter.sendMail(mailOptions, (err, res) => {

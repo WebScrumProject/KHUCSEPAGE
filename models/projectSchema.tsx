@@ -9,9 +9,10 @@ const recruitSchema = new Schema({
 
 const applySchema = new Schema({
     date: {type: String, required: true},
-    name : {type: String, required: true},
+    fieldDetail : {type: String, required: true},
     field: {type:String, required:true},
-    memo: {type:String}
+    memo: {type:String},
+    id:{type:String, required:true}
 })
 
 const projectSchema = new Schema({

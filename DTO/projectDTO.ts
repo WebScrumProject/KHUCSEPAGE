@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 const projectModel = require('../models/projectSchema.tsx');
-const alertUsers = require('../middlewares/alertUsers')
-const client = require ('./models/connectRedis')
+const {alertUsers} = require('../middlewares/alertUsers')
+const client = require ('../models/connectRedis')
 
 interface np {
   title: String,
@@ -17,7 +17,7 @@ interface np {
   recruit: Array<object>,
   deadline : String,
   is_done: boolean,
-  apply : Array<object>
+  apply : Array<applier>
 }
 
 interface applier {
@@ -51,7 +51,6 @@ export async function writeProject(newProject:np, userid:string, username:string
           is_done: false,
           apply : []
         })
-        
       }
       catch(err){
         console.log(err)
@@ -62,35 +61,33 @@ export async function editProject(newProject:np, projectId:string){
   const objectId: mongoose.Types.ObjectId = new mongoose.Types.ObjectId(projectId)
   let applier:Array<applier>;
   let project:project
-  projectModel.find({_id:objectId})
-  .then((res: any)=>{
-    if(!res){
-      throw new Error('프로젝트를 찾을 수 없습니다.');
-    }
-    res.title= newProject.title;
-    res.content.image=newProject.content.image;
-    res.content.video= newProject.content.video;
-    res.content.text= newProject.content.text;
-    res.content.file= newProject.content.file;
-    res.recruit= newProject.recruit;
-    res.deadline = newProject.deadline;
-    applier=res.apply
-    project.name=res.title
-    project.link=`localhost8080/project/detail/${projectId}`
-    project.reason=''
-    return res.save();
-  })
-  .then(() => {
+  const oldProject = await projectModel.findOne({_id:objectId})
+  oldProject.title= newProject.title;
+  oldProject.content.image=newProject.content.image;
+  oldProject.content.video= newProject.content.video;
+  oldProject.content.text= newProject.content.text;
+  oldProject.content.file= newProject.content.file;
+  oldProject.recruit= newProject.recruit;
+  oldProject.deadline = newProject.deadline;
+  applier=oldProject.apply
+  project={name: oldProject.title, link:`localhost8080/project/detail/${oldProject._id}`, reason: ''}
+  await oldProject.save()
+  try{
     console.log('프로젝트가 성공적으로 수정되었습니다.');
     for(let i=0; i<applier.length; i++){
-      client.hgetall(applier[i].id, (err: any, user: any)=>{
-        alertUsers(user.useremail, 'edit', user.username, project)
+      let useremail='', username='';
+      client.hget(applier[i].id, 'useremail', (err: any, email: any)=>{
+        useremail=email;
+        client.hget(applier[i].id, 'username', (err: any, name: any)=>{
+          username=name;
+          alertUsers(useremail, 'edit', username, project)
+        })
       })
     }
-  })
-  .catch((error: any) => {
+  }
+  catch(error)  {
     console.error('프로젝트 수정 중 오류 발생:', error);
-  });
+  };
 }
 
 export async function getList(page: string) {
@@ -128,34 +125,31 @@ export async function endProject(projectId: string){
   let applier:Array<applier>;
   let project:project
   const objectId: mongoose.Types.ObjectId = new mongoose.Types.ObjectId(projectId)
-  projectModel.find({_id:objectId})
-  .then((res:any)=>{
-    if(!res){
-      throw new Error('프로젝트를 찾을 수 없습니다.');
-    }
-    res.is_done = true
-    applier=res.apply
-    project.name=res.title
-    project.link=`localhost8080/project/detail/${projectId}`
-    project.reason=''
-    return res.save()
-  })
-  .then(() => {
+  const oldProject=await projectModel.findOne({_id:objectId})
+  oldProject.is_done=true
+  applier=oldProject.apply
+  project={name: oldProject.title, link:`localhost8080/project/detail/${oldProject._id}`, reason: ''}
+  await oldProject.save()
+  try{
     console.log('프로젝트가 성공적으로 마감되었습니다.');
     for(let i=0; i<applier.length; i++){
-      client.hgetall(applier[i].id, (err: any, user: any)=>{
-        alertUsers(user.useremail, applier[i].memo, user.username, project)
+      let useremail='', username='';
+      client.hget(applier[i].id, 'useremail', (err: any, email: any)=>{
+        useremail=email;
+        client.hget(applier[i].id, 'username', (err: any, name: any)=>{
+          username=name;
+          alertUsers(useremail, applier[i].memo, username, project)
+        })
       })
     }
-  })
-  .catch((error: any) => {
+  }
+  catch(error)  {
     console.error('프로젝트 마감 중 오류 발생:', error);
-  });
+  };
 }
-
 export async function applyProject(projectId: string, newApply:applier){
   const objectId: mongoose.Types.ObjectId = new mongoose.Types.ObjectId(projectId)
-  projectModel.find({_id:objectId})
+  projectModel.findOne({_id:objectId})
   .then((res:any)=>{
     if(!res){
       throw new Error('프로젝트를 찾을 수 없습니다.');
@@ -184,20 +178,23 @@ export async function deleteProject(projectId: string, reason: string){
   let applier:Array<applier>;
   let project:project
   const objectId: mongoose.Types.ObjectId = new mongoose.Types.ObjectId(projectId)
-  projectModel.find({_id:objectId})
+  projectModel.findOne({_id:objectId})
   .then((res:any)=>{
     if(!res){
       throw new Error('프로젝트를 찾을 수 없습니다.');
     }
     applier=res.apply
-    project.name=res.title
-    project.link=`localhost8080/project/detail/${projectId}`
-    project.reason=reason
+    project={name: res.title, link:`localhost8080/project/detail/${res._id}`, reason: reason}
   })
   .then(() => {
     for(let i=0; i<applier.length; i++){
-      client.hgetall(applier[i].id, (err: any, user: any)=>{
-        alertUsers(user.useremail, 'deletion', user.username, project)
+      let useremail='', username='';
+      client.hget(applier[i].id, 'useremail', (err: any, email: any)=>{
+        useremail=email;
+        client.hget(applier[i].id, 'username', (err: any, name: any)=>{
+          username=name;
+          alertUsers(useremail,'deletion', username, project)
+        })
       })
     }
   })
@@ -206,5 +203,4 @@ export async function deleteProject(projectId: string, reason: string){
   });
   const result = await projectModel.deleteOne({ _id: objectId });
   console.log('프로젝트가 성공적으로 삭제되었습니다')
-  alertUsers()
 }

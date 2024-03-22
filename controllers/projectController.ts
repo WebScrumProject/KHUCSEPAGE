@@ -51,14 +51,16 @@ router.get('/', async (req, res)=>{
 router.get('/detail/:id', async (req,res)=>{
   try {
       const detail = await getDetail(req.params.id);
+      console.log('detail')
       res.send(detail)
   } catch (error) {
       console.error
   }
 })
 
-router.put('/edit/:id',async(req:CustomRequest, res:Response)=>{
-  editProject(req.body.p_list, req.user.userid, req.user.username)
+router.put('/edit/:id',async(req, res:Response)=>{
+  console.log(req.body, req.params.id)
+  editProject(req.body.p_list, req.params.id)
 })
 
 router.put('/end/:id', async(req:CustomRequest, res:Response)=>{
