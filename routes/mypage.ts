@@ -13,7 +13,7 @@ router.put("/profile/api/edit", [isLoggedIn], mypageController.putUserDetail);
 
 router.post("/profile/image", upload.single("img"), mypageController.postImage);
 
-router.get('/profile/api/myproject', [isLoggedIn], mypageController.)
+// router.get('/profile/api/myproject', [isLoggedIn], mypageController.)
 
 router.delete(
   "/profile/api/withdrawal",
