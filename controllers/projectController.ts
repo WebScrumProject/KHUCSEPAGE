@@ -1,8 +1,9 @@
 import { StringArray } from 'aws-sdk/clients/rdsdataservice';
+import { bool } from 'aws-sdk/clients/signer';
 import express, {Request, Response} from 'express'
 const router = express.Router()
 const upload = require('../middlewares/multer')
-const {writeProject, editProject, getList, getDetail} = require('../DTO/projectDTO')
+const {writeProject, editProject, getList, endProject, applyProject, deleteProject, getDetail} = require('../DTO/projectDTO')
 
 interface CustomRequest extends Request {
     files? : any
@@ -49,15 +50,31 @@ router.get('/', async (req, res)=>{
 
 router.get('/detail/:id', async (req,res)=>{
   try {
-      const detail = await getList(req.params.id);
+      const detail = await getDetail(req.params.id);
+      console.log('detail')
       res.send(detail)
   } catch (error) {
       console.error
   }
 })
 
-router.post('/edit',async(req:CustomRequest, res:Response)=>{
-  editProject(req.body.p_list, req.user.userid, req.user.username )
+router.put('/edit/:id',async(req, res:Response)=>{
+  console.log(req.body, req.params.id)
+  editProject(req.body.p_list, req.params.id)
+})
+
+router.put('/end/:id', async(req:CustomRequest, res:Response)=>{
+  endProject(req.params.id)
+})
+
+router.put('/applyment/:id', async(req:CustomRequest, res:Response)=>{
+  if(applyProject(req.params.id, req.body)==false){
+    res.json('정원이 초과되었습니다.')
+  }
+})
+
+router.delete('/delete/:id', async(req:CustomRequest, res:Response)=>{
+  deleteProject(req.params.id, req.body.reason)
 })
 
 export default router
