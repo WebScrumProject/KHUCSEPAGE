@@ -13,10 +13,16 @@ import {
 } from "../libs/jwt";
 import { redisClient } from "../libs/database";
 
-export function welcome(req, res) {
-  res.send.json({
-    message: `Hello ${req.user.googleId}, Welcome to the mypage route`,
-  });
+export async function postImage(req: Request, res: Response) {
+  try {
+    const multerFile = req.file as Express.MulterS3.File;
+    const imageUrl = multerFile.location;
+
+    console.log(imageUrl);
+    res.send(imageUrl);
+  } catch (err) {
+    res.status(500).send("Error posting profImage");
+  }
 }
 
 export async function getUserDetail(req, res) {

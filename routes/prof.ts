@@ -4,7 +4,6 @@ import upload from "../libs/multer";
 
 const router = express.Router();
 
-// router.get("/image/:id", profController.getImage);
 router.post("/image", upload.single("img"), profController.postImage);
 router.get("/api/info", profController.getProfCard);
 router.get("/api/info/:id", profController.getProfDetail);

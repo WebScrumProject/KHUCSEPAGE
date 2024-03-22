@@ -14,12 +14,7 @@ export async function postImage(req: Request, res: Response) {
   try {
     const multerFile = req.file as Express.MulterS3.File;
     const imageUrl = multerFile.location;
-    const imageName = multerFile.key;
-    const newFile: DBFile = new File({
-      fileUrl: imageUrl,
-      fileName: imageName,
-    });
-    await newFile.save();
+
     console.log(imageUrl);
     res.send(imageUrl);
   } catch (err) {
@@ -141,7 +136,7 @@ export async function postProf(req: Request, res: Response) {
     });
     const savedProf = await newProf.save();
     res.status(200).json({ ObjectId: savedProf._id });
-    console.log(savedProf)
+    console.log(savedProf);
   } catch (err) {
     res.status(500).send("Error posting Prof");
   }
