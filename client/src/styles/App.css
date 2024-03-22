@@ -46,6 +46,18 @@
   z-index: 800;
 }
 
+.navbar_user {
+  display: flex;
+}
+
+.navbar_user img {
+  width: 43px;
+  height: 43px;
+  border-radius: 20px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
 .container {
   height: 100vh;
   display: flex;

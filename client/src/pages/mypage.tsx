@@ -10,14 +10,6 @@ import { getUser } from "../store/user";
 import MypageModal from "../components/MypageModal";
 
 function Mypage() {
-  //이 페이지를 보여주면서 mypage/api/info로 get요청을 보내면 사용자정보 전체를 준다.
-  //get요청보낼때 headers:{'authorization':`Bearer ${token}} 하기
-  //token은 cookie에 저장되어있다
-  //페이로드 정보에는 gooleId, email, name, type이 있다
-
-  // router.get("/profile/api/info", [isLoggedIn], mypageController.getUserDetail);
-  // router.put("/profile/api/edit", [isLoggedIn], mypageController.putUserDetail);
-
   const user = useSelector((state: RootState) => state.user); // state 타입은 RootState로 가정
  
   const [isModalOpen, setIsModalOpen] = useState(false);
