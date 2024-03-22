@@ -18,6 +18,7 @@ function isLoggedIn(req: Request, res: Response, next) {
       });
     }
     req.user = user;
+
     next();
   });
 }
