@@ -68,11 +68,10 @@ function Mynavbar() {
   }, [receivedToken])
 
   return (
-    <div>
       <div className="navbar">
-        <div>
-          <p className="navbar_webname"> 웹이름 </p>
-        </div>
+        {/* <div> */}
+          <p onClick={()=> navigate('/')}className="navbar_webname"> 웹이름 </p>
+        {/* </div> */}
         <div className="navbar_menu">
           <p onClick={()=> navigate('/research')} className="navbar_text"> 학부 연구생</p>
           <p onClick={()=> navigate('/project')} className="navbar_text"> 팀원 모집 </p>
@@ -93,7 +92,6 @@ function Mynavbar() {
             </form>
           )}
       </div>
-    </div>
   );
 }
 
