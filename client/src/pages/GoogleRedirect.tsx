@@ -13,7 +13,6 @@ export default function GoogleRedirect() {
         `http://localhost:8080/login/api/auth/google?authCode=${code}`,
         {}
       );
-      console.log(res.data);
       const receivedToken = res.data;
       localStorage.setItem("accessToken", receivedToken);
       navigate("/");
