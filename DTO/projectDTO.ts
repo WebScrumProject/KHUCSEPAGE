@@ -21,18 +21,19 @@ interface np {
 }
 
 interface applier {
-	  id: string;
-    date: string;
-    field: string;
-    fieldDetail: string;
-    memo: string;
-    }
+  id: string;
+  date: string;
+  field: string;
+  fieldDetail: string;
+  memo: string;
+}
 
 interface project{
   link: string,
   name: string,
   reason: string
 }
+
 export async function writeProject(newProject:np, userid:string, username:string){
     try{
         const project = await projectModel.create({
