@@ -22,7 +22,7 @@ export default function Routing() {
           path="/detail/:profId"
           element={<UndergraduateStudentDetail></UndergraduateStudentDetail>}
         />
-        <Route path="/login/api/auth/google" element={<GoogleRedirect />} />{" "}
+        <Route path="/login/api/auth/google" element={<GoogleRedirect />} />
       </Routes>
     </div>
   );

@@ -7,13 +7,16 @@ const user = createSlice({
 		usercollege: '', username: '', accessToken: ''
 	},
 	reducers : {
-		setUser(state, action) { // 로그인
-			const { usermajor, usercollege, username, useremail, userphone} = action.payload;
+
+		getUser(state, action) { // 마이페이지
+			const { usermajor, usercollege, username, useremail, userphone, usertype, userimage} = action.payload;
 			state.usermajor = usermajor;
 			state.usercollege = usercollege;
 			state.username = username;
 			state.useremail = useremail;
 			state.userphone = userphone;
+			state.userimage = userimage;
+			state.usertype = usertype;
 		},
 		setLogin(state, action) {
 			const {username, accessToken} = action.payload;
@@ -23,5 +26,5 @@ const user = createSlice({
 	}
 })
 
-export const { setUser, setLogin } = user.actions;
+export const { getUser, setLogin } = user.actions;
 export default user.reducer;
