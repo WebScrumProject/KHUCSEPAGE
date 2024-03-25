@@ -1,0 +1,90 @@
+.tap_container {
+    width: 548px;
+    height: 43px;
+    display: flex;
+    justify-content: space-around;
+    /* background-color: rebeccapurple; */
+    font-size: 20px;
+    font-weight: 600;
+    color: #666666;
+    /* margin: -1px; */
+}
+
+.tap {
+    width: 165px;
+    height: 43px;
+    background-color: white;
+    border-width: 2px 2px 0 2px;
+    border-style: solid;
+    border-color: #CCCCCC;
+    border-radius: 4px 4px 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.tap:hover {
+    background-color: #EEEEEE;
+}
+
+.write_list_con {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    width: 548px;
+    height: 269px;
+    border: 2px solid #CCCCCC;
+    border-radius: 2px;
+    margin-top: 1px;
+}
+
+.top { 
+    display: flex;
+    justify-content: space-between;
+    width: 494px;
+    height: 28px;
+    border-width: 2px 0 1px 0;
+    border-style: solid;
+    border-color:  black;
+    background-color: #F3F3F3;
+}
+
+.top p {
+    width: 164px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+}
+.write_list {
+    width: 494px;
+    height: 202px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: auto;
+}
+
+.write_set {
+    display: flex;
+    width: 494px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.write_set p {
+    font-size: 14px;
+    text-align: center;
+    width: 164.66px;
+}
+.write_line {
+    width: 494px;
+    background-color: gray;
+    height: 0.1px;
+}
