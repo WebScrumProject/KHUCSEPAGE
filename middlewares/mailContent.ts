@@ -67,7 +67,6 @@ export async function contentSelector(purpose:string, userName: string, project:
     </head>
     <body>
         <div class="container">
-            <img src="../IMG_3881.jpeg" alt="로고">
             <h2>${purposeObj.purp}</h2>
             <p>안녕하세요,</p>
             ${purposeObj.content}
