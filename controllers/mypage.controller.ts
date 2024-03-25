@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { redisClient } from "../libs/database";
-import projectModel from "../models/projectSchema";
+const projectModel = require('../models/projectSchema')
 import ProjCardDTO from "../DTO/proj.dto";
 
 export async function postImage(req: Request, res: Response) {

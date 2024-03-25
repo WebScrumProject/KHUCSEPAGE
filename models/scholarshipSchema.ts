@@ -1,6 +1,3 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
-
 const scholarshipSchema = new Schema({
     category: {type : String, required: true},
     title: {type : String, required: true},

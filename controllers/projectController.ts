@@ -1,5 +1,4 @@
 import { StringArray } from 'aws-sdk/clients/rdsdataservice';
-import { bool } from 'aws-sdk/clients/signer';
 import express, {Request, Response} from 'express'
 const router = express.Router()
 const upload = require('../middlewares/multer')
@@ -11,7 +10,7 @@ interface CustomRequest extends Request {
 }
 
 router.post('/write',async(req:CustomRequest, res:Response)=>{
-  writeProject(req.body.p_list, req.user.userid, req.user.username )
+  writeProject(req.body.p_list, req.user.googleId, req.user.name )
 })
   
 router.post('/write/images',upload.array('image'),async(req:CustomRequest, res:Response)=>{

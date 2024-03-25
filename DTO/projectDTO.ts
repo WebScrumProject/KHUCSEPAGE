@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-const projectModel = require('../models/projectSchema.tsx');
+const projectModel = require('../models/projectSchema');
 const {alertUsers} = require('../middlewares/alertUsers')
 const client = require ('../models/connectRedis')
 

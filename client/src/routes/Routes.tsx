@@ -11,6 +11,7 @@ import P_List_add_design from '../pages/P_List_add_design';
 import P_calendar from '../components/calendar';
 import P_List from '../pages/P_List';
 import P_List_edit from '../pages/P_List_edit';
+import GoogleRedirect from '../pages/GoogleRedirect';
 
 function Routing() {
   
@@ -28,6 +29,7 @@ function Routing() {
         <Route path="/project/write" element={<P_List_add_design/>}/>
         <Route path="/project/:key/:page" element={ <P_List/> }/>
         <Route path="/project/edit/:page/:id" element={<P_List_edit/>}/>
+        <Route path="/login/api/auth/google" element={<GoogleRedirect />} />
       </Routes>
     
   );
