@@ -4,7 +4,6 @@ import passport from "passport";
 import path from "path";
 import dotenv from "dotenv";
 import cors from "cors";
-import connectRedis from "connect-redis";
 
 import {
   // connectToRedis,
@@ -14,6 +13,8 @@ import {
 import authRoutes from "./routes/login";
 import profRoutes from "./routes/prof";
 import mypageRoutes from "./routes/mypage";
+import scholarshipRoutes from "./controllers/scholarshipController"
+import projectRoutes from "./controllers/projectController"
 
 const RedisStore = require("connect-redis").default;
 const app = express();
@@ -26,6 +27,8 @@ app.use(express.static(path.join(__dirname, "../client/build")));
 
 app.use(authRoutes);
 app.use(mypageRoutes);
+app.use('/scholarship', scholarshipRoutes)
+app.use('/project', projectRoutes)
 app.use("/undergraduate_student", profRoutes);
 
 dotenv.config();
