@@ -71,6 +71,18 @@
     overflow: auto;
 }
 
+.write_set {
+    display: flex;
+    width: 494px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.write_set p {
+    font-size: 14px;
+    text-align: center;
+    width: 164.66px;
+}
 .write_line {
     width: 494px;
     background-color: gray;
