@@ -70,6 +70,7 @@ export async function editProject(newProject:np, projectId:string){
   oldProject.content.file= newProject.content.file;
   oldProject.recruit= newProject.recruit;
   oldProject.deadline = newProject.deadline;
+  oldProject.apply = newProject.apply;
   applier=oldProject.apply
   project={name: oldProject.title, link:`localhost8080/project/detail/${oldProject._id}`, reason: ''}
   await oldProject.save()
