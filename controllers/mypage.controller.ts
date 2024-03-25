@@ -1,18 +1,4 @@
 import { Request, Response } from "express";
-import mongoose from "mongoose";
-
-import jwt from "jsonwebtoken";
-import {
-  getAccessTokenFromGoogle,
-  getGoogleAuthURL,
-} from "../libs/googleoauth";
-import { getUserDetails, upsertUser } from "../libs/userdetail";
-import {
-  appendRefreshToken,
-  emptyRefreshTokens,
-  generateJWT,
-  generateRefreshJWT,
-} from "../libs/jwt";
 import { redisClient } from "../libs/database";
 import projectModel from "../models/projectSchema";
 import ProjCardDTO from "../DTO/proj.dto";
@@ -31,10 +17,30 @@ export async function postImage(req: Request, res: Response) {
 
 export async function getUserProject(req, res: Response) {
   const userId: string = req.user.googleId;
-  console.log(userId);
+
   try {
     const result = await projectModel.find({ id: userId });
 
+    if (result) {
+      const userProj: ProjCardDTO[] = result.map((data) => ({
+        projTitle: data.title,
+        projDate: data.date,
+      }));
+      res.send(userProj);
+    } else {
+      console.log("해당 id를 가진 project를 찾을 수 없습니다.");
+    }
+  } catch (err) {
+    res.status(500).send(`Error getting User Project : ${err}`);
+  }
+}
+
+export async function getAppliedProject(req, res: Response) {
+  const userId: string = req.user.googleId;
+
+  try {
+    const result = await projectModel.find({ "apply.id": userId });
+    console.log(result);
     if (result) {
       const userProj: ProjCardDTO[] = result.map((data) => ({
         projTitle: data.title,

@@ -12,6 +12,7 @@ const applySchema = new Schema({
   date: { type: String, required: true },
   name: { type: String, required: true },
   field: { type: String, required: true },
+  id: { type: String, required: true },
   memo: { type: String },
 });
 

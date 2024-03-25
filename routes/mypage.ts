@@ -17,6 +17,12 @@ router.get(
   mypageController.getUserProject
 );
 
+router.get(
+  "/profile/api/appliedproject",
+  [isLoggedIn],
+  mypageController.getAppliedProject
+);
+
 router.delete(
   "/profile/api/withdrawal",
   [isLoggedIn],
