@@ -31,6 +31,21 @@ export default function Detail(props:any) {
         setModalOpen(true);
     };
 
+    const openModal2 = () => {
+        axios.get('/authorization')
+        .then(response => {
+          if(response.data.userid == p_list[id].id){
+            setModalOpen(true);
+          }
+          else {
+            alert("당신은 작성자가 아닙니다.")
+          }
+        })
+        .catch(error => {
+        });
+        
+    };
+
     const closeModal = () => {
         setModalOpen(false);
     };
@@ -112,6 +127,30 @@ export default function Detail(props:any) {
                                                         })
                                                 .catch(error => {
                                                 });
+                                            }} >지원</button>
+                                        </div>
+                            
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+        )}
+
+        <button onClick={openModal2} > 지원자 확인하기 </button>
+                {modalOpen && (
+                    <div className={apply_modal.modal_overlay} onClick={closeModal}>
+                        <div className={apply_modal.modal_content}>
+
+                                {p_list[id].apply.map((item, index) => (
+                                    <div key={index} style={{ marginLeft: '20px' }}>
+                                        <div>
+                                            <span style={{ fontWeight: 'bold', fontSize:20}}>모집 분야:</span>{' '}
+                                            <span style={{ fontWeight: 'bold', fontSize:20}}>{/* item.cate_field */}</span>{' '}
+                                            <span style={{ fontWeight: 'bold',marginLeft:20,fontSize:20 }}>상세:</span>{' '}
+                                            <span style={{ fontWeight: 'bold', fontSize:20}}>{item.field} 에 지원하기</span>{' '} 
+
+                                            <button onClick={()=>{
+                                                
                                             }} >지원</button>
                                         </div>
                             
