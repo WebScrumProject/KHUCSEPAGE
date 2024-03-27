@@ -74,7 +74,7 @@ export async function editProject(newProject:np, projectId:string){
   await oldProject.save()
   try{
     console.log('프로젝트가 성공적으로 수정되었습니다.');
-    for(let i=0; i<applier.length; i++){
+    /* for(let i=0; i<applier.length; i++){
       let useremail='', username='';
       client.hget(applier[i].id, 'useremail', (err: any, email: any)=>{
         useremail=email;
@@ -83,7 +83,7 @@ export async function editProject(newProject:np, projectId:string){
           alertUsers(useremail, 'edit', username, project)
         })
       })
-    }
+    } */
   }
   catch(error)  {
     console.error('프로젝트 수정 중 오류 발생:', error);

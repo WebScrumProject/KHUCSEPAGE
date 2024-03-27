@@ -60,6 +60,9 @@ router.get('/detail/:id', async (req,res)=>{
 
 router.put('/edit/:id',async(req, res:Response)=>{
   console.log(req.body, req.params.id)
+
+  console.log(req.body.p_list.apply, req.params.id)
+
   editProject(req.body.p_list, req.params.id)
 })
 

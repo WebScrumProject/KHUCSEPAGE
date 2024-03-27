@@ -320,7 +320,7 @@ export default function P_List_edit(props:any) {
     const gogo  = async () => {
         try {
             
-            /* const res = await  */axios.post(`/project/edit/${temp_p_list._id}`, { p_list: temp_p_list })
+            /* const res = await  */axios.put(`/project/edit/${temp_p_list._id}`, { p_list: temp_p_list })
             alert("글을 수정하셨습니다..")
             navigate('/project');
             

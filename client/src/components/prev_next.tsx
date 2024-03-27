@@ -7,8 +7,8 @@ import { useSelector } from 'react-redux';
 
 export default function Prev_next(props:any) {
     let p_list = useSelector((state: RootState) => state.p_list);
-    console.log(props.id, typeof(props.id));
-    console.log(p_list);
+    /* console.log(props.id, typeof(props.id));
+    console.log(p_list); */
     const num: number = parseInt(props.id, 10);
 
     if(num==0) {

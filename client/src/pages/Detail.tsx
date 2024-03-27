@@ -14,6 +14,7 @@ import axios from 'axios';
 
 import { useNavigate, useParams } from 'react-router';
 import moment from 'moment';
+import { PListItem } from '../components/type';
 
 
 
@@ -26,6 +27,7 @@ export default function Detail(props:any) {
     const navigate = useNavigate();
 
     const [modalOpen, setModalOpen] = useState(false);
+    const [modalOpen2, setModalOpen2] = useState(false);
 
     const openModal = () => {
         setModalOpen(true);
@@ -35,7 +37,7 @@ export default function Detail(props:any) {
         axios.get('/authorization')
         .then(response => {
           if(response.data.userid == p_list[id].id){
-            setModalOpen(true);
+            setModalOpen2(true);
           }
           else {
             alert("당신은 작성자가 아닙니다.")
@@ -45,11 +47,66 @@ export default function Detail(props:any) {
         });
         
     };
+    const openModal3 = () => {
+        setModalOpen2(true);
+        
+    };
 
     const closeModal = () => {
         setModalOpen(false);
     };
+
+    const closeModal2 = () => {
+        setModalOpen2(false);
+    };
     const todayDate = moment().format('YYYY/MM/DD');
+    
+    /* let InitialState: PListItem = {
+        _id:'',
+        title: '',
+        category: '',
+        writer: '',
+        date: '',
+        id: '',
+        content: {
+            image: [],
+            video: [],
+            text: '',
+            file: [],
+        },
+        recruit: [
+            {
+                field: '',
+                apply_cnt: 0,
+                cate_field: '',
+            },
+        ],
+        deadline: '',
+        is_done: false,
+        apply: [
+            {
+                date: '',
+                fieldDetail: '',
+                id:'',
+                field: '',
+                memo: '',
+            },
+        ],
+    }; */
+    const [temp_p_list, setTempPList] = useState<PListItem>(p_list[id]);
+    
+
+    useEffect(() => {
+        console.log(temp_p_list.apply)
+        temp_p_list.apply.map((a,i)=>{
+            if(temp_p_list.apply[i].memo!='') {
+                console.log(temp_p_list)
+                axios.put(`/project/edit/${p_list[id]._id}`, { p_list: temp_p_list })
+            }
+        })
+    }, [temp_p_list]); 
+    
+    
    
 
     return (
@@ -136,22 +193,52 @@ export default function Detail(props:any) {
                     </div>
         )}
 
-        <button onClick={openModal2} > 지원자 확인하기 </button>
-                {modalOpen && (
-                    <div className={apply_modal.modal_overlay} onClick={closeModal}>
+        <button onClick={openModal3} > 지원자 확인하기 </button>
+                {modalOpen2 && (
+                    <div className={apply_modal.modal_overlay} onClick={closeModal2}>
                         <div className={apply_modal.modal_content}>
 
                                 {p_list[id].apply.map((item, index) => (
                                     <div key={index} style={{ marginLeft: '20px' }}>
                                         <div>
+                                            <span style={{ fontWeight: 'bold', fontSize:20}}>이름</span>{' '}
+                                            <span style={{ fontWeight: 'bold', fontSize:20}}>{item.id}</span>{' '}
                                             <span style={{ fontWeight: 'bold', fontSize:20}}>모집 분야:</span>{' '}
-                                            <span style={{ fontWeight: 'bold', fontSize:20}}>{/* item.cate_field */}</span>{' '}
+                                            <span style={{ fontWeight: 'bold', fontSize:20}}>{item.field}</span>{' '}
                                             <span style={{ fontWeight: 'bold',marginLeft:20,fontSize:20 }}>상세:</span>{' '}
-                                            <span style={{ fontWeight: 'bold', fontSize:20}}>{item.field} 에 지원하기</span>{' '} 
+                                            <span style={{ fontWeight: 'bold', fontSize:20}}>{item.fieldDetail}</span>{' '} 
+
+                                            
 
                                             <button onClick={()=>{
-                                                
-                                            }} >지원</button>
+                                                setTempPList(prevState => {
+                                                    const updatedApply = prevState.apply.map((item2, index2) => {
+                                                      if (index2 === index) {
+                                                        return {
+                                                          ...item2,
+                                                          memo: 'accept',
+                                                        };
+                                                      }
+                                                      return item2;
+                                                    });
+                                                  
+                                                    return {
+                                                      ...prevState,
+                                                      apply: updatedApply,
+                                                    };
+                                                  });
+                                                  alert('이분을 합격시켰습니다!')
+                                            }} > 합격 </button>
+                                            <button onClick={()=>{
+                                                setTempPList(prevState => ({
+                                                    ...prevState,
+                                                    apply: {
+                                                      ...prevState.apply,
+                                                      memo: 'accept',
+                                                    },
+                                                  }));
+                                                  alert('이분을 탈락시켰습니다!')
+                                            }} > 탈락 </button>
                                         </div>
                             
                                 </div>
@@ -161,6 +248,7 @@ export default function Detail(props:any) {
         )}
 
             <button onClick={()=>{console.log(p_list)}} >버튼</button>
+            <button onClick={()=>{console.log(temp_p_list)}} >버튼2</button>
 
          
 
