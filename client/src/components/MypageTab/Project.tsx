@@ -18,7 +18,7 @@ export default function Project() {
       },
     });
     try {
-      console.log(res.data);
+      console.log(res);
       setProject(res.data)
     } catch (err) {
       console.log(err);
